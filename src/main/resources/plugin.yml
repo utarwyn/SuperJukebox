@@ -1,0 +1,9 @@
+name: SuperJukebox
+author: Utarwyn
+version: 1.0.0
+main: fr.utarwyn.superjukebox.SuperJukebox
+commands:
+  superjukebox:
+    description: Main command of the SuperJukebox plugin
+    aliases: [sjb, sj]
+    usage: "Usage: /superjukebox help"

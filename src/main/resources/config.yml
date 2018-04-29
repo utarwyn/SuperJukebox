@@ -1,0 +1,11 @@
+# # # # # # # # # # # # # # # # # # # # #
+#  SuperJukebox configuration           #
+#  Version: 1.0.0                       #
+#  An awesome music plugin by Utarwyn!  #
+# # # # # # # # # # # # # # # # # # # # #
+
+# Enable debugging (use this only when you have a problem with the plugin)
+debug: false
+
+# The locale of the plugin
+locale: en
