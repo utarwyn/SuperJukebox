@@ -50,16 +50,20 @@ public class Jukebox {
 		return this.distance;
 	}
 
+	public List<Music> getMusics() {
+		return new ArrayList<>(this.musics);
+	}
+
+	public Music getCurrentMusic() {
+		return this.currentMusic;
+	}
+
 	public boolean isAutoplay() {
 		return this.autoplay;
 	}
 
 	public boolean isValid() {
 		return this.block.getType() == Config.MAT_JUKEBOX;
-	}
-
-	public Music getCurrentMusic() {
-		return this.currentMusic;
 	}
 
 	public void setDistance(int distance) {

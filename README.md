@@ -1,8 +1,8 @@
 # SuperJukebox (under development)
 ![Plugin's logo](https://i.imgur.com/bZC1wDi.png)
 
-> No links/shields for the moment! Comming soon.
-
+[![Travis](https://img.shields.io/travis/utarwyn/SuperJukebox.svg?style=flat-square)](https://travis-ci.org/utarwyn/SuperJukebox) [![GitHub last commit (branch)](https://img.shields.io/github/last-commit/utarwyn/superjukebox/master.svg?style=flat-square)](https://github.com/utarwyn/SuperJukebox/commits/master) \
+[![license](https://img.shields.io/github/license/utarwyn/superjukebox.svg?style=flat-square)](https://github.com/utarwyn/SuperJukebox/blob/master/LICENSE) \
 \
 SuperJukebox is a Bukkit/Spigot plugin (Minecraft) which allows you to play custom musics from jukeboxes.  
 We all love music, right?
@@ -15,6 +15,7 @@ We all love music, right?
  - Play any kind of music for all players
  - Jukeboxes **fully configurable with GUIs**!
  - Can display particles/holograms
+ - Configure **jukebox's sound distance**!
  - Support for **1.12+** sounds!
  - Console commands support
  - Full titles, messages, GUI texts customization

@@ -2,9 +2,11 @@ package fr.utarwyn.superjukebox.jukebox;
 
 import fr.utarwyn.superjukebox.AbstractManager;
 import fr.utarwyn.superjukebox.SuperJukebox;
+import fr.utarwyn.superjukebox.menu.Menus;
 import fr.utarwyn.superjukebox.util.FlatFile;
 import fr.utarwyn.superjukebox.util.JUtil;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -19,6 +21,8 @@ public class JukeboxesManager extends AbstractManager {
 
 	public JukeboxesManager() {
 		super(SuperJukebox.getInstance());
+
+		this.registerListener(new JukeboxListener(this));
 	}
 
 	@Override
@@ -37,12 +41,16 @@ public class JukeboxesManager extends AbstractManager {
 		for (Jukebox jukebox : this.jukeboxes)
 			jukebox.unload();
 
-		if (this.database != null)
-			this.database.save();
+		// Close all menus
+		Menus.closeAll();
 	}
 
-	public Jukebox getJB(int idx) {
-		return this.jukeboxes.get(idx);
+	Jukebox getJukeboxAt(Block block) {
+		for (Jukebox jukebox : this.jukeboxes)
+			if (jukebox.getBlock().equals(block))
+				return jukebox;
+
+		return null;
 	}
 
 	private void reloadDatabase() {

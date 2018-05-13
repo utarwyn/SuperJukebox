@@ -3,10 +3,7 @@ package fr.utarwyn.superjukebox.util;
 import fr.utarwyn.superjukebox.music.Music;
 import fr.utarwyn.superjukebox.music.model.Note;
 
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 
 public class NBSDecoder {
 
@@ -14,59 +11,74 @@ public class NBSDecoder {
 
 	}
 
-	public static Music decode(File file) throws IOException {
-		FileInputStream fis = new FileInputStream(file);
-		DataInputStream dis = new DataInputStream(fis);
+	public static Music decode(File file) throws NBSDecodeException {
+		FileInputStream fis = null;
+		DataInputStream dis = null;
+
+		try {
+			fis = new FileInputStream(file);
+			dis = new DataInputStream(fis);
+		} catch (FileNotFoundException e) {
+			throw new NBSDecodeException(file, "Cannot open the file!", e);
+		}
 
 		short length, height, tempo;
 		String name, author, description;
 
-		// Longueur de la musique
-		length = readShort(dis);
-		// Hauteur max de la musique
-		height = readShort(dis);
-		// Nom de la musique
-		name = readString(dis);
-		// Auteur
-		author = readString(dis);
-		readString(dis);
-		// Description
-		description = readString(dis);
-		// Tempo
-		tempo = readShort(dis);
-		// Auto-save + ...
-		dis.readByte();
-		dis.readByte();
-		dis.readByte();
-		readInt(dis);
-		readInt(dis);
-		readInt(dis);
-		readInt(dis);
-		readInt(dis);
-		readString(dis);
+		try {
+			// Longueur de la musique
+			length = readShort(dis);
+			// Hauteur max de la musique
+			height = readShort(dis);
+			// Nom de la musique
+			name = readString(dis);
+			// Auteur
+			author = readString(dis);
+			readString(dis);
+			// Description
+			description = readString(dis);
+			// Tempo
+			tempo = readShort(dis);
+			// Auto-save + ...
+			dis.readByte();
+			dis.readByte();
+			dis.readByte();
+			readInt(dis);
+			readInt(dis);
+			readInt(dis);
+			readInt(dis);
+			readInt(dis);
+			readString(dis);
+		} catch (IOException e) {
+			throw new NBSDecodeException(file, "Cannot read NBS description!", e);
+		}
 
 		Music music = new Music(length, height, name, author, description, tempo/100f);
 
 		// Lecture des notes
 		short tick = -1;
 
-		while (true) {
-			short jumpsT = readShort(dis);
-			if (jumpsT == 0) break;
-
-			tick += jumpsT;
-
-			short layer = -1;
+		try {
 			while (true) {
-				short jumpsL = readShort(dis);
-				if (jumpsL == 0) break;
-				layer += jumpsL;
+				short jumpsT = readShort(dis);
+				if (jumpsT == 0) break;
 
-				byte instrument = dis.readByte();
-				byte note = dis.readByte();
+				tick += jumpsT;
 
-				addNoteToLayer(music, layer, tick, instrument, note);
+				short layer = -1;
+				while (true) {
+					short jumpsL = readShort(dis);
+					if (jumpsL == 0) break;
+					layer += jumpsL;
+
+					byte instrument = dis.readByte();
+					byte note = dis.readByte();
+
+					addNoteToLayer(music, layer, tick, instrument, note);
+				}
 			}
+		} catch (IOException e) {
+			throw new NBSDecodeException(file, "Cannot read NBS music notes!", e);
 		}
 
 		return music;

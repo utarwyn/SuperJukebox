@@ -1,8 +1,11 @@
 package fr.utarwyn.superjukebox.commands;
 
 import fr.utarwyn.superjukebox.Config;
+import fr.utarwyn.superjukebox.Managers;
 import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.jukebox.JukeboxesManager;
+import fr.utarwyn.superjukebox.util.JUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -32,6 +35,26 @@ public class SuperJukeboxCommand implements CommandExecutor {
 			case "?":
 				// TODO: write the plugin's help page
 				sender.sendMessage(Config.PREFIX + ChatColor.RED + "No help for the moment.");
+				break;
+
+			case "reload":
+			case "rl":
+				if (!JUtil.senderHasPerm(sender, "reload")) {
+					sender.sendMessage(Config.PREFIX + "You don't have permission to do that!");
+					return true;
+				}
+
+				if (!Config.get().reload()) {
+					sender.sendMessage(Config.PREFIX + "§cError when reloading config! See the console for more info!");
+					sender.sendMessage(Config.PREFIX + "§8Plugin now disabled.");
+
+					Bukkit.getPluginManager().disablePlugin(SuperJukebox.getInstance());
+					return true;
+				}
+
+				Managers.reloadAll();
+
+				sender.sendMessage(Config.PREFIX + "§aConfiguration reloaded!");
 				break;
 		}
 

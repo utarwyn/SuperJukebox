@@ -2,6 +2,7 @@ package fr.utarwyn.superjukebox;
 
 import fr.utarwyn.superjukebox.commands.SuperJukeboxCommand;
 import fr.utarwyn.superjukebox.jukebox.JukeboxesManager;
+import fr.utarwyn.superjukebox.music.MusicManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Level;
@@ -19,6 +20,7 @@ public class SuperJukebox extends JavaPlugin {
 			return;
 
 		// Register all managers
+		new MusicManager();
 		new JukeboxesManager();
 
 		// Register the main command!

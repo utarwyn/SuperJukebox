@@ -116,7 +116,13 @@ public class MusicPlayer implements Runnable {
 			Note note = layer.getNote(this.tick);
 			if (note == null) continue;
 
-			this.jukebox.getBlock().getWorld().playSound(this.jukebox.getBlock().getLocation(), note.getInstrument().getSound(), 1f, note.getPitch().getPitch());
+			this.jukebox.getBlock().getWorld().playSound(
+					this.jukebox.getBlock().getLocation(),
+					note.getInstrument().getSound(),
+					(1/16f) * this.jukebox.getDistance(),
+					note.getPitch().getPitch()
+			);
+
 			nbNote++;
 		}
 
