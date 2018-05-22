@@ -19,11 +19,14 @@ public class JukeboxMainMenu extends AbstractMenu {
 
 	private Player player;
 
+	private int currentPage;
+
 	public JukeboxMainMenu(Jukebox jukebox, Player player) {
 		super(4, "SuperJukebox main menu");
 
 		this.jukebox = jukebox;
 		this.player = player;
+		this.currentPage = 1;
 
 		this.prepare();
 	}

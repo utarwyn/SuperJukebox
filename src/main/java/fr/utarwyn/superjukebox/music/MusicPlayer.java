@@ -82,7 +82,7 @@ public class MusicPlayer implements Runnable {
 						this.tick = -1;
 
 						// Check for autoplay!
-						if (this.jukebox.isAutoplay()) {
+						if (this.jukebox.getSettings().isAutoplay()) {
 							this.jukebox.nextMusic();
 							this.playing = true;
 						}
@@ -119,7 +119,7 @@ public class MusicPlayer implements Runnable {
 			this.jukebox.getBlock().getWorld().playSound(
 					this.jukebox.getBlock().getLocation(),
 					note.getInstrument().getSound(),
-					(1/16f) * this.jukebox.getDistance(),
+					(1/16f) * this.jukebox.getSettings().getDistance(),
 					note.getPitch().getPitch()
 			);
 

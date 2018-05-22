@@ -70,9 +70,8 @@ public class JukeboxesManager extends AbstractManager {
 			Location loc = JUtil.getLocationFromConfig(section.getConfigurationSection("location"));
 			Jukebox jukebox = new Jukebox(id, loc.getBlock());
 
-			// Import settings into the jukebox object
-			jukebox.setDistance(section.getInt("settings.distance"));
-			jukebox.setAutoplay(section.getBoolean("settings.autoplay"));
+			// Import settings into the jukebox settings object
+			jukebox.getSettings().loadFromConfigurationSection(section.getConfigurationSection("settings"));
 
 			// And put the jukebox into the memory list!
 			this.jukeboxes.add(jukebox);

@@ -14,9 +14,7 @@ public class Jukebox {
 
 	private Block block;
 
-	private int distance;
-
-	private boolean autoplay;
+	private JukeboxSettings settings;
 
 	private MusicPlayer player;
 
@@ -29,10 +27,11 @@ public class Jukebox {
 	Jukebox(int id, Block block) {
 		this.id = id;
 		this.block = block;
-		this.distance = 20;
-		this.autoplay = false;
 		this.currentMusicIdx = -1;
 		this.musics = new ArrayList<>();
+
+		// Register all settings of the jukebox!
+		this.settings = new JukeboxSettings();
 
 		// Instanciate the music player!
 		this.player = new MusicPlayer(this);
@@ -46,8 +45,8 @@ public class Jukebox {
 		return this.block;
 	}
 
-	public int getDistance() {
-		return this.distance;
+	public JukeboxSettings getSettings() {
+		return this.settings;
 	}
 
 	public List<Music> getMusics() {
@@ -58,20 +57,8 @@ public class Jukebox {
 		return this.currentMusic;
 	}
 
-	public boolean isAutoplay() {
-		return this.autoplay;
-	}
-
 	public boolean isValid() {
 		return this.block.getType() == Config.MAT_JUKEBOX;
-	}
-
-	public void setDistance(int distance) {
-		this.distance = distance;
-	}
-
-	public void setAutoplay(boolean autoplay) {
-		this.autoplay = autoplay;
 	}
 
 	public void nextMusic() {
