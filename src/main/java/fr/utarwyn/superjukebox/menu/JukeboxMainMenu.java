@@ -2,8 +2,10 @@ package fr.utarwyn.superjukebox.menu;
 
 import fr.utarwyn.superjukebox.jukebox.Jukebox;
 import fr.utarwyn.superjukebox.music.Music;
+import fr.utarwyn.superjukebox.util.JUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -36,14 +38,40 @@ public class JukeboxMainMenu extends AbstractMenu {
 		List<Music> musics = this.jukebox.getMusics();
 
 		// Settings items
-		ItemStack settingItem = new ItemStack(Material.COMMAND);
-		ItemMeta settingMeta = settingItem.getItemMeta();
+		if (this.canOpenSettingsMenu()) {
+			ItemStack settingItem = new ItemStack(Material.COMMAND);
+			ItemMeta settingMeta = settingItem.getItemMeta();
 
-		settingMeta.setDisplayName(ChatColor.YELLOW + "Jukebox's settings");
-		settingMeta.setLore(Arrays.asList("§7Click to change the settings", "§7of this jukebox!"));
-		settingItem.setItemMeta(settingMeta);
+			settingMeta.setDisplayName(ChatColor.YELLOW + "Jukebox's settings");
+			settingMeta.setLore(Arrays.asList("§7Click to change the settings", "§7of this jukebox!"));
+			settingItem.setItemMeta(settingMeta);
 
-		this.setItem(28, settingItem);
+			this.setItem(28, settingItem);
+		} else {
+			this.setItem(28, AbstractMenu.SEPARATOR);
+		}
+
+		// Music management item
+		if (this.canOpenMusicManagementMenu()) {
+			ItemStack musicsItem = new ItemStack(Material.DIAMOND);
+			ItemMeta musicsMeta = musicsItem.getItemMeta();
+
+			musicsMeta.setDisplayName(ChatColor.GOLD + "Manage jukebox musics");
+			if (this.jukebox.getSettings().usesGlobalMusics()) {
+				musicsMeta.setLore(Arrays.asList(
+						"§cYou can't edit this jukebox's musics", "§cbecause §lthey are managed globally§c.",
+						"§dYou can allow custom musics by changing the", "§doption in the settings menu of this jukbox."
+				));
+			} else {
+				musicsMeta.setLore(Arrays.asList("§7Click to edit musics", "§7of this jukebox!"));
+				musicsMeta.addEnchant(Enchantment.DURABILITY, 3, true);
+			}
+			musicsItem.setItemMeta(musicsMeta);
+
+			this.setItem(29, musicsItem);
+		} else {
+			this.setItem(29, AbstractMenu.SEPARATOR);
+		}
 
 		// Page items
 		if (musics.size() > MUSICS_PER_PAGE) {
@@ -55,6 +83,8 @@ public class JukeboxMainMenu extends AbstractMenu {
 
 		// Separators
 		this.setItem(27, AbstractMenu.SEPARATOR);
+		this.setItem(30, AbstractMenu.SEPARATOR);
+		this.setItem(31, AbstractMenu.SEPARATOR);
 		this.setItem(32, AbstractMenu.SEPARATOR);
 		this.setItem(35, AbstractMenu.SEPARATOR);
 
@@ -81,6 +111,15 @@ public class JukeboxMainMenu extends AbstractMenu {
 	@Override
 	public void onClose(Player player) {
 
+	}
+
+	private boolean canOpenSettingsMenu() {
+		return JUtil.playerHasPerm(this.player, "jukebox.editsettings");
+	}
+
+
+	private boolean canOpenMusicManagementMenu() {
+		return JUtil.playerHasPerm(this.player, "jukebox.editmusics");
 	}
 
 }

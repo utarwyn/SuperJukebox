@@ -15,6 +15,7 @@ We all love music, right?
  - Play any kind of music for all players
  - Jukeboxes **fully configurable with GUIs**!
  - Can display particles/holograms
+ - Permissions **for each jukebox**!
  - Configure **jukebox's sound distance**!
  - Support for **1.12+** sounds!
  - Console commands support

@@ -11,6 +11,12 @@ import org.bukkit.configuration.ConfigurationSection;
 public class JukeboxSettings {
 
 	/**
+	 * Under this number of blocks, Minecraft seems to not respect the sound distance.
+	 * So we have to define a minimum distance to keep a good Jukebox behavior.
+	 */
+	private static final int MIN_DISTANCE = 15;
+
+	/**
 	 * Max distance where a player can hear the sound of the jukebox
 	 */
 	private int distance;
@@ -34,6 +40,7 @@ public class JukeboxSettings {
 		this.distance = 20;
 		this.volume = 100;
 		this.autoplay = false;
+		this.useGlobalMusics = true;
 	}
 
 	/**
@@ -45,6 +52,14 @@ public class JukeboxSettings {
 	}
 
 	/**
+	 * Returns the volume of the jukebox, in percent.
+	 * @return Volume in percent.
+	 */
+	public int getVolume() {
+		return this.volume;
+	}
+
+	/**
 	 * Returns true if the jukebox is in an auto-playing mode
 	 * @return True if autoplay option is activated for the linked jukebox
 	 */
@@ -53,11 +68,27 @@ public class JukeboxSettings {
 	}
 
 	/**
+	 * Returns true is the jukebox uses the global musics system.
+	 * @return True for global musics.
+	 */
+	public boolean usesGlobalMusics() {
+		return this.useGlobalMusics;
+	}
+
+	/**
 	 * Sets the max distance
 	 * @param distance Max distance
 	 */
 	public void setDistance(int distance) {
-		this.distance = distance;
+		this.distance = Math.max(distance, MIN_DISTANCE);
+	}
+
+	/**
+	 * Sets the volume
+	 * @param volume The volume in percent
+	 */
+	public void setVolume(int volume) {
+		this.volume = Math.max(volume, 0);
 	}
 
 	/**
@@ -73,8 +104,11 @@ public class JukeboxSettings {
 	 * @param section Configuration section where all jukebox settings are stored
 	 */
 	void loadFromConfigurationSection(ConfigurationSection section) {
-		this.distance = section.getInt("settings.distance");
-		this.autoplay = section.getBoolean("settings.autoplay");
+		this.autoplay = section.getBoolean("autoplay");
+		this.useGlobalMusics = section.getBoolean("globalmusics");
+
+		this.setDistance(section.getInt("distance"));
+		this.setVolume(section.getInt("volume"));
 	}
 
 }

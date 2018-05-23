@@ -119,7 +119,7 @@ public class MusicPlayer implements Runnable {
 			this.jukebox.getBlock().getWorld().playSound(
 					this.jukebox.getBlock().getLocation(),
 					note.getInstrument().getSound(),
-					(1/16f) * this.jukebox.getSettings().getDistance(),
+					(1/16f) * this.jukebox.getSettings().getDistance() * (this.jukebox.getSettings().getVolume() / 100f),
 					note.getPitch().getPitch()
 			);
 
