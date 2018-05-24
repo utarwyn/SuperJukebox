@@ -1,7 +1,9 @@
 package fr.utarwyn.superjukebox.jukebox;
 
 import fr.utarwyn.superjukebox.Config;
+import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.music.Music;
+import fr.utarwyn.superjukebox.music.MusicManager;
 import fr.utarwyn.superjukebox.music.MusicPlayer;
 import org.bukkit.block.Block;
 
@@ -37,22 +39,47 @@ public class Jukebox {
 		this.player = new MusicPlayer(this);
 	}
 
+	/**
+	 * Returns the unique identifier of the jukebox
+	 * @return A decimal identifier
+	 */
 	public int getId() {
 		return this.id;
 	}
 
+	/**
+	 * Returns the Bukkit block used by this jukebox class.
+	 * @return This jukebox Bukkit block.
+	 */
 	public Block getBlock() {
 		return this.block;
 	}
 
+	/**
+	 * Returns the settings associated with this jukebox.
+	 * @return All settings of the jukebox.
+	 */
 	public JukeboxSettings getSettings() {
 		return this.settings;
 	}
 
+	/**
+	 * Get all musics used by this jukebox.
+	 * We have to check in the settings to return globals musics or custom musics.
+	 * @return All musics that can be played by this jukebox.
+	 */
 	public List<Music> getMusics() {
-		return new ArrayList<>(this.musics);
+		if (this.getSettings().usesGlobalMusics()) {
+			return SuperJukebox.getInstance().getInstance(MusicManager.class).getMusics();
+		} else {
+			return new ArrayList<>(this.musics);
+		}
 	}
 
+	/**
+	 * Returns the current music played by this jukebox.
+	 * @return The current musics for this jukebox.
+	 */
 	public Music getCurrentMusic() {
 		return this.currentMusic;
 	}
@@ -61,11 +88,17 @@ public class Jukebox {
 		return this.block.getType() == Config.MAT_JUKEBOX;
 	}
 
+	/**
+	 * Change to the next music!
+	 */
 	public void nextMusic() {
 		this.currentMusicIdx = (this.currentMusicIdx + 1) % this.musics.size();
 		this.currentMusic = this.musics.get(this.currentMusicIdx);
 	}
 
+	/**
+	 * Play the next music!
+	 */
 	public void play() {
 		this.nextMusic();
 
@@ -76,6 +109,10 @@ public class Jukebox {
 		this.player.restart();
 	}
 
+	/**
+	 * Unload this jukebox.
+	 * This means clear all musics and destroy the player object if needed.
+	 */
 	public void unload() {
 		this.musics.clear();
 
@@ -89,6 +126,23 @@ public class Jukebox {
 	 */
 	public void addMusic(Music music) {
 		this.musics.add(music);
+	}
+
+	/**
+	 * Loads musics from the jukebox configuration (with a list which contains all music ids)
+	 * @param musicIdsList Music ids list extracted from the configuration
+	 */
+	void loadMusicsFromConfiguration(List<Integer> musicIdsList) {
+		MusicManager musicManager = SuperJukebox.getInstance().getInstance(MusicManager.class);
+		Music music;
+
+		for (int musicId : musicIdsList) {
+			music = musicManager.getMusic(musicId);
+
+			if (music != null) {
+				this.musics.add(music);
+			}
+		}
 	}
 
 }

@@ -10,7 +10,9 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MusicManager extends AbstractManager {
@@ -36,6 +38,10 @@ public class MusicManager extends AbstractManager {
 	@Override
 	protected void unload() {
 
+	}
+
+	public List<Music> getMusics() {
+		return new ArrayList<>(this.musics.values());
 	}
 
 	public Music getMusic(int id) {
@@ -64,6 +70,10 @@ public class MusicManager extends AbstractManager {
 
 			try {
 				Music music = NBSDecoder.decode(file);
+
+				// Update the icon of the music
+				music.setIconWithMaterialId(section.getString("icon"));
+
 				this.musics.put(id, music);
 			} catch (NBSDecodeException e) {
 				Log.warn("Music #" + id + " (" + filename + ") cannot be loaded! Details below.");

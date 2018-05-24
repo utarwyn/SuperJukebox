@@ -90,7 +90,10 @@ public class JukeboxMainMenu extends AbstractMenu {
 
 		// Music items
 		if (!musics.isEmpty()) {
-			// TODO
+			int begin = (this.currentPage - 1) * MUSICS_PER_PAGE;
+
+			for (int i = begin; i < begin + MUSICS_PER_PAGE && i < musics.size(); i++)
+				this.setItem(i % MUSICS_PER_PAGE, musics.get(i).getIcon());
 		} else {
 			ItemStack noMusicItem = new ItemStack(Material.BARRIER);
 			ItemMeta noMusicMeta = noMusicItem.getItemMeta();

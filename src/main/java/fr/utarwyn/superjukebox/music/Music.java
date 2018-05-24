@@ -1,8 +1,14 @@
 package fr.utarwyn.superjukebox.music;
 
 import fr.utarwyn.superjukebox.music.model.Layer;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Music {
@@ -23,6 +29,8 @@ public class Music {
 
 	private List<Layer> layers;
 
+	private ItemStack icon;
+
 	public Music(short length, short height, String name, String author, String desc, float tempo) {
 		this.length = length;
 		this.height = height;
@@ -33,6 +41,7 @@ public class Music {
 		this.delay = 20 / this.tempo;
 
 		this.layers = new ArrayList<>();
+		this.setIconWithMaterialId("RECORD_10");
 	}
 
 	public List<Layer> getLayers() {
@@ -75,6 +84,45 @@ public class Music {
 		Layer layer = new Layer(key);
 		this.layers.add(layer);
 		return layer;
+	}
+
+	public ItemStack getIcon() {
+		return this.icon;
+	}
+
+	void setIconWithMaterialId(String material) {
+		this.icon = new ItemStack(Material.valueOf(material));
+		this.updateIconMetadatas();
+	}
+
+	/**
+	 * Updates the icon item to insert all music datas on it.
+	 */
+	private void updateIconMetadatas() {
+		ItemMeta iconMeta = this.icon.getItemMeta();
+
+		// Set all metadatas on the Bukkit itemstack
+		iconMeta.setDisplayName(ChatColor.GREEN + "♫ " + this.name);
+		iconMeta.setLore(Arrays.asList(
+				ChatColor.DARK_GRAY + "*-------------------------*",
+				ChatColor.GRAY + "Duration: " + ChatColor.YELLOW + this.getFormattedLength(),
+				ChatColor.GRAY + "Author: " + ChatColor.AQUA + this.author,
+				ChatColor.GRAY + "Description: " + ChatColor.WHITE + this.description,
+				ChatColor.DARK_GRAY + "*-------------------------*",
+				"",
+				ChatColor.GOLD + "Click to play this music!"
+		));
+		// Hide real music name from ths disc!
+		iconMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+
+		this.icon.setItemMeta(iconMeta);
+	}
+
+	private String getFormattedLength() {
+		// Convert the music length into seconds ...
+		int seconds = this.length / 20;
+		// ... and into a readable time!
+		return (seconds / 60) + ":" + (seconds % 60);
 	}
 
 }
