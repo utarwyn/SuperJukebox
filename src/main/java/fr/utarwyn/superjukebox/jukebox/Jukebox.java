@@ -1,6 +1,5 @@
 package fr.utarwyn.superjukebox.jukebox;
 
-import fr.utarwyn.superjukebox.Config;
 import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.music.Music;
 import fr.utarwyn.superjukebox.music.MusicManager;
@@ -84,10 +83,6 @@ public class Jukebox {
 		return this.currentMusic;
 	}
 
-	public boolean isValid() {
-		return this.block.getType() == Config.MAT_JUKEBOX;
-	}
-
 	/**
 	 * Change to the next music!
 	 */
@@ -99,7 +94,7 @@ public class Jukebox {
 	/**
 	 * Play the next music!
 	 */
-	public void play() {
+	public void playNext() {
 		this.nextMusic();
 
 		// Start the player!
@@ -110,10 +105,30 @@ public class Jukebox {
 	}
 
 	/**
+	 * Play a specific music!
+	 * @param music Music to be played.
+	 */
+	public void play(Music music) {
+		// Does the music exist in the list?
+		if (!this.getMusics().contains(music)) return;
+
+		// Ssetup the current music
+		this.currentMusicIdx = this.getMusics().indexOf(music);
+		this.currentMusic = music;
+
+		// Start the player!
+		if (!this.player.isTaskRunned())
+			this.player.runTask();
+
+		// Restart the player at the beginning of the music!
+		this.player.restart();
+	}
+
+	/**
 	 * Unload this jukebox.
 	 * This means clear all musics and destroy the player object if needed.
 	 */
-	public void unload() {
+	void unload() {
 		this.musics.clear();
 
 		if (this.player != null)

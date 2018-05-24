@@ -7,9 +7,6 @@ import fr.utarwyn.superjukebox.music.model.Note;
 import org.bukkit.Bukkit;
 import org.inventivetalent.particle.ParticleEffect;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 public class MusicPlayer implements Runnable {
 
 	private Jukebox jukebox;
@@ -21,8 +18,6 @@ public class MusicPlayer implements Runnable {
 	private int tick;
 
 	private boolean taskRunned;
-
-	private final Lock lock = new ReentrantLock();
 
 	public MusicPlayer(Jukebox jukebox) {
 		this.jukebox = jukebox;
@@ -57,21 +52,13 @@ public class MusicPlayer implements Runnable {
 	}
 
 	public synchronized void destroy() {
-		lock.lock();
-
-		try {
-			this.destroyed = true;
-		} finally {
-			lock.unlock();
-		}
+		this.destroyed = true;
 	}
 
 	@Override
 	public void run() {
 		while (!this.destroyed) {
 			long start = System.currentTimeMillis();
-
-			lock.lock();
 
 			synchronized (this) {
 				if (this.playing) {
@@ -82,10 +69,8 @@ public class MusicPlayer implements Runnable {
 						this.tick = -1;
 
 						// Check for autoplay!
-						if (this.jukebox.getSettings().isAutoplay()) {
-							this.jukebox.nextMusic();
-							this.playing = true;
-						}
+						if (this.jukebox.getSettings().isAutoplay())
+							this.jukebox.playNext();
 
 						return;
 					}
@@ -95,7 +80,6 @@ public class MusicPlayer implements Runnable {
 				}
 			}
 
-			lock.unlock();
 			if (this.destroyed) break;
 
 			long diff = System.currentTimeMillis() - start;
