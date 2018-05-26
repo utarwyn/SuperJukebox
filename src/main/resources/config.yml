@@ -9,3 +9,15 @@ debug: false
 
 # The locale of the plugin
 locale: en
+
+# Default configuration for new jukeboxes!
+jukeboxconfiguration:
+  settings:
+    distance: 25
+    volume: 100
+    globalmusics: true
+    autoplay: false
+  permissions:
+    interact: WITH_PERM
+    editmusics: WITH_PERM
+    editsettings: WITH_PERM

@@ -45,6 +45,27 @@ public class Config extends YamlLinker {
 	@Configurable
 	public static String locale;
 
+	@Configurable(key = "jukeboxconfiguration.settings.distance")
+	public static int jukeboxDefaultDistance;
+
+	@Configurable(key = "jukeboxconfiguration.settings.volume")
+	public static int jukeboxDefaultVolume;
+
+	@Configurable(key = "jukeboxconfiguration.settings.globalmusics")
+	public static boolean jukeboxDefaultUseGlobalMusics;
+
+	@Configurable(key = "jukeboxconfiguration.settings.autoplay")
+	public static boolean jukeboxDefaultUseAutoplay;
+
+	@Configurable(key = "jukeboxconfiguration.permissions.interact")
+	public static String jukeboxDefaultInteractPerm;
+
+	@Configurable(key = "jukeboxconfiguration.permissions.editmusics")
+	public static String jukeboxDefaultEditMusicsPerm;
+
+	@Configurable(key = "jukeboxconfiguration.permissions.editsettings")
+	public static String jukeboxDefaultEditSettingsPerm;
+
 	public boolean initialize(JavaPlugin plugin) {
 		// Create config.yml file if not exists
 		if (!new File(plugin.getDataFolder(), "config.yml").exists())

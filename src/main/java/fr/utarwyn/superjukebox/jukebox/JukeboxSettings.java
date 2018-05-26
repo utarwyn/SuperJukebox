@@ -1,5 +1,6 @@
 package fr.utarwyn.superjukebox.jukebox;
 
+import fr.utarwyn.superjukebox.Config;
 import fr.utarwyn.superjukebox.jukebox.perm.Permission;
 import fr.utarwyn.superjukebox.jukebox.perm.PermissionType;
 import org.bukkit.configuration.ConfigurationSection;
@@ -53,11 +54,20 @@ public class JukeboxSettings {
 	 */
 	private Permission editSettingsPerm;
 
+	/**
+	 * Constructs the jukebox settings object and apply default configuration!
+	 */
 	JukeboxSettings() {
-		this.distance = 20;
-		this.volume = 100;
-		this.autoplay = false;
-		this.useGlobalMusics = true;
+		// Default settings
+		this.autoplay = Config.jukeboxDefaultUseAutoplay;
+		this.useGlobalMusics = Config.jukeboxDefaultUseGlobalMusics;
+		this.setDistance(Config.jukeboxDefaultDistance);
+		this.setVolume(Config.jukeboxDefaultVolume);
+
+		// Default permissions
+		this.interactPerm = this.createPermissionNode(Config.jukeboxDefaultInteractPerm, "interact");
+		this.editMusicsPerm = this.createPermissionNode(Config.jukeboxDefaultEditMusicsPerm, "editmusics");
+		this.editSettingsPerm = this.createPermissionNode(Config.jukeboxDefaultEditSettingsPerm, "editsettings");
 	}
 
 	/**
@@ -147,16 +157,20 @@ public class JukeboxSettings {
 	 */
 	void loadFromConfiguration(ConfigurationSection settingsSection, ConfigurationSection permsSection) {
 		// Load settings
-		this.autoplay = settingsSection.getBoolean("autoplay");
-		this.useGlobalMusics = settingsSection.getBoolean("globalmusics");
+		if (settingsSection != null) {
+			this.autoplay = settingsSection.getBoolean("autoplay");
+			this.useGlobalMusics = settingsSection.getBoolean("globalmusics");
 
-		this.setDistance(settingsSection.getInt("distance"));
-		this.setVolume(settingsSection.getInt("volume"));
+			this.setDistance(settingsSection.getInt("distance"));
+			this.setVolume(settingsSection.getInt("volume"));
+		}
 
 		// Load permissions
-		this.interactPerm = this.createPermissionNode(permsSection, "interact");
-		this.editMusicsPerm = this.createPermissionNode(permsSection, "editmusics");
-		this.editSettingsPerm = this.createPermissionNode(permsSection, "editsettings");
+		if (permsSection != null) {
+			this.interactPerm = this.createPermissionNode(permsSection, "interact");
+			this.editMusicsPerm = this.createPermissionNode(permsSection, "editmusics");
+			this.editSettingsPerm = this.createPermissionNode(permsSection, "editsettings");
+		}
 	}
 
 	/**
@@ -167,6 +181,16 @@ public class JukeboxSettings {
 	 */
 	private Permission createPermissionNode(ConfigurationSection configSection, String permissionName) {
 		return new Permission(PermissionType.getByName(configSection.getString(permissionName)), permissionName);
+	}
+
+	/**
+	 * Creates a permission node from a permission type and a name
+	 * @param permissionType Permission type
+	 * @param permissionName Permission name used to create the Bukkit permission
+	 * @return The generated permission node
+	 */
+	private Permission createPermissionNode(String permissionType, String permissionName) {
+		return new Permission(PermissionType.getByName(permissionType), permissionName);
 	}
 
 }
