@@ -71,7 +71,10 @@ public class JukeboxesManager extends AbstractManager {
 			Jukebox jukebox = new Jukebox(id, loc.getBlock());
 
 			// Import settings into the jukebox settings object
-			jukebox.getSettings().loadFromConfigurationSection(section.getConfigurationSection("settings"));
+			jukebox.getSettings().loadFromConfiguration(
+					section.getConfigurationSection("settings"),
+					section.getConfigurationSection("permissions")
+			);
 
 			// Import custom musics into the jukebox object
 			if (section.isList("musics"))

@@ -1,5 +1,7 @@
 package fr.utarwyn.superjukebox.jukebox;
 
+import fr.utarwyn.superjukebox.jukebox.perm.Permission;
+import fr.utarwyn.superjukebox.jukebox.perm.PermissionType;
 import org.bukkit.configuration.ConfigurationSection;
 
 /**
@@ -36,6 +38,21 @@ public class JukeboxSettings {
 	 */
 	private boolean useGlobalMusics;
 
+	/**
+	 * Permission to interact with the jukebox and to show its main menu.
+	 */
+	private Permission interactPerm;
+
+	/**
+	 * Permission to edit musics of the jukebox.
+	 */
+	private Permission editMusicsPerm;
+
+	/**
+	 * Permission to change settings of the jukebox.
+	 */
+	private Permission editSettingsPerm;
+
 	JukeboxSettings() {
 		this.distance = 20;
 		this.volume = 100;
@@ -57,6 +74,30 @@ public class JukeboxSettings {
 	 */
 	public int getVolume() {
 		return this.volume;
+	}
+
+	/**
+	 * Returns the interaction permission of the linked jukebox
+	 * @return The permission node
+	 */
+	public Permission getInteractPerm() {
+		return this.interactPerm;
+	}
+
+	/**
+	 * Returns the musics edition permission of the linked jukebox
+	 * @return The permission node
+	 */
+	public Permission getEditMusicsPerm() {
+		return this.editMusicsPerm;
+	}
+
+	/**
+	 * Returns the settings edition permission of the linked jukebox
+	 * @return The permission node
+	 */
+	public Permission getEditSettingsPerm() {
+		return this.editSettingsPerm;
 	}
 
 	/**
@@ -101,14 +142,31 @@ public class JukeboxSettings {
 
 	/**
 	 * Loads all the jukebox settings from a Bukkit configuration section
-	 * @param section Configuration section where all jukebox settings are stored
+	 * @param settingsSection Configuration section where all jukebox settings are stored
+	 * @param permsSection Configuration section where all jukebox permissions are stored
 	 */
-	void loadFromConfigurationSection(ConfigurationSection section) {
-		this.autoplay = section.getBoolean("autoplay");
-		this.useGlobalMusics = section.getBoolean("globalmusics");
+	void loadFromConfiguration(ConfigurationSection settingsSection, ConfigurationSection permsSection) {
+		// Load settings
+		this.autoplay = settingsSection.getBoolean("autoplay");
+		this.useGlobalMusics = settingsSection.getBoolean("globalmusics");
 
-		this.setDistance(section.getInt("distance"));
-		this.setVolume(section.getInt("volume"));
+		this.setDistance(settingsSection.getInt("distance"));
+		this.setVolume(settingsSection.getInt("volume"));
+
+		// Load permissions
+		this.interactPerm = this.createPermissionNode(permsSection, "interact");
+		this.editMusicsPerm = this.createPermissionNode(permsSection, "editmusics");
+		this.editSettingsPerm = this.createPermissionNode(permsSection, "editsettings");
+	}
+
+	/**
+	 * Creates a permission node from a name and the configuration section
+	 * @param configSection Configuration section used to get the type of the permission
+	 * @param permissionName Permission name used to create the Bukkit permission
+	 * @return The generated permission node
+	 */
+	private Permission createPermissionNode(ConfigurationSection configSection, String permissionName) {
+		return new Permission(PermissionType.getByName(configSection.getString(permissionName)), permissionName);
 	}
 
 }

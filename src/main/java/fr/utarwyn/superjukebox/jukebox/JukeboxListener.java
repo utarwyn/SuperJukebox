@@ -31,7 +31,7 @@ public class JukeboxListener implements Listener {
 		Player player = event.getPlayer();
 		if (player.isSneaking()) return;
 
-		if (JUtil.playerHasPerm(player, "interact")) {
+		if (jukebox.getSettings().getInteractPerm().has(player)) {
 			JUtil.runSync(() -> new JukeboxMainMenu(jukebox, player).open(player));
 
 			// Play opening sound
