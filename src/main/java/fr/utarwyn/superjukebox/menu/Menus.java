@@ -63,6 +63,13 @@ public class Menus implements Listener {
 		if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR)
 			return;
 
+		// Click on a back item!
+		if (menu.getParentMenu() != null && event.getCurrentItem().equals(AbstractMenu.BACK_ITEM)) {
+			event.setCancelled(true);
+			menu.getParentMenu().open(player);
+			return;
+		}
+
 		event.setCancelled(menu.onClick(player, event.getSlot()));
 	}
 

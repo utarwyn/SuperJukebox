@@ -31,6 +31,11 @@ public abstract class AbstractMenu implements InventoryHolder {
 	static final ItemStack SEPARATOR = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 1, (byte) 15);
 
 	/**
+	 * The item used to create a way to go to a parent menu
+	 */
+	static final ItemStack BACK_ITEM = new ItemStack(Material.ARROW);
+
+	/**
 	 * The number of rows of the menu
 	 */
 	private int rows;
@@ -54,6 +59,11 @@ public abstract class AbstractMenu implements InventoryHolder {
 	 * True if the size has to be dynamically calculated before the creation of the menu
 	 */
 	private boolean dynamicSize;
+
+	/**
+	 * Stores the parent menu of the menu
+	 */
+	private AbstractMenu parentMenu;
 
 	/**
 	 * Construct a menu with a number of rows and a title
@@ -81,9 +91,15 @@ public abstract class AbstractMenu implements InventoryHolder {
 	}
 
 	static {
+		// Prepare the separator item
 		ItemMeta separatorMeta = SEPARATOR.getItemMeta();
 		separatorMeta.setDisplayName(ChatColor.BLACK + "");
 		SEPARATOR.setItemMeta(separatorMeta);
+
+		// Prepare the back item
+		ItemMeta backMeta = BACK_ITEM.getItemMeta();
+		backMeta.setDisplayName(ChatColor.RED + "≪ Back");
+		BACK_ITEM.setItemMeta(backMeta);
 	}
 
 	/**
@@ -95,6 +111,14 @@ public abstract class AbstractMenu implements InventoryHolder {
 
 		copy.entrySet().removeIf((entry) -> entry.getValue() == null);
 		return copy.size();
+	}
+
+	/**
+	 * Gets the parent menu of this one
+	 * @return The parent menu
+	 */
+	AbstractMenu getParentMenu() {
+		return this.parentMenu;
 	}
 
 	/**
@@ -110,9 +134,17 @@ public abstract class AbstractMenu implements InventoryHolder {
 	 * @param position The position where the item will be setted
 	 * @param item The item to set
 	 */
-	public void setItem(int position, ItemStack item) {
+	void setItem(int position, ItemStack item) {
 		if (!this.items.containsKey(position))
 			this.items.put(position, item);
+	}
+
+	/**
+	 * Set a parent menu of this one
+	 * @param parentMenu The parent menu
+	 */
+	void setParentMenu(AbstractMenu parentMenu) {
+		this.parentMenu = parentMenu;
 	}
 
 	/**
@@ -131,7 +163,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 	 * @param position Position where to search for an item
 	 * @return The item found at the position
 	 */
-	public ItemStack getItemAt(int position) {
+	ItemStack getItemAt(int position) {
 		return this.items.get(position);
 	}
 

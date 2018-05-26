@@ -17,7 +17,9 @@ jukeboxconfiguration:
     volume: 100
     globalmusics: true
     autoplay: false
+
+  # In this section, you can use OP, WITH_PERM or EVERYONE.
   permissions:
-    interact: WITH_PERM
+    interact: EVERYONE
     editmusics: WITH_PERM
     editsettings: WITH_PERM

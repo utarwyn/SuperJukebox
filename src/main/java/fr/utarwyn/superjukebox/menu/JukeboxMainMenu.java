@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -28,12 +29,16 @@ public class JukeboxMainMenu extends AbstractMenu {
 
 	private ItemStack musicsItem;
 
+	private AbstractMenu settingsMenu;
+
 	public JukeboxMainMenu(Jukebox jukebox, Player player) {
 		super(4, "SuperJukebox main menu");
 
 		this.jukebox = jukebox;
 		this.player = player;
 		this.currentPage = 1;
+
+		this.settingsMenu = new JukeboxSettingsMenu(this, this.jukebox, this.player);
 
 		this.prepare();
 	}
@@ -53,7 +58,7 @@ public class JukeboxMainMenu extends AbstractMenu {
 
 			this.setItem(28, this.settingItem);
 		} else {
-			this.setItem(28, AbstractMenu.SEPARATOR);
+			this.setItem(28, SEPARATOR);
 		}
 
 		// Music management item
@@ -70,28 +75,29 @@ public class JukeboxMainMenu extends AbstractMenu {
 			} else {
 				musicsMeta.setLore(Arrays.asList("§7Click to edit musics", "§7of this jukebox!"));
 				musicsMeta.addEnchant(Enchantment.DURABILITY, 3, true);
+				musicsMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 			}
 			this.musicsItem.setItemMeta(musicsMeta);
 
 			this.setItem(29, this.musicsItem);
 		} else {
-			this.setItem(29, AbstractMenu.SEPARATOR);
+			this.setItem(29, SEPARATOR);
 		}
 
 		// Page items
 		if (musics.size() > MUSICS_PER_PAGE) {
 			// TODO
 		} else {
-			this.setItem(33, AbstractMenu.SEPARATOR);
-			this.setItem(34, AbstractMenu.SEPARATOR);
+			this.setItem(33, SEPARATOR);
+			this.setItem(34, SEPARATOR);
 		}
 
 		// Separators
-		this.setItem(27, AbstractMenu.SEPARATOR);
-		this.setItem(30, AbstractMenu.SEPARATOR);
-		this.setItem(31, AbstractMenu.SEPARATOR);
-		this.setItem(32, AbstractMenu.SEPARATOR);
-		this.setItem(35, AbstractMenu.SEPARATOR);
+		this.setItem(27, SEPARATOR);
+		this.setItem(30, SEPARATOR);
+		this.setItem(31, SEPARATOR);
+		this.setItem(32, SEPARATOR);
+		this.setItem(35, SEPARATOR);
 
 		// Music items
 		if (!musics.isEmpty()) {
@@ -126,8 +132,8 @@ public class JukeboxMainMenu extends AbstractMenu {
 		}
 
 		// Settings menu item
-		if (this.settingItem != null && this.getItemAt(slot) == this.settingItem) {
-			new JukeboxSettingsMenu(this.jukebox, this.player).open(this.player);
+		if (this.settingItem != null && this.getItemAt(slot).equals(this.settingItem)) {
+			this.settingsMenu.open(this.player);
 		}
 
 		return true;
