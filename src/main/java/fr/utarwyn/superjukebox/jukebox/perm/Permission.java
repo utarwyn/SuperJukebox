@@ -34,6 +34,30 @@ public class Permission {
 	}
 
 	/**
+	 * Returns the type of this permission
+	 * @return Type of the permission
+	 */
+	public PermissionType getType() {
+		return this.type;
+	}
+
+	/**
+	 * Returns the bukkit permission
+	 * @return Bukkit permission
+	 */
+	public String getBukkitPermission() {
+		return this.bukkitPermission;
+	}
+
+	/**
+	 * Redefines the type of this permission
+	 * @param type Permission type
+	 */
+	public void setType(PermissionType type) {
+		this.type = type;
+	}
+
+	/**
 	 * Check if a player has the permission specified.
 	 *
 	 * @return True if the player has the permission

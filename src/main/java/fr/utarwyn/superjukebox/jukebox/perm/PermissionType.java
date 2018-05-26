@@ -31,4 +31,22 @@ public enum PermissionType {
 		return WITH_PERM;
 	}
 
+	/**
+	 * Returns the next permission type in the list
+	 * @return Next permission type
+	 */
+	public PermissionType next() {
+		boolean next = false;
+
+		for (PermissionType value : values()) {
+			if (value == this) {
+				next = true;
+			} else if (next) {
+				return value;
+			}
+		}
+
+		return values()[0];
+	}
+
 }
