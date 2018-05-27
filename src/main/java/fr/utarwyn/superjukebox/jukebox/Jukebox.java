@@ -1,6 +1,7 @@
 package fr.utarwyn.superjukebox.jukebox;
 
 import fr.utarwyn.superjukebox.SuperJukebox;
+import fr.utarwyn.superjukebox.jukebox.settings.JukeboxSettings;
 import fr.utarwyn.superjukebox.music.Music;
 import fr.utarwyn.superjukebox.music.MusicManager;
 import fr.utarwyn.superjukebox.music.MusicPlayer;
@@ -68,7 +69,7 @@ public class Jukebox {
 	 * @return All musics that can be played by this jukebox.
 	 */
 	public List<Music> getMusics() {
-		if (this.getSettings().usesGlobalMusics()) {
+		if (this.getSettings().getUseGlobalMusics().getValue()) {
 			return SuperJukebox.getInstance().getInstance(MusicManager.class).getMusics();
 		} else {
 			return new ArrayList<>(this.musics);

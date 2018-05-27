@@ -1,9 +1,12 @@
 package fr.utarwyn.superjukebox.menu;
 
 import fr.utarwyn.superjukebox.jukebox.Jukebox;
+import fr.utarwyn.superjukebox.jukebox.settings.Setting;
+import fr.utarwyn.superjukebox.util.JUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -13,49 +16,48 @@ public class JukeboxSettingsMenu extends AbstractMenu {
 
 	private Jukebox jukebox;
 
-	private Player player;
-
-	private Map<String, ItemStack> settingItems;
+	private Map<Setting, ItemStack> settingItems;
 
 	private ItemStack permissionItem;
 
 	private AbstractMenu permissionsMenu;
 
-	JukeboxSettingsMenu(AbstractMenu parentMenu, Jukebox jukebox, Player player) {
+	JukeboxSettingsMenu(AbstractMenu parentMenu, Jukebox jukebox) {
 		super(3, "SuperJukebox settings menu");
 
 		this.jukebox = jukebox;
-		this.player = player;
 		this.settingItems = new HashMap<>();
 
-		this.permissionsMenu = new JukeboxPermissionsMenu(this, this.jukebox, this.player);
-
 		this.setParentMenu(parentMenu);
-		this.prepare();
 	}
 
 	@Override
 	public void prepare() {
+
+		// Clear all previous data
+		this.clear();
+		this.settingItems.clear();
+
 		// Setings items
 		this.createSettingItem(
 				10, Material.ENDER_PEARL,
-				"setDistance", "Distance",
+				"Distance",
 				this.jukebox.getSettings().getDistance()
 		);
 		this.createSettingItem(
 				11, Material.BEACON,
-				"setVolume", "Volume",
+				"Volume",
 				this.jukebox.getSettings().getVolume()
 		);
 		this.createSettingItem(
 				12, Material.DIAMOND,
-				"setUseGlobalMusics", "Global musics",
-				this.jukebox.getSettings().usesGlobalMusics()
+				"Global musics",
+				this.jukebox.getSettings().getUseGlobalMusics()
 		);
 		this.createSettingItem(
 				13, Material.REDSTONE_COMPARATOR,
-				"setAutoplay", "Autoplay",
-				this.jukebox.getSettings().isAutoplay()
+				"Autoplay",
+				this.jukebox.getSettings().getAutoplay()
 		);
 
 		// Permissions item
@@ -85,15 +87,46 @@ public class JukeboxSettingsMenu extends AbstractMenu {
 	}
 
 	@Override
-	public boolean onClick(Player player, int slot) {
-		ItemStack item = this.getItemAt(slot);
+	public void onClick(InventoryClickEvent event) {
+		ItemStack itemStack = this.getItemAt(event.getSlot());
 
-		// Permissions item
-		if (item.equals(this.permissionItem)) {
-			this.permissionsMenu.open(this.player);
+		// Setting item
+		for (Map.Entry<Setting, ItemStack> entry : this.settingItems.entrySet()) {
+			if (entry.getValue().equals(itemStack)) {
+				Setting setting = entry.getKey();
+
+				// Update the setting in memory in terms of the player's action
+				switch (setting.getJavaType()) {
+					case "Boolean":
+						setting.setValue(!(Boolean) setting.getValue());
+						break;
+					case "Integer":
+						System.out.println("soon!");
+						break;
+				}
+
+				// Update metadatas of the current itemstack and update the inventory!
+				itemStack.setItemMeta(this.updateSettingItemLore(setting, itemStack.getItemMeta()));
+				this.updateInventory();
+
+				break;
+			}
 		}
 
-		return true;
+		// Permissions item
+		if (itemStack.equals(this.permissionItem)) {
+			// Open the permission menu in another Thread
+			JUtil.runSync(() -> {
+				if (this.permissionsMenu == null) {
+					this.permissionsMenu = new JukeboxPermissionsMenu(this, this.jukebox);
+				}
+
+				this.permissionsMenu.prepare();
+				this.permissionsMenu.open((Player) event.getWhoClicked());
+			});
+		}
+
+		event.setCancelled(true);
 	}
 
 	@Override
@@ -101,37 +134,43 @@ public class JukeboxSettingsMenu extends AbstractMenu {
 		// TODO Save settings on the disk...
 	}
 
-	private void createSettingItem(int slot, Material material, String setter, String settingName, Object value) {
+	private void createSettingItem(int slot, Material material, String settingName, Setting setting) {
 		ItemStack itemStack = new ItemStack(material);
 		ItemMeta itemMeta = itemStack.getItemMeta();
 
 		itemMeta.setDisplayName(ChatColor.YELLOW + ChatColor.BOLD.toString() + settingName);
+		itemMeta = this.updateSettingItemLore(setting, itemMeta);
 
+		itemStack.setItemMeta(itemMeta);
+
+		this.setItem(slot, itemStack);
+		this.settingItems.put(setting, itemStack);
+	}
+
+	private ItemMeta updateSettingItemLore(Setting setting, ItemMeta itemMeta) {
 		List<String> lore = new ArrayList<>(Arrays.asList(
 				"",
-				ChatColor.GRAY + "Current value: " + this.formatSettingValue(value),
+				ChatColor.GRAY + "Current value: " + this.formatSettingValue(setting),
 				""
 		));
 
 		// Adding action lore
+		// TODO
 
 		itemMeta.setLore(lore);
-		itemStack.setItemMeta(itemMeta);
-
-		this.setItem(slot, itemStack);
-		this.settingItems.put(setter, itemStack);
+		return itemMeta;
 	}
 
-	private String formatSettingValue(Object value) {
-		switch (value.getClass().getSimpleName()) {
+	private String formatSettingValue(Setting setting) {
+		switch (setting.getJavaType()) {
 			case "Boolean":
-				if ((Boolean) value) {
+				if ((Boolean) setting.getValue()) {
 					return ChatColor.GREEN + "Yes";
 				} else {
 					return ChatColor.RED + "No";
 				}
 			case "Integer":
-				return ChatColor.AQUA.toString() + value;
+				return ChatColor.AQUA.toString() + setting.getValue();
 			default:
 				return ChatColor.DARK_GRAY + "- error -";
 		}

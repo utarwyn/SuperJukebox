@@ -1,4 +1,4 @@
-package fr.utarwyn.superjukebox.jukebox;
+package fr.utarwyn.superjukebox.jukebox.settings;
 
 import fr.utarwyn.superjukebox.Config;
 import fr.utarwyn.superjukebox.jukebox.perm.Permission;
@@ -22,22 +22,22 @@ public class JukeboxSettings {
 	/**
 	 * Max distance where a player can hear the sound of the jukebox
 	 */
-	private int distance;
+	private Setting<Integer> distance;
 
 	/**
 	 * Volume of a jukebox, in percent.
 	 */
-	private int volume;
+	private Setting<Integer> volume;
 
 	/**
 	 * True if the jukebox have to run automatically new music
 	 */
-	private boolean autoplay;
+	private Setting<Boolean> autoplay;
 
 	/**
 	 * True if the jukebox uses the global musics stored by the server
 	 */
-	private boolean useGlobalMusics;
+	private Setting<Boolean> useGlobalMusics;
 
 	/**
 	 * Permission to interact with the jukebox and to show its main menu.
@@ -57,12 +57,20 @@ public class JukeboxSettings {
 	/**
 	 * Constructs the jukebox settings object and apply default configuration!
 	 */
-	JukeboxSettings() {
-		// Default settings
-		this.autoplay = Config.jukeboxDefaultUseAutoplay;
-		this.useGlobalMusics = Config.jukeboxDefaultUseGlobalMusics;
-		this.setDistance(Config.jukeboxDefaultDistance);
-		this.setVolume(Config.jukeboxDefaultVolume);
+	public JukeboxSettings() {
+		// Create setting objects
+		this.distance = new Setting<Integer>("distance", Config.jukeboxDefaultDistance) {
+			public boolean checkValue(Integer distance) {
+				return distance >= MIN_DISTANCE;
+			}
+		};
+		this.volume = new Setting<Integer>("volume", Config.jukeboxDefaultVolume) {
+			public boolean checkValue(Integer volume) {
+				return volume >= 0;
+			}
+		};
+		this.autoplay = new Setting<>("autoplay", Config.jukeboxDefaultUseAutoplay);
+		this.useGlobalMusics = new Setting<>("globalmusics", Config.jukeboxDefaultUseGlobalMusics);
 
 		// Default permissions
 		this.interactPerm = this.createPermissionNode(Config.jukeboxDefaultInteractPerm, "interact");
@@ -74,7 +82,7 @@ public class JukeboxSettings {
 	 * Returns the max distance of the jukebox
 	 * @return Max distance of the jukebox
 	 */
-	public int getDistance() {
+	public Setting<Integer> getDistance() {
 		return this.distance;
 	}
 
@@ -82,8 +90,24 @@ public class JukeboxSettings {
 	 * Returns the volume of the jukebox, in percent.
 	 * @return Volume in percent.
 	 */
-	public int getVolume() {
+	public Setting<Integer> getVolume() {
 		return this.volume;
+	}
+
+	/**
+	 * Returns true if the jukebox is in an auto-playing mode
+	 * @return True if autoplay option is activated for the linked jukebox
+	 */
+	public Setting<Boolean> getAutoplay() {
+		return this.autoplay;
+	}
+
+	/**
+	 * Returns true is the jukebox uses the global musics system.
+	 * @return True for global musics.
+	 */
+	public Setting<Boolean> getUseGlobalMusics() {
+		return this.useGlobalMusics;
 	}
 
 	/**
@@ -111,66 +135,17 @@ public class JukeboxSettings {
 	}
 
 	/**
-	 * Returns true if the jukebox is in an auto-playing mode
-	 * @return True if autoplay option is activated for the linked jukebox
-	 */
-	public boolean isAutoplay() {
-		return this.autoplay;
-	}
-
-	/**
-	 * Returns true is the jukebox uses the global musics system.
-	 * @return True for global musics.
-	 */
-	public boolean usesGlobalMusics() {
-		return this.useGlobalMusics;
-	}
-
-	/**
-	 * Sets the max distance
-	 * @param distance Max distance
-	 */
-	public void setDistance(int distance) {
-		this.distance = Math.max(distance, MIN_DISTANCE);
-	}
-
-	/**
-	 * Sets the volume
-	 * @param volume The volume in percent
-	 */
-	public void setVolume(int volume) {
-		this.volume = Math.max(volume, 0);
-	}
-
-	/**
-	 * Activate the autoplay behavior or no.
-	 * @param autoplay True to turn on the autoplay system
-	 */
-	public void setAutoplay(boolean autoplay) {
-		this.autoplay = autoplay;
-	}
-
-	/**
-	 * Use global musics for this jukebox or no.
-	 * @param useGlobalMusics True if the jukebox have to use global musics.
-	 */
-	public void setUseGlobalMusics(boolean useGlobalMusics) {
-		this.useGlobalMusics = useGlobalMusics;
-	}
-
-	/**
 	 * Loads all the jukebox settings from a Bukkit configuration section
 	 * @param settingsSection Configuration section where all jukebox settings are stored
 	 * @param permsSection Configuration section where all jukebox permissions are stored
 	 */
-	void loadFromConfiguration(ConfigurationSection settingsSection, ConfigurationSection permsSection) {
+	public void loadFromConfiguration(ConfigurationSection settingsSection, ConfigurationSection permsSection) {
 		// Load settings
 		if (settingsSection != null) {
-			this.autoplay = settingsSection.getBoolean("autoplay");
-			this.useGlobalMusics = settingsSection.getBoolean("globalmusics");
-
-			this.setDistance(settingsSection.getInt("distance"));
-			this.setVolume(settingsSection.getInt("volume"));
+			this.distance.setValue(settingsSection.getInt("distance"));
+			this.volume.setValue(settingsSection.getInt("volume"));
+			this.autoplay.setValue(settingsSection.getBoolean("autoplay"));
+			this.useGlobalMusics.setValue(settingsSection.getBoolean("globalmusics"));
 		}
 
 		// Load permissions

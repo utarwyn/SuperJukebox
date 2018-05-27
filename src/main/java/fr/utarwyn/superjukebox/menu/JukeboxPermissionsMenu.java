@@ -6,6 +6,7 @@ import fr.utarwyn.superjukebox.jukebox.perm.PermissionType;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -19,25 +20,22 @@ public class JukeboxPermissionsMenu extends AbstractMenu {
 
 	private Jukebox jukebox;
 
-	private Player player;
-
 	private Map<Permission, ItemStack> permissionItems;
 
-	JukeboxPermissionsMenu(AbstractMenu parentMenu, Jukebox jukebox, Player player) {
+	JukeboxPermissionsMenu(AbstractMenu parentMenu, Jukebox jukebox) {
 		super(3, "Superjukebox permissions menu");
 
 		this.jukebox = jukebox;
-		this.player = player;
 		this.permissionItems = new HashMap<>();
 
 		this.setParentMenu(parentMenu);
-		this.prepare();
 	}
 
 	@Override
 	public void prepare() {
-		// Clear any previous items
+		// Clear any previous data
 		this.clear();
+		this.permissionItems.clear();
 
 		// Create permission items
 		this.createPermissionItem(10, Material.JUKEBOX, this.jukebox.getSettings().getInteractPerm());
@@ -58,24 +56,22 @@ public class JukeboxPermissionsMenu extends AbstractMenu {
 	}
 
 	@Override
-	public boolean onClick(Player player, int slot) {
-		ItemStack item = this.getItemAt(slot);
-
+	public void onClick(InventoryClickEvent event) {
 		for (Map.Entry<Permission, ItemStack> entry : this.permissionItems.entrySet()) {
-			if (entry.getValue().equals(item)) {
+			if (entry.getValue().equals(event.getCurrentItem())) {
 				Permission permission = entry.getKey();
 
 				// Redefine the type of the permission ...
 				permission.setType(permission.getType().next());
 
 				// ... and only the display name/lore of the current item!
-				this.updateItemMeta(item, permission);
+				this.updateItemMeta(this.getItemAt(event.getSlot()), permission);
 				this.updateInventory();
 				break;
 			}
 		}
 
-		return true;
+		event.setCancelled(true);
 	}
 
 	@Override

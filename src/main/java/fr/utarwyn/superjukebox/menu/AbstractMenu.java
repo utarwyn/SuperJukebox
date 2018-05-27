@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -272,11 +273,9 @@ public abstract class AbstractMenu implements InventoryHolder {
 
 	/**
 	 * Called when a player click on an item in the menu
-	 * @param player The player who interacts with the menu
-	 * @param slot The slot where the player has clicked
-	 * @return True if the event has to be cancelled
+	 * @param event Event object used to retreive all needed information about the click
 	 */
-	public abstract boolean onClick(Player player, int slot);
+	abstract void onClick(InventoryClickEvent event);
 
 	/**
 	 * Called when a player closes the menu

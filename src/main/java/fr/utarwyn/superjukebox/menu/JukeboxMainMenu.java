@@ -4,10 +4,12 @@ import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.jukebox.Jukebox;
 import fr.utarwyn.superjukebox.music.Music;
 import fr.utarwyn.superjukebox.music.MusicManager;
+import fr.utarwyn.superjukebox.util.JUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -38,14 +40,15 @@ public class JukeboxMainMenu extends AbstractMenu {
 		this.player = player;
 		this.currentPage = 1;
 
-		this.settingsMenu = new JukeboxSettingsMenu(this, this.jukebox, this.player);
-
 		this.prepare();
 	}
 
 	@Override
 	public void prepare() {
 		List<Music> musics = this.jukebox.getMusics();
+
+		// Clear any previous item
+		this.clear();
 
 		// Settings items
 		if (this.jukebox.getSettings().getEditSettingsPerm().has(this.player)) {
@@ -67,7 +70,7 @@ public class JukeboxMainMenu extends AbstractMenu {
 			ItemMeta musicsMeta = this.musicsItem.getItemMeta();
 
 			musicsMeta.setDisplayName(ChatColor.GOLD + "Manage jukebox musics");
-			if (this.jukebox.getSettings().usesGlobalMusics()) {
+			if (this.jukebox.getSettings().getUseGlobalMusics().getValue()) {
 				musicsMeta.setLore(Arrays.asList(
 						"§cYou can't edit this jukebox's musics", "§cbecause §lthey are managed globally§c.",
 						"§dYou can allow custom musics by changing the", "§doption in the settings menu of this jukbox."
@@ -118,25 +121,33 @@ public class JukeboxMainMenu extends AbstractMenu {
 	}
 
 	@Override
-	public boolean onClick(Player player, int slot) {
+	public void onClick(InventoryClickEvent event) {
 		// Click on a music disc!
-		if (slot < MUSICS_PER_PAGE) {
-			int musicId = (this.currentPage - 1) * MUSICS_PER_PAGE + slot;
+		if (event.getSlot() < MUSICS_PER_PAGE) {
+			int musicId = (this.currentPage - 1) * MUSICS_PER_PAGE + event.getSlot();
 
 			if (musicId < this.jukebox.getMusics().size()) {
 				Music music = SuperJukebox.getInstance().getInstance(MusicManager.class).getMusic(musicId);
 
 				this.jukebox.play(music);
-				player.sendMessage(ChatColor.GREEN + "Have a great moment with " + ChatColor.YELLOW + music.getName() + ChatColor.GREEN + " !");
+				this.player.sendMessage(ChatColor.GREEN + "Have a great moment with " + ChatColor.YELLOW + music.getName() + ChatColor.GREEN + " !");
 			}
 		}
 
 		// Settings menu item
-		if (this.settingItem != null && this.getItemAt(slot).equals(this.settingItem)) {
-			this.settingsMenu.open(this.player);
+		if (this.settingItem != null && event.getCurrentItem().equals(this.settingItem)) {
+			// Open the setting menu in another Thread
+			JUtil.runSync(() -> {
+				if (this.settingsMenu == null) {
+					this.settingsMenu = new JukeboxSettingsMenu(this, this.jukebox);
+				}
+
+				this.settingsMenu.prepare();
+				this.settingsMenu.open(this.player);
+			});
 		}
 
-		return true;
+		event.setCancelled(true);
 	}
 
 	@Override
