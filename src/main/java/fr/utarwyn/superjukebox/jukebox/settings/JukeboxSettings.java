@@ -59,16 +59,8 @@ public class JukeboxSettings {
 	 */
 	public JukeboxSettings() {
 		// Create setting objects
-		this.distance = new Setting<Integer>("distance", Config.jukeboxDefaultDistance) {
-			public boolean checkValue(Integer distance) {
-				return distance >= MIN_DISTANCE;
-			}
-		};
-		this.volume = new Setting<Integer>("volume", Config.jukeboxDefaultVolume) {
-			public boolean checkValue(Integer volume) {
-				return volume >= 0;
-			}
-		};
+		this.distance = new Setting<>("distance", Config.jukeboxDefaultDistance, value -> value >= MIN_DISTANCE);
+		this.volume = new Setting<>("volume", Config.jukeboxDefaultVolume, value -> value >= 0);
 		this.autoplay = new Setting<>("autoplay", Config.jukeboxDefaultUseAutoplay);
 		this.useGlobalMusics = new Setting<>("globalmusics", Config.jukeboxDefaultUseGlobalMusics);
 

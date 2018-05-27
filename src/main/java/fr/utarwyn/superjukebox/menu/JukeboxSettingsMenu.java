@@ -118,7 +118,7 @@ public class JukeboxSettingsMenu extends AbstractMenu {
 
 						// Apply the new value if possible
 						newValue = (Integer) setting.getValue() + difference;
-						if (setting.checkValue(newValue)) {
+						if (setting.isValid(newValue)) {
 							setting.setValue(newValue);
 						}
 						break;
