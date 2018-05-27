@@ -100,8 +100,27 @@ public class JukeboxSettingsMenu extends AbstractMenu {
 					case "Boolean":
 						setting.setValue(!(Boolean) setting.getValue());
 						break;
+
 					case "Integer":
-						System.out.println("soon!");
+						int difference, newValue;
+
+						// Left click = minus — Right click = plus
+						if (event.getClick().isLeftClick()) {
+							difference = -1;
+						} else {
+							difference = 1;
+						}
+
+						// Shift = 5 — Default = 1
+						if (event.getClick().isShiftClick()) {
+							difference *= 5;
+						}
+
+						// Apply the new value if possible
+						newValue = (Integer) setting.getValue() + difference;
+						if (setting.checkValue(newValue)) {
+							setting.setValue(newValue);
+						}
 						break;
 				}
 
@@ -154,8 +173,18 @@ public class JukeboxSettingsMenu extends AbstractMenu {
 				""
 		));
 
-		// Adding action lore
-		// TODO
+		switch (setting.getJavaType()) {
+			case "Boolean":
+				lore.add(ChatColor.LIGHT_PURPLE + "Click to switch the value!");
+				break;
+
+			case "Integer":
+				lore.add(ChatColor.RED + ChatColor.BOLD.toString() + "-5: " + ChatColor.LIGHT_PURPLE + "shift-left click");
+				lore.add(ChatColor.RED + ChatColor.BOLD.toString() + "-1: " + ChatColor.LIGHT_PURPLE + "left click");
+				lore.add(ChatColor.GREEN + ChatColor.BOLD.toString() + "+1: " + ChatColor.LIGHT_PURPLE + "right click");
+				lore.add(ChatColor.GREEN + ChatColor.BOLD.toString() + "+5: " + ChatColor.LIGHT_PURPLE + "shift-right click");
+				break;
+		}
 
 		itemMeta.setLore(lore);
 		return itemMeta;
@@ -169,8 +198,10 @@ public class JukeboxSettingsMenu extends AbstractMenu {
 				} else {
 					return ChatColor.RED + "No";
 				}
+
 			case "Integer":
 				return ChatColor.AQUA.toString() + setting.getValue();
+
 			default:
 				return ChatColor.DARK_GRAY + "- error -";
 		}
