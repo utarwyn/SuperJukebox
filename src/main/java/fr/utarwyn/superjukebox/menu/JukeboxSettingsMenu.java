@@ -7,13 +7,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.Arrays;
+import java.util.*;
 
 public class JukeboxSettingsMenu extends AbstractMenu {
 
 	private Jukebox jukebox;
 
 	private Player player;
+
+	private Map<String, ItemStack> settingItems;
 
 	private ItemStack permissionItem;
 
@@ -24,6 +26,7 @@ public class JukeboxSettingsMenu extends AbstractMenu {
 
 		this.jukebox = jukebox;
 		this.player = player;
+		this.settingItems = new HashMap<>();
 
 		this.permissionsMenu = new JukeboxPermissionsMenu(this, this.jukebox, this.player);
 
@@ -34,7 +37,26 @@ public class JukeboxSettingsMenu extends AbstractMenu {
 	@Override
 	public void prepare() {
 		// Setings items
-		// TODO
+		this.createSettingItem(
+				10, Material.ENDER_PEARL,
+				"setDistance", "Distance",
+				this.jukebox.getSettings().getDistance()
+		);
+		this.createSettingItem(
+				11, Material.BEACON,
+				"setVolume", "Volume",
+				this.jukebox.getSettings().getVolume()
+		);
+		this.createSettingItem(
+				12, Material.DIAMOND,
+				"setUseGlobalMusics", "Global musics",
+				this.jukebox.getSettings().usesGlobalMusics()
+		);
+		this.createSettingItem(
+				13, Material.REDSTONE_COMPARATOR,
+				"setAutoplay", "Autoplay",
+				this.jukebox.getSettings().isAutoplay()
+		);
 
 		// Permissions item
 		this.permissionItem = new ItemStack(Material.BLAZE_POWDER);
@@ -50,10 +72,10 @@ public class JukeboxSettingsMenu extends AbstractMenu {
 		this.setItem(16, this.permissionItem);
 
 		// Separators
-		for (int i = 0; i < 10; i ++) {
+		for (int i = 0; i < 10; i++) {
 			this.setItem(i, SEPARATOR);
 		}
-		for (int i = 17; i < 27; i ++) {
+		for (int i = 17; i < 27; i++) {
 			if (i == 18) continue;
 			this.setItem(i, SEPARATOR);
 		}
@@ -76,7 +98,43 @@ public class JukeboxSettingsMenu extends AbstractMenu {
 
 	@Override
 	public void onClose(Player player) {
+		// TODO Save settings on the disk...
+	}
 
+	private void createSettingItem(int slot, Material material, String setter, String settingName, Object value) {
+		ItemStack itemStack = new ItemStack(material);
+		ItemMeta itemMeta = itemStack.getItemMeta();
+
+		itemMeta.setDisplayName(ChatColor.YELLOW + ChatColor.BOLD.toString() + settingName);
+
+		List<String> lore = new ArrayList<>(Arrays.asList(
+				"",
+				ChatColor.GRAY + "Current value: " + this.formatSettingValue(value),
+				""
+		));
+
+		// Adding action lore
+
+		itemMeta.setLore(lore);
+		itemStack.setItemMeta(itemMeta);
+
+		this.setItem(slot, itemStack);
+		this.settingItems.put(setter, itemStack);
+	}
+
+	private String formatSettingValue(Object value) {
+		switch (value.getClass().getSimpleName()) {
+			case "Boolean":
+				if ((Boolean) value) {
+					return ChatColor.GREEN + "Yes";
+				} else {
+					return ChatColor.RED + "No";
+				}
+			case "Integer":
+				return ChatColor.AQUA.toString() + value;
+			default:
+				return ChatColor.DARK_GRAY + "- error -";
+		}
 	}
 
 }

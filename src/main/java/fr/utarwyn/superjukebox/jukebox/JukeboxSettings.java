@@ -151,6 +151,14 @@ public class JukeboxSettings {
 	}
 
 	/**
+	 * Use global musics for this jukebox or no.
+	 * @param useGlobalMusics True if the jukebox have to use global musics.
+	 */
+	public void setUseGlobalMusics(boolean useGlobalMusics) {
+		this.useGlobalMusics = useGlobalMusics;
+	}
+
+	/**
 	 * Loads all the jukebox settings from a Bukkit configuration section
 	 * @param settingsSection Configuration section where all jukebox settings are stored
 	 * @param permsSection Configuration section where all jukebox permissions are stored

@@ -68,8 +68,8 @@ public class JukeboxPermissionsMenu extends AbstractMenu {
 				// Redefine the type of the permission ...
 				permission.setType(permission.getType().next());
 
-				// ... and update the entire menu!
-				this.prepare();
+				// ... and only the display name/lore of the current item!
+				this.updateItemMeta(item, permission);
 				this.updateInventory();
 				break;
 			}
@@ -80,7 +80,7 @@ public class JukeboxPermissionsMenu extends AbstractMenu {
 
 	@Override
 	public void onClose(Player player) {
-
+		// TODO Save permissions on the disk...
 	}
 
 	/**
@@ -93,7 +93,22 @@ public class JukeboxPermissionsMenu extends AbstractMenu {
 	 */
 	private void createPermissionItem(int slot, Material material, Permission permission) {
 		ItemStack item = new ItemStack(material);
-		ItemMeta itemMeta = item.getItemMeta();
+
+		// Update the item just created with all needed information
+		this.updateItemMeta(item, permission);
+
+		// Add the item to the inventory and to memory
+		this.setItem(slot, item);
+		this.permissionItems.put(permission, item);
+	}
+
+	/**
+	 * Update an itemstack with informations about a permission
+	 * @param itemStack The itemstack which have to be updated
+	 * @param permission The permission used to do the update
+	 */
+	private void updateItemMeta(ItemStack itemStack, Permission permission) {
+		ItemMeta itemMeta = itemStack.getItemMeta();
 
 		itemMeta.setDisplayName(ChatColor.YELLOW + ChatColor.BOLD.toString() + "Permission " + ChatColor.GOLD + ChatColor.UNDERLINE + permission.getBukkitPermission().toUpperCase());
 
@@ -114,11 +129,7 @@ public class JukeboxPermissionsMenu extends AbstractMenu {
 
 		itemMeta.setLore(lore);
 		itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_POTION_EFFECTS);
-		item.setItemMeta(itemMeta);
-
-		// Add the item to the inventory and to memory
-		this.setItem(slot, item);
-		this.permissionItems.put(permission, item);
+		itemStack.setItemMeta(itemMeta);
 	}
 
 }
