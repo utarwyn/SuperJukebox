@@ -1,6 +1,8 @@
 package fr.utarwyn.superjukebox.menu;
 
+import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.jukebox.Jukebox;
+import fr.utarwyn.superjukebox.jukebox.JukeboxesManager;
 import fr.utarwyn.superjukebox.jukebox.perm.Permission;
 import fr.utarwyn.superjukebox.jukebox.perm.PermissionType;
 import org.bukkit.ChatColor;
@@ -76,7 +78,8 @@ public class JukeboxPermissionsMenu extends AbstractMenu {
 
 	@Override
 	public void onClose(Player player) {
-		// TODO Save permissions on the disk...
+		// Save all permissions on the disk
+		SuperJukebox.getInstance().getInstance(JukeboxesManager.class).saveJukeboxPermissionsOnDisk(this.jukebox);
 	}
 
 	/**

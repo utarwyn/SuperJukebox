@@ -53,6 +53,20 @@ public class JukeboxesManager extends AbstractManager {
 		return null;
 	}
 
+	public void saveJukeboxSettingsOnDisk(Jukebox jukebox) {
+		ConfigurationSection jukeboxSection = this.database.getConfiguration().getConfigurationSection("jukebox" + jukebox.getId());
+
+		jukebox.getSettings().applySettingsToConfiguration(jukeboxSection.getConfigurationSection("settings"));
+		this.database.save();
+	}
+
+	public void saveJukeboxPermissionsOnDisk(Jukebox jukebox) {
+		ConfigurationSection jukeboxSection = this.database.getConfiguration().getConfigurationSection("jukebox" + jukebox.getId());
+
+		jukebox.getSettings().applyPermissionsToConfiguration(jukeboxSection.getConfigurationSection("permissions"));
+		this.database.save();
+	}
+
 	private void reloadDatabase() {
 		ConfigurationSection section;
 		YamlConfiguration conf = this.database.getConfiguration();

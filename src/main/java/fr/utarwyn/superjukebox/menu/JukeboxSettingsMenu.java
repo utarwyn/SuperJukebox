@@ -1,6 +1,8 @@
 package fr.utarwyn.superjukebox.menu;
 
+import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.jukebox.Jukebox;
+import fr.utarwyn.superjukebox.jukebox.JukeboxesManager;
 import fr.utarwyn.superjukebox.jukebox.settings.Setting;
 import fr.utarwyn.superjukebox.util.JUtil;
 import org.bukkit.ChatColor;
@@ -150,7 +152,8 @@ public class JukeboxSettingsMenu extends AbstractMenu {
 
 	@Override
 	public void onClose(Player player) {
-		// TODO Save settings on the disk...
+		// Save all settings on the disk
+		SuperJukebox.getInstance().getInstance(JukeboxesManager.class).saveJukeboxSettingsOnDisk(this.jukebox);
 	}
 
 	private void createSettingItem(int slot, Material material, String settingName, Setting setting) {

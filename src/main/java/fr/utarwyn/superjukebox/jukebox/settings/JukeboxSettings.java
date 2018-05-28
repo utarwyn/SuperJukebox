@@ -149,6 +149,27 @@ public class JukeboxSettings {
 	}
 
 	/**
+	 * Applies all settings' value in a Bukkit configuration section
+	 * @param section The Bukkit configuration section
+	 */
+	public void applySettingsToConfiguration(ConfigurationSection section) {
+		section.set("distance", this.distance.getValue());
+		section.set("volume", this.volume.getValue());
+		section.set("autoplay", this.autoplay.getValue());
+		section.set("globalmusics", this.useGlobalMusics.getValue());
+	}
+
+	/**
+	 * Applies all permissions in a Bukkit configuration section
+	 * @param section The Bukkit configuration section
+	 */
+	public void applyPermissionsToConfiguration(ConfigurationSection section) {
+		section.set("interact", this.interactPerm.getType().name());
+		section.set("editmusics", this.editMusicsPerm.getType().name());
+		section.set("editsettings", this.editSettingsPerm.getType().name());
+	}
+
+	/**
 	 * Creates a permission node from a name and the configuration section
 	 * @param configSection Configuration section used to get the type of the permission
 	 * @param permissionName Permission name used to create the Bukkit permission
