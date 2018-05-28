@@ -45,6 +45,9 @@ public class Config extends YamlLinker {
 	@Configurable
 	public static String locale;
 
+	@Configurable(key = "alljukeboxesaresuper")
+	public static boolean allJukeboxAreSuper;
+
 	@Configurable(key = "jukeboxconfiguration.settings.distance")
 	public static int jukeboxDefaultDistance;
 

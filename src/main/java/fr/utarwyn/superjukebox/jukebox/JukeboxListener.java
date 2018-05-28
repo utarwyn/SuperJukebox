@@ -3,10 +3,12 @@ package fr.utarwyn.superjukebox.jukebox;
 import fr.utarwyn.superjukebox.Config;
 import fr.utarwyn.superjukebox.menu.JukeboxMainMenu;
 import fr.utarwyn.superjukebox.util.JUtil;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class JukeboxListener implements Listener {
@@ -36,6 +38,16 @@ public class JukeboxListener implements Listener {
 
 			// Play opening sound
 			JUtil.playSound(player, "NOTE_PLING", "BLOCK_NOTE_PLING");
+		}
+	}
+
+	@EventHandler
+	public void onBlockPlace(BlockPlaceEvent event) {
+		Block block = event.getBlock();
+
+		// Create a new super jukebox if needed!
+		if (block.getType() == Config.MAT_JUKEBOX && Config.allJukeboxAreSuper) {
+			JUtil.runSync(() -> this.manager.createSuperJukebox(block));
 		}
 	}
 

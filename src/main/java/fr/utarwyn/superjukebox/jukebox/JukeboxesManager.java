@@ -45,6 +45,20 @@ public class JukeboxesManager extends AbstractManager {
 		Menus.closeAll();
 	}
 
+	void createSuperJukebox(Block block) {
+		Jukebox jukebox = new Jukebox(this.getNewJukeboxId(), block);
+
+		// Save jukebox in memory
+		this.jukeboxes.add(jukebox);
+
+		// Save all jukebox's settings on disk
+		this.database.getConfiguration().createSection("jukebox" + jukebox.getId());
+
+		this.saveJukeboxLocationOnDisk(jukebox);
+		this.saveJukeboxSettingsOnDisk(jukebox);
+		this.saveJukeboxPermissionsOnDisk(jukebox);
+	}
+
 	Jukebox getJukeboxAt(Block block) {
 		for (Jukebox jukebox : this.jukeboxes)
 			if (jukebox.getBlock().equals(block))
@@ -53,17 +67,36 @@ public class JukeboxesManager extends AbstractManager {
 		return null;
 	}
 
-	public void saveJukeboxSettingsOnDisk(Jukebox jukebox) {
-		ConfigurationSection jukeboxSection = this.database.getConfiguration().getConfigurationSection("jukebox" + jukebox.getId());
+	public void saveJukeboxLocationOnDisk(Jukebox jukebox) {
+		ConfigurationSection section = this.getJukeboxConfigSection(jukebox);
 
-		jukebox.getSettings().applySettingsToConfiguration(jukeboxSection.getConfigurationSection("settings"));
+		if (!section.isConfigurationSection("location")) {
+			section.createSection("location");
+		}
+
+		JUtil.saveLocationIntoConfig(section.getConfigurationSection("location"), jukebox.getBlock().getLocation());
+		this.database.save();
+	}
+
+	public void saveJukeboxSettingsOnDisk(Jukebox jukebox) {
+		ConfigurationSection section = this.getJukeboxConfigSection(jukebox);
+
+		if (!section.isConfigurationSection("settings")) {
+			section.createSection("settings");
+		}
+
+		jukebox.getSettings().applySettingsToConfiguration(section.getConfigurationSection("settings"));
 		this.database.save();
 	}
 
 	public void saveJukeboxPermissionsOnDisk(Jukebox jukebox) {
-		ConfigurationSection jukeboxSection = this.database.getConfiguration().getConfigurationSection("jukebox" + jukebox.getId());
+		ConfigurationSection section = this.getJukeboxConfigSection(jukebox);
 
-		jukebox.getSettings().applyPermissionsToConfiguration(jukeboxSection.getConfigurationSection("permissions"));
+		if (!section.isConfigurationSection("permissions")) {
+			section.createSection("permissions");
+		}
+
+		jukebox.getSettings().applyPermissionsToConfiguration(section.getConfigurationSection("permissions"));
 		this.database.save();
 	}
 
@@ -97,6 +130,20 @@ public class JukeboxesManager extends AbstractManager {
 			// And put the jukebox into the memory list!
 			this.jukeboxes.add(jukebox);
 		}
+	}
+
+	private ConfigurationSection getJukeboxConfigSection(Jukebox jukebox) {
+		return this.database.getConfiguration().getConfigurationSection("jukebox" + jukebox.getId());
+	}
+
+	private int getNewJukeboxId() {
+		int max = 0;
+
+		for (Jukebox jukebox : this.jukeboxes)
+			if (jukebox.getId() > max)
+				max = jukebox.getId();
+
+		return max + 1;
 	}
 
 }

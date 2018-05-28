@@ -149,7 +149,7 @@ public class JukeboxSettings {
 	}
 
 	/**
-	 * Applies all settings' value in a Bukkit configuration section
+	 * Applies all settings values in a Bukkit configuration section
 	 * @param section The Bukkit configuration section
 	 */
 	public void applySettingsToConfiguration(ConfigurationSection section) {
