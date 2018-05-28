@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -49,6 +50,19 @@ public class JukeboxListener implements Listener {
 		if (block.getType() == Config.MAT_JUKEBOX && Config.allJukeboxAreSuper) {
 			JUtil.runSync(() -> this.manager.createSuperJukebox(block));
 		}
+	}
+
+	@EventHandler
+	public void onBlockBreak(BlockBreakEvent event) {
+		Block block = event.getBlock();
+		if (block.getType() != Config.MAT_JUKEBOX) return;
+
+		// Is there a super jukebox here?
+		Jukebox jukebox = this.manager.getJukeboxAt(block);
+		if (jukebox == null) return; // No :'(
+
+		// Remove it!
+		this.manager.removeSuperJukebox(block);
 	}
 
 }

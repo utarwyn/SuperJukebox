@@ -59,6 +59,19 @@ public class JukeboxesManager extends AbstractManager {
 		this.saveJukeboxPermissionsOnDisk(jukebox);
 	}
 
+	void removeSuperJukebox(Block block) {
+		Jukebox jukebox = this.getJukeboxAt(block);
+		if (jukebox == null) return;
+
+		// Unload the jukebox and remove it from the memory
+		jukebox.unload();
+		this.jukeboxes.remove(jukebox);
+
+		// Remove the jukebox from the configuration
+		this.database.getConfiguration().set("jukebox" + jukebox.getId(), null);
+		this.database.save();
+	}
+
 	Jukebox getJukeboxAt(Block block) {
 		for (Jukebox jukebox : this.jukeboxes)
 			if (jukebox.getBlock().equals(block))
