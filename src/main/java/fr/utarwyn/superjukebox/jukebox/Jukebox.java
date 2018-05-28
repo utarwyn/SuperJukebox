@@ -102,7 +102,7 @@ public class Jukebox {
 		if (!this.player.isTaskRunned())
 			this.player.runTask();
 
-		this.player.restart();
+		this.player.start();
 	}
 
 	/**
@@ -122,7 +122,7 @@ public class Jukebox {
 			this.player.runTask();
 
 		// Restart the player at the beginning of the music!
-		this.player.restart();
+		this.player.start();
 	}
 
 	/**

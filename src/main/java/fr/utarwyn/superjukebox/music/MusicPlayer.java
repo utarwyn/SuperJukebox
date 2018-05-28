@@ -38,17 +38,22 @@ public class MusicPlayer implements Runnable {
 		this.taskRunned = true;
 	}
 
-	public synchronized void start() {
+	public synchronized void resume() {
 		this.playing = true;
 	}
 
-	public synchronized void stop() {
+	public synchronized void pause() {
 		this.playing = false;
 	}
 
-	public synchronized void restart() {
+	public synchronized void start() {
 		this.tick = -1;
-		this.start();
+		this.resume();
+	}
+
+	public synchronized void stop() {
+		this.pause();
+		this.tick = -1;
 	}
 
 	public synchronized void destroy() {
@@ -61,7 +66,7 @@ public class MusicPlayer implements Runnable {
 			long start = System.currentTimeMillis();
 
 			synchronized (this) {
-				if (this.playing) {
+				if (this.playing && this.canPlay()) {
 					this.tick++;
 
 					if (this.tick > this.jukebox.getCurrentMusic().getLength()) {
@@ -111,13 +116,18 @@ public class MusicPlayer implements Runnable {
 			nbNote++;
 		}
 
-		// Play particles at the same time!
-		if (nbNote > 0)
+		// Play particles at the same time if needed!
+		if (nbNote > 0 && this.jukebox.getSettings().getParticles().getValue()) {
 			ParticleEffect.NOTE.send(
 					Bukkit.getOnlinePlayers(),
 					this.jukebox.getBlock().getLocation().clone().add(.5, 1.2, .5),
 					.3f, .3f, .3f, 1f, nbNote
 			);
+		}
+	}
+
+	private boolean canPlay() {
+		return !this.jukebox.getSettings().getPlayWithRedstone().getValue() || this.jukebox.getBlock().isBlockIndirectlyPowered();
 	}
 
 }

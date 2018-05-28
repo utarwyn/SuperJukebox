@@ -40,6 +40,16 @@ public class JukeboxSettings {
 	private Setting<Boolean> useGlobalMusics;
 
 	/**
+	 * True if the plugin has to display particles when playing music
+	 */
+	private Setting<Boolean> particles;
+
+	/**
+	 * If this setting is set to true, a redstone signal is needed to play music
+	 */
+	private Setting<Boolean> playWithRedstone;
+
+	/**
 	 * Permission to interact with the jukebox and to show its main menu.
 	 */
 	private Permission interactPerm;
@@ -63,6 +73,8 @@ public class JukeboxSettings {
 		this.volume = new Setting<>("volume", Config.jukeboxDefaultVolume, value -> value >= 0);
 		this.autoplay = new Setting<>("autoplay", Config.jukeboxDefaultUseAutoplay);
 		this.useGlobalMusics = new Setting<>("globalmusics", Config.jukeboxDefaultUseGlobalMusics);
+		this.particles = new Setting<>("particles", Config.jukeboxDefaultParticles);
+		this.playWithRedstone = new Setting<>("playwithredstone", Config.jukeboxDefaultPlayWithRedstone);
 
 		// Default permissions
 		this.interactPerm = this.createPermissionNode(Config.jukeboxDefaultInteractPerm, "interact");
@@ -103,6 +115,22 @@ public class JukeboxSettings {
 	}
 
 	/**
+	 * Returns true is the jukebox has the particles system activated
+	 * @return True is the plugin has to display particles
+	 */
+	public Setting<Boolean> getParticles() {
+		return this.particles;
+	}
+
+	/**
+	 * Returns true is the jukebox has to be powered to play music
+	 * @return True if redstone has an impact on the jukebox behavior.
+	 */
+	public Setting<Boolean> getPlayWithRedstone() {
+		return this.playWithRedstone;
+	}
+
+	/**
 	 * Returns the interaction permission of the linked jukebox
 	 * @return The permission node
 	 */
@@ -138,6 +166,8 @@ public class JukeboxSettings {
 			this.volume.setValue(settingsSection.getInt("volume"));
 			this.autoplay.setValue(settingsSection.getBoolean("autoplay"));
 			this.useGlobalMusics.setValue(settingsSection.getBoolean("globalmusics"));
+			this.particles.setValue(settingsSection.getBoolean("particles"));
+			this.playWithRedstone.setValue(settingsSection.getBoolean("playwithredstone"));
 		}
 
 		// Load permissions
@@ -157,6 +187,8 @@ public class JukeboxSettings {
 		section.set("volume", this.volume.getValue());
 		section.set("autoplay", this.autoplay.getValue());
 		section.set("globalmusics", this.useGlobalMusics.getValue());
+		section.set("particles", this.particles.getValue());
+		section.set("playwithredstone", this.playWithRedstone.getValue());
 	}
 
 	/**

@@ -35,6 +35,7 @@ public class JukeboxListener implements Listener {
 		if (player.isSneaking()) return;
 
 		if (jukebox.getSettings().getInteractPerm().has(player)) {
+			event.setCancelled(true);
 			JUtil.runSync(() -> new JukeboxMainMenu(jukebox, player).open(player));
 
 			// Play opening sound
@@ -62,7 +63,7 @@ public class JukeboxListener implements Listener {
 		if (jukebox == null) return; // No :'(
 
 		// Remove it!
-		this.manager.removeSuperJukebox(block);
+		JUtil.runSync(() -> this.manager.removeSuperJukebox(block));
 	}
 
 }

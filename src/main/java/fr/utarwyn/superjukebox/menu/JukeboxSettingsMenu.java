@@ -61,6 +61,16 @@ public class JukeboxSettingsMenu extends AbstractMenu {
 				"Autoplay",
 				this.jukebox.getSettings().getAutoplay()
 		);
+		this.createSettingItem(
+				14, Material.NOTE_BLOCK,
+				"Particles",
+				this.jukebox.getSettings().getParticles()
+		);
+		this.createSettingItem(
+				15, Material.REDSTONE,
+				"Play with redstone",
+				this.jukebox.getSettings().getPlayWithRedstone()
+		);
 
 		// Permissions item
 		this.permissionItem = new ItemStack(Material.BLAZE_POWDER);

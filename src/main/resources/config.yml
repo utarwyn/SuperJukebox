@@ -21,6 +21,8 @@ jukeboxconfiguration:
     volume: 100
     globalmusics: true
     autoplay: false
+    particles: true
+    playwithredstone: false
 
   # In this section, you can use OP, WITH_PERM or EVERYONE.
   permissions:
