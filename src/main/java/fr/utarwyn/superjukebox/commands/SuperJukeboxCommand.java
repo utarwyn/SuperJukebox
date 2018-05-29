@@ -48,7 +48,7 @@ public class SuperJukeboxCommand implements CommandExecutor {
 
 				Player player = (Player) sender;
 
-				if (!JUtil.playerHasPerm(player, "command.create")) {
+				if (!JUtil.playerHasPerm(player, "create")) {
 					sender.sendMessage(Config.PREFIX + ChatColor.RED + "You don't have permission to do that!");
 					return true;
 				}
@@ -72,7 +72,7 @@ public class SuperJukeboxCommand implements CommandExecutor {
 
 			case "reload":
 			case "rl":
-				if (!JUtil.senderHasPerm(sender, "command.reload")) {
+				if (!JUtil.senderHasPerm(sender, "reload")) {
 					sender.sendMessage(Config.PREFIX + ChatColor.RED + "You don't have permission to do that!");
 					return true;
 				}
