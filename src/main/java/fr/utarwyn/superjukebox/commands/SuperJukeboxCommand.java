@@ -7,9 +7,11 @@ import fr.utarwyn.superjukebox.jukebox.JukeboxesManager;
 import fr.utarwyn.superjukebox.util.JUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class SuperJukeboxCommand implements CommandExecutor {
 
@@ -37,10 +39,41 @@ public class SuperJukeboxCommand implements CommandExecutor {
 				sender.sendMessage(Config.PREFIX + ChatColor.RED + "No help for the moment.");
 				break;
 
+			case "create":
+				// Convert the aimed jukebox by a super jukebox if the player has the permission!
+				if (!(sender instanceof Player)) {
+					sender.sendMessage(Config.PREFIX + ChatColor.RED + "You cannot send this command as the console!");
+					return true;
+				}
+
+				Player player = (Player) sender;
+
+				if (!JUtil.playerHasPerm(player, "command.create")) {
+					sender.sendMessage(Config.PREFIX + ChatColor.RED + "You don't have permission to do that!");
+					return true;
+				}
+
+				Block block = player.getTargetBlock(null, 6);
+
+				if (block == null || block.getType() != Config.MAT_JUKEBOX) {
+					sender.sendMessage(Config.PREFIX + ChatColor.RED + "The aimed block is not a valid jukebox.");
+					return true;
+				}
+
+				if (this.manager.getJukeboxAt(block) != null) {
+					sender.sendMessage(Config.PREFIX + ChatColor.RED + "The aimed block is already a super jukebox!");
+					return true;
+				}
+
+				// Create a superjukebox here!
+				this.manager.createSuperJukebox(block);
+				sender.sendMessage(Config.PREFIX + ChatColor.GREEN + "This jukebox is now " + ChatColor.GOLD + "A SuperJukebox " + ChatColor.GREEN + "!");
+				break;
+
 			case "reload":
 			case "rl":
-				if (!JUtil.senderHasPerm(sender, "reload")) {
-					sender.sendMessage(Config.PREFIX + "You don't have permission to do that!");
+				if (!JUtil.senderHasPerm(sender, "command.reload")) {
+					sender.sendMessage(Config.PREFIX + ChatColor.RED + "You don't have permission to do that!");
 					return true;
 				}
 

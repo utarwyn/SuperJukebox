@@ -45,7 +45,7 @@ public class JukeboxesManager extends AbstractManager {
 		Menus.closeAll();
 	}
 
-	void createSuperJukebox(Block block) {
+	public void createSuperJukebox(Block block) {
 		Jukebox jukebox = new Jukebox(this.getNewJukeboxId(), block);
 
 		// Save jukebox in memory
@@ -72,7 +72,7 @@ public class JukeboxesManager extends AbstractManager {
 		this.database.save();
 	}
 
-	Jukebox getJukeboxAt(Block block) {
+	public Jukebox getJukeboxAt(Block block) {
 		for (Jukebox jukebox : this.jukeboxes)
 			if (jukebox.getBlock().equals(block))
 				return jukebox;

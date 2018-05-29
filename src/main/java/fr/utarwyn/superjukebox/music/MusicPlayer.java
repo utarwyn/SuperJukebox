@@ -70,8 +70,7 @@ public class MusicPlayer implements Runnable {
 					this.tick++;
 
 					if (this.tick > this.jukebox.getCurrentMusic().getLength()) {
-						this.playing = false;
-						this.tick = -1;
+						this.stop();
 
 						// Check for autoplay!
 						if (this.jukebox.getSettings().getAutoplay().getValue())

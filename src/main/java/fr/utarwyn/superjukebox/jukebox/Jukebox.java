@@ -88,8 +88,8 @@ public class Jukebox {
 	 * Change to the next music!
 	 */
 	public void nextMusic() {
-		this.currentMusicIdx = (this.currentMusicIdx + 1) % this.musics.size();
-		this.currentMusic = this.musics.get(this.currentMusicIdx);
+		this.currentMusicIdx = (this.currentMusicIdx + 1) % this.getMusics().size();
+		this.currentMusic = this.getMusics().get(this.currentMusicIdx);
 	}
 
 	/**
@@ -134,14 +134,6 @@ public class Jukebox {
 
 		if (this.player != null)
 			this.player.destroy();
-	}
-
-	/**
-	 * TEMP
-	 * TODO: use a music manager with custom music id to load musics here
-	 */
-	public void addMusic(Music music) {
-		this.musics.add(music);
 	}
 
 	/**
