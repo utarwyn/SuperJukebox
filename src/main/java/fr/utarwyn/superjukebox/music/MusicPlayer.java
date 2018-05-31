@@ -5,6 +5,7 @@ import fr.utarwyn.superjukebox.jukebox.Jukebox;
 import fr.utarwyn.superjukebox.music.model.Layer;
 import fr.utarwyn.superjukebox.music.model.Note;
 import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitTask;
 import org.inventivetalent.particle.ParticleEffect;
 
 public class MusicPlayer implements Runnable {
@@ -17,7 +18,7 @@ public class MusicPlayer implements Runnable {
 
 	private int tick;
 
-	private boolean taskRunned;
+	private BukkitTask task;
 
 	public MusicPlayer(Jukebox jukebox) {
 		this.jukebox = jukebox;
@@ -28,14 +29,12 @@ public class MusicPlayer implements Runnable {
 	}
 
 	public boolean isTaskRunned() {
-		return this.taskRunned;
+		return this.task != null && !this.task.isCancelled();
 	}
 
 	public synchronized void runTask() {
-		if (this.taskRunned) return;
-
-		Bukkit.getScheduler().runTaskAsynchronously(SuperJukebox.getInstance(), this);
-		this.taskRunned = true;
+		if (this.isTaskRunned()) return;
+		this.task = Bukkit.getScheduler().runTaskAsynchronously(SuperJukebox.getInstance(), this);
 	}
 
 	public synchronized void resume() {
@@ -73,10 +72,11 @@ public class MusicPlayer implements Runnable {
 						this.stop();
 
 						// Check for autoplay!
-						if (this.jukebox.getSettings().getAutoplay().getValue())
+						if (this.jukebox.getSettings().getAutoplay().getValue()) {
 							this.jukebox.playNext();
+						}
 
-						return;
+						continue;
 					}
 
 					if (Bukkit.getOnlinePlayers().size() > 0)
