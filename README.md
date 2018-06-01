@@ -1,5 +1,6 @@
-# SuperJukebox (under development)
 ![Plugin's logo](https://i.imgur.com/bZC1wDi.png)
+
+# SuperJukebox (under development)
 
 [![Travis](https://img.shields.io/travis/utarwyn/SuperJukebox.svg?style=flat-square)](https://travis-ci.org/utarwyn/SuperJukebox) [![GitHub last commit (branch)](https://img.shields.io/github/last-commit/utarwyn/superjukebox/master.svg?style=flat-square)](https://github.com/utarwyn/SuperJukebox/commits/master) \
 [![license](https://img.shields.io/github/license/utarwyn/superjukebox.svg?style=flat-square)](https://github.com/utarwyn/SuperJukebox/blob/master/LICENSE) \

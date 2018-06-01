@@ -39,6 +39,11 @@ public class Config extends YamlLinker {
 	 */
 	public static final Material MAT_JUKEBOX = Material.JUKEBOX;
 
+	/**
+	 * Folder inside the plugin's folder used to store all music files
+	 */
+	public static final String MUSICS_FOLDER = "musics";
+
 	@Configurable
 	public static boolean debug;
 

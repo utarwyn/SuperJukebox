@@ -1,9 +1,7 @@
 package fr.utarwyn.superjukebox.menu;
 
-import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.jukebox.Jukebox;
 import fr.utarwyn.superjukebox.music.Music;
-import fr.utarwyn.superjukebox.music.MusicManager;
 import fr.utarwyn.superjukebox.util.JUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -127,7 +125,7 @@ public class JukeboxMainMenu extends AbstractMenu {
 			int musicId = (this.currentPage - 1) * MUSICS_PER_PAGE + event.getSlot();
 
 			if (musicId < this.jukebox.getMusics().size()) {
-				Music music = SuperJukebox.getInstance().getInstance(MusicManager.class).getMusic(musicId);
+				Music music = this.jukebox.getMusics().get(musicId);
 
 				this.jukebox.play(music);
 				this.player.sendMessage(ChatColor.GREEN + "Have a great moment with " + ChatColor.YELLOW + music.getName() + ChatColor.GREEN + " !");

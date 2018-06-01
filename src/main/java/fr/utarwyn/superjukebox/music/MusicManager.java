@@ -1,15 +1,18 @@
 package fr.utarwyn.superjukebox.music;
 
 import fr.utarwyn.superjukebox.AbstractManager;
+import fr.utarwyn.superjukebox.Config;
 import fr.utarwyn.superjukebox.SuperJukebox;
-import fr.utarwyn.superjukebox.util.FlatFile;
-import fr.utarwyn.superjukebox.util.Log;
-import fr.utarwyn.superjukebox.util.NBSDecodeException;
-import fr.utarwyn.superjukebox.util.NBSDecoder;
+import fr.utarwyn.superjukebox.util.*;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +43,35 @@ public class MusicManager extends AbstractManager {
 
 	}
 
+	public boolean importMusic(String url) {
+		try {
+			URL urlObject = new URL(url);
+			String fileName = url.substring(url.lastIndexOf('/') + 1, url.length());
+			if (!fileName.endsWith(".nbs")) return false;
+
+			fileName = fileName.replace("%20", " ");
+
+			File targetFile = new File(SuperJukebox.getInstance().getDataFolder().getAbsolutePath() + File.separator + "musics" + File.separator + fileName);
+
+			// Copy the file into the disk
+			Files.copy(urlObject.openStream(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+			// Add it to the configuration (and the memory!)
+			if (this.createMusicConfigurationSection(targetFile)) {
+				return true;
+			} else {
+				if (targetFile.exists()) {
+					// Music cannot been loaded, remove the imported file.
+					targetFile.delete();
+				}
+
+				return false;
+			}
+		} catch (IOException e) {
+			return false;
+		}
+	}
+
 	public List<Music> getMusics() {
 		return new ArrayList<>(this.musics.values());
 	}
@@ -56,35 +88,72 @@ public class MusicManager extends AbstractManager {
 
 		for (String confKey : conf.getKeys(false)) {
 			section = conf.getConfigurationSection(confKey);
-
-			int id = section.getInt("id");
-			String filename = section.getString("file").replace("..", "");
-
-			File file = new File(this.getPlugin().getDataFolder(), "musics/" + filename);
-
-			if (!file.exists()) {
-				Log.warn("Music #" + id + " (" + filename + ") doesn't exist anymore! Deleting from configuration.");
-				conf.set(confKey, null);
-				continue;
-			}
-
-			try {
-				Music music = NBSDecoder.decode(file);
-
-				// Update the icon of the music
-				music.setIconWithMaterialId(section.getString("icon"));
-
-				this.musics.put(id, music);
-			} catch (NBSDecodeException e) {
-				Log.warn("Music #" + id + " (" + filename + ") cannot be loaded! Details below.");
-				e.printStackTrace();
-			}
+			this.loadMusicFile(section);
 		}
 
 		Log.log(this.musics.size() + " musics loaded from config!");
 
 		// Save edited configuration! (when music doesn't exist)
 		this.database.save();
+	}
+
+	private boolean loadMusicFile(ConfigurationSection section) {
+		int id = section.getInt("id");
+		String filename = section.getString("file").replace("..", "");
+
+		File file = new File(this.getPlugin().getDataFolder(), Config.MUSICS_FOLDER + File.separator + filename);
+
+		if (!file.exists()) {
+			Log.warn("Music #" + id + " (" + filename + ") doesn't exist anymore! Deleting from configuration.");
+			section.getRoot().set(section.getName(), null);
+			return false;
+		}
+
+		try {
+			Music music = NBSDecoder.decode(file);
+
+			// Update the icon of the music
+			music.setIconWithMaterialId(section.getString("icon"));
+
+			this.musics.put(id, music);
+			return true;
+		} catch (NBSDecodeException e) {
+			Log.warn("Music #" + id + " (" + filename + ") cannot be loaded! Details below.");
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	private boolean createMusicConfigurationSection(File file) {
+		// Generate an unique number for the section name!
+		String ts = String.valueOf(System.currentTimeMillis());
+		String uniqueKey = ts + JUtil.RND.nextInt(1000);
+
+		// Create the configuration
+		ConfigurationSection section = this.database.getConfiguration().createSection("music" + uniqueKey);
+
+		section.set("id", this.getNewMusicId());
+		section.set("file", file.getName());
+		section.set("icon", this.getRandomMusicMaterial().name());
+
+		this.database.save();
+
+		// And load the new configuration section into memory!
+		return this.loadMusicFile(section);
+	}
+
+	private int getNewMusicId() {
+		int max = 0;
+
+		for (Integer musicId : this.musics.keySet())
+			if (musicId > max)
+				max = musicId;
+
+		return max + 1;
+	}
+
+	private Material getRandomMusicMaterial() {
+		return Material.valueOf("RECORD_" + (JUtil.RND.nextInt(10) + 3));
 	}
 
 }

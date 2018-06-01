@@ -2,6 +2,7 @@ package fr.utarwyn.superjukebox.commands;
 
 import fr.utarwyn.superjukebox.Config;
 import fr.utarwyn.superjukebox.SuperJukebox;
+import fr.utarwyn.superjukebox.commands.music.MusicCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -16,6 +17,7 @@ public class MainCommand extends AbstractCommand {
 		super("superjukebox", "sj");
 
 		this.addSubCommand(new CreateCommand());
+		this.addSubCommand(new MusicCommand());
 		this.addSubCommand(new HelpCommand());
 		this.addSubCommand(new ReloadCommand());
 	}

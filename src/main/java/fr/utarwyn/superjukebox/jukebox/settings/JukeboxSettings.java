@@ -64,6 +64,8 @@ public class JukeboxSettings {
 	 */
 	private Permission editSettingsPerm;
 
+	// TODO: setting for announcing new music
+
 	/**
 	 * Constructs the jukebox settings object and apply default configuration!
 	 */

@@ -81,7 +81,7 @@ public abstract class AbstractCommand extends Command implements TabCompleter, C
 
 		// Check argument count
 		if (!this.checkArgLength(args.length)) {
-			sender.sendMessage(Config.PREFIX + "§cWrong argument number. Try §6/sj help §cto show the plugin's help!");
+			sender.sendMessage(Config.PREFIX + "§cWrong argument count. §6/sj help §cto show the plugin's help!");
 			return true;
 		}
 

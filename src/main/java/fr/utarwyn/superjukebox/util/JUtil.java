@@ -9,12 +9,17 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
+import java.util.Random;
+
 /**
  * The Utility class for SuperJukebox!
- * @since 1.0.0
+ *
  * @author Utarwyn
+ * @since 1.0.0
  */
 public class JUtil {
+
+	public static final Random RND = new Random();
 
 	/**
 	 * No constructor, it's an utility class!
@@ -26,6 +31,7 @@ public class JUtil {
 	/**
 	 * Create a Bukkit Location object from a stored location in a Yaml configuration.
 	 * (This method only supports block coordinates)
+	 *
 	 * @param section Root configuration section where the location is stored.
 	 * @return A Bukkit Location object.
 	 */
@@ -39,7 +45,8 @@ public class JUtil {
 	/**
 	 * Save a Bukkit Location object into a Yaml configuration.
 	 * (This method only supports block coordinates)
-	 * @param section Section where the location will be stored.
+	 *
+	 * @param section  Section where the location will be stored.
 	 * @param location Location to store into the configuration.
 	 */
 	public static void saveLocationIntoConfig(ConfigurationSection section, Location location) {
@@ -51,6 +58,7 @@ public class JUtil {
 
 	/**
 	 * Shortcut used to create an synchronous Java thread
+	 *
 	 * @param runnable Runnable to run synchronously
 	 */
 	public static void runSync(Runnable runnable) {
@@ -62,7 +70,7 @@ public class JUtil {
 	 * Permissions are automatically prefixed by the name of the plugin.
 	 *
 	 * @param player Player to check
-	 * @param perm Permission used for the test
+	 * @param perm   Permission used for the test
 	 * @return True if the player has the given permission
 	 */
 	public static boolean playerHasPerm(Player player, String perm) {
@@ -74,7 +82,7 @@ public class JUtil {
 	 * Permissions are automatically prefixed by the name of the plugin.
 	 *
 	 * @param sender Command sender to check
-	 * @param perm Permission used for the test
+	 * @param perm   Permission used for the test
 	 * @return True if the command sender has the given permission
 	 */
 	public static boolean senderHasPerm(CommandSender sender, String perm) {
@@ -83,9 +91,10 @@ public class JUtil {
 
 	/**
 	 * Plays a sound at a specific location with support of 1.8 sound and 1.9+ sound.
+	 *
 	 * @param location Location where to play the sound
-	 * @param sound18 Sound string for 1.8 versions
-	 * @param sound19 Sound string for 1.9 versions
+	 * @param sound18  Sound string for 1.8 versions
+	 * @param sound19  Sound string for 1.9 versions
 	 */
 	public static void playSound(Location location, String sound18, String sound19) {
 		Sound sound = JUtil.generateSound(sound18, sound19);
@@ -98,7 +107,7 @@ public class JUtil {
 	 * Plays a sound at a specific location with support of 1.8 sound and 1.9+ sound.
 	 * Plays the sound only for a specific player.
 	 *
-	 * @param player Player which will receive the sound
+	 * @param player  Player which will receive the sound
 	 * @param sound18 Sound string for 1.8 versions
 	 * @param sound19 Sound string for 1.9 versions
 	 */
@@ -138,6 +147,7 @@ public class JUtil {
 
 	/**
 	 * Returns the existance of a sound by its name
+	 *
 	 * @param soundName Sound name to check
 	 * @return True if the sound with the given name exists
 	 */
@@ -163,10 +173,11 @@ public class JUtil {
 
 		if (JUtil.soundExists(sound18))
 			sound = Sound.valueOf(sound18);   // 1.8
-		else if (JUtil.soundExists(sound19))
-			sound = Sound.valueOf(sound19);   // 1.9+
 		else
-			return null;                      // Else? Not supported.
+			if (JUtil.soundExists(sound19))
+				sound = Sound.valueOf(sound19);   // 1.9+
+			else
+				return null;                      // Else? Not supported.
 
 		return sound;
 	}
