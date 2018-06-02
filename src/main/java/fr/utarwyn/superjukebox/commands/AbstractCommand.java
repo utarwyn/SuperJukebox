@@ -63,9 +63,6 @@ public abstract class AbstractCommand extends Command implements TabCompleter, C
 
 		// Add all aliases
 		Collections.addAll(this.getAliases(), aliases);
-
-		// Register the command inside the Bukkit server!
-		AbstractCommand.register(this);
 	}
 
 	@Override
@@ -310,7 +307,7 @@ public abstract class AbstractCommand extends Command implements TabCompleter, C
 	 * This method is called by the AsbtractCommand class.
 	 * @param command Object to register inside the Bukkit server
 	 */
-	private static void register(AbstractCommand command) {
+	public static void register(AbstractCommand command) {
 		// Get the command map of the server first!
 		if (commandMap == null) {
 			try {

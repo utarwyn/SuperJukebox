@@ -1,5 +1,6 @@
 package fr.utarwyn.superjukebox;
 
+import fr.utarwyn.superjukebox.commands.AbstractCommand;
 import fr.utarwyn.superjukebox.commands.MainCommand;
 import fr.utarwyn.superjukebox.jukebox.JukeboxesManager;
 import fr.utarwyn.superjukebox.music.MusicManager;
@@ -24,7 +25,7 @@ public class SuperJukebox extends JavaPlugin {
 		new JukeboxesManager();
 
 		// Register the main command!
-		new MainCommand();
+		AbstractCommand.register(new MainCommand());
 	}
 
 	@Override
