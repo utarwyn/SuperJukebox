@@ -45,6 +45,10 @@ public class JukeboxesManager extends AbstractManager {
 		Menus.closeAll();
 	}
 
+	public List<Jukebox> getJukeboxes() {
+		return new ArrayList<>(this.jukeboxes);
+	}
+
 	public void createSuperJukebox(Block block) {
 		Jukebox jukebox = new Jukebox(this.getNewJukeboxId(), block);
 

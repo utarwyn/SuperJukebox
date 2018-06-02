@@ -90,6 +90,15 @@ public class Jukebox {
 	}
 
 	/**
+	 * Returns the current music index played by this jukebox
+	 *
+	 * @return Current music index
+	 */
+	public int getCurrentMusicIndex() {
+		return this.currentMusicIdx;
+	}
+
+	/**
 	 * Change to the next music!
 	 */
 	public void nextMusic() {
@@ -117,7 +126,10 @@ public class Jukebox {
 	 */
 	public void play(Music music) {
 		// Does the music exist in the list?
-		if (!this.getMusics().contains(music)) return;
+		if (!this.getMusics().contains(music)) {
+			this.player.stop();
+			return;
+		}
 
 		// Ssetup the current music
 		this.currentMusicIdx = this.getMusics().indexOf(music);

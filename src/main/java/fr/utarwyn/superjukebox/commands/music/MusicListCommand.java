@@ -30,6 +30,11 @@ public class MusicListCommand extends AbstractCommand {
 	public void perform(CommandSender sender) {
 		List<Music> musics = this.manager.getMusics();
 
+		if (musics.isEmpty()) {
+			sender.sendMessage(Config.PREFIX + ChatColor.RED + "There is no music yet.");
+			return;
+		}
+
 		int page = this.readArgOrDefault(1);
 		if (page <= 0 || page > Math.ceil(musics.size() / (double) MUSICS_PER_PAGE)) {
 			sender.sendMessage(Config.PREFIX + ChatColor.RED + "This page does not exist!");

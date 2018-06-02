@@ -3,6 +3,8 @@ package fr.utarwyn.superjukebox.music;
 import fr.utarwyn.superjukebox.AbstractManager;
 import fr.utarwyn.superjukebox.Config;
 import fr.utarwyn.superjukebox.SuperJukebox;
+import fr.utarwyn.superjukebox.jukebox.Jukebox;
+import fr.utarwyn.superjukebox.jukebox.JukeboxesManager;
 import fr.utarwyn.superjukebox.util.*;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -92,6 +94,42 @@ public class MusicManager extends AbstractManager {
 		}
 	}
 
+	public synchronized boolean removeMusic(Music music) {
+		boolean deleted = false;
+		int musicId = -1;
+
+		// Delete the configuration section of the music
+		for (Map.Entry<Integer, Music> entry : this.musics.entrySet()) {
+			if (entry.getValue() == music) {
+				musicId = entry.getKey();
+				deleted = this.deleteMusicConfigurationSection(entry.getKey());
+				break;
+			}
+		}
+
+		if (deleted) {
+			// Delete music from memory
+			this.musics.remove(musicId);
+
+			// Jump to next music for jukeboxes
+			for (Jukebox jukebox : SuperJukebox.getInstance().getInstance(JukeboxesManager.class).getJukeboxes()) {
+				if (jukebox.getCurrentMusic() == music) {
+					int musicIndex = jukebox.getCurrentMusicIndex();
+					List<Music> musics = jukebox.getMusics();
+					Music newMusic = null;
+
+					if (musicIndex < musics.size()) {
+						newMusic = musics.get(musicIndex);
+					}
+
+					jukebox.play(newMusic);
+				}
+			}
+		}
+
+		return deleted;
+	}
+
 	public List<Music> getMusics() {
 		return new ArrayList<>(this.musics.values());
 	}
@@ -100,7 +138,7 @@ public class MusicManager extends AbstractManager {
 		return this.musics.getOrDefault(id, null);
 	}
 
-	private void reloadDatabase() {
+	private synchronized void reloadDatabase() {
 		ConfigurationSection section;
 		YamlConfiguration conf = this.database.getConfiguration();
 
@@ -144,7 +182,7 @@ public class MusicManager extends AbstractManager {
 		}
 	}
 
-	private boolean createMusicConfigurationSection(File file) {
+	private synchronized boolean createMusicConfigurationSection(File file) {
 		// Generate an unique number for the section name!
 		String ts = String.valueOf(System.currentTimeMillis());
 		String uniqueKey = ts + JUtil.RND.nextInt(1000);
@@ -166,6 +204,20 @@ public class MusicManager extends AbstractManager {
 			this.database.save();
 			return false;
 		}
+	}
+
+	private synchronized boolean deleteMusicConfigurationSection(int musicId) {
+		for (String sectionName : this.database.getConfiguration().getKeys(false)) {
+			ConfigurationSection section = this.database.getConfiguration().getConfigurationSection(sectionName);
+
+			if (section.getInt("id") == musicId) {
+				section.getRoot().set(sectionName, null);
+				this.database.save();
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private int getNewMusicId() {

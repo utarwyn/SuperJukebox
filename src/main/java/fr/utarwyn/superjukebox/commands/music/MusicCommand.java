@@ -11,6 +11,7 @@ public class MusicCommand extends AbstractCommand {
 
 		this.addSubCommand(new MusicImportCommand());
 		this.addSubCommand(new MusicListCommand());
+		this.addSubCommand(new MusicRemoveCommand());
 	}
 
 	@Override
