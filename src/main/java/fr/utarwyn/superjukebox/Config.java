@@ -71,6 +71,9 @@ public class Config extends YamlLinker {
 	@Configurable(key = "jukeboxconfiguration.settings.playwithredstone")
 	public static boolean jukeboxDefaultPlayWithRedstone;
 
+	@Configurable(key = "jukeboxconfiguration.settings.announcements")
+	public static boolean jukeboxDefaultAnnouncements;
+
 	@Configurable(key = "jukeboxconfiguration.permissions.interact")
 	public static String jukeboxDefaultInteractPerm;
 

@@ -25,7 +25,7 @@ public class JukeboxSettingsMenu extends AbstractMenu {
 	private AbstractMenu permissionsMenu;
 
 	JukeboxSettingsMenu(AbstractMenu parentMenu, Jukebox jukebox) {
-		super(3, "SuperJukebox settings menu");
+		super(4, "SuperJukebox settings menu");
 
 		this.jukebox = jukebox;
 		this.settingItems = new HashMap<>();
@@ -67,10 +67,15 @@ public class JukeboxSettingsMenu extends AbstractMenu {
 				this.jukebox.getSettings().getParticles()
 		);
 		this.createSettingItem(
-				15, Material.REDSTONE,
-				"Play with redstone",
-				this.jukebox.getSettings().getPlayWithRedstone()
-		);
+                19, Material.REDSTONE,
+                "Play with redstone",
+                this.jukebox.getSettings().getPlayWithRedstone()
+        );
+        this.createSettingItem(
+                20, Material.SIGN,
+                "Announce music",
+                this.jukebox.getSettings().getAnnouncements()
+        );
 
 		// Permissions item
 		this.permissionItem = new ItemStack(Material.BLAZE_POWDER);
@@ -89,13 +94,16 @@ public class JukeboxSettingsMenu extends AbstractMenu {
 		for (int i = 0; i < 10; i++) {
 			this.setItem(i, SEPARATOR);
 		}
-		for (int i = 17; i < 27; i++) {
-			if (i == 18) continue;
+		for (int i = 17; i < 19; i++) {
+		    this.setItem(i, SEPARATOR);
+        }
+		for (int i = 26; i < 36; i++) {
+			if (i == 27) continue;
 			this.setItem(i, SEPARATOR);
 		}
 
 		// Back item
-		this.setItem(18, BACK_ITEM);
+		this.setItem(27, BACK_ITEM);
 	}
 
 	@Override

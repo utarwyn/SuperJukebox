@@ -4,7 +4,9 @@ import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.jukebox.Jukebox;
 import fr.utarwyn.superjukebox.music.model.Layer;
 import fr.utarwyn.superjukebox.music.model.Note;
+import fr.utarwyn.superjukebox.util.ActionBarUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitTask;
 import org.inventivetalent.particle.ParticleEffect;
 
@@ -48,6 +50,11 @@ public class MusicPlayer implements Runnable {
 	public synchronized void start() {
 		this.tick = -1;
 		this.resume();
+
+		// Send announcements to all players
+		if (this.jukebox.getSettings().getAnnouncements().getValue()) {
+			ActionBarUtil.sendActionTitleToAllPlayers(ChatColor.GREEN + "♫ " + this.jukebox.getCurrentMusic().getName() + " §e(" + this.jukebox.getCurrentMusic().getOriginalAuthor() + ")");
+		}
 	}
 
 	public synchronized void stop() {

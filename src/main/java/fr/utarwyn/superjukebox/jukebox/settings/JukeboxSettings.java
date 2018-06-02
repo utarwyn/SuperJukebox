@@ -49,6 +49,11 @@ public class JukeboxSettings {
 	 */
 	private Setting<Boolean> playWithRedstone;
 
+    /**
+     * Activate music announcements
+     */
+	private Setting<Boolean> announcements;
+
 	/**
 	 * Permission to interact with the jukebox and to show its main menu.
 	 */
@@ -77,6 +82,7 @@ public class JukeboxSettings {
 		this.useGlobalMusics = new Setting<>("globalmusics", Config.jukeboxDefaultUseGlobalMusics);
 		this.particles = new Setting<>("particles", Config.jukeboxDefaultParticles);
 		this.playWithRedstone = new Setting<>("playwithredstone", Config.jukeboxDefaultPlayWithRedstone);
+		this.announcements = new Setting<>("announcements", Config.jukeboxDefaultAnnouncements);
 
 		// Default permissions
 		this.interactPerm = this.createPermissionNode(Config.jukeboxDefaultInteractPerm, "interact");
@@ -132,6 +138,14 @@ public class JukeboxSettings {
 		return this.playWithRedstone;
 	}
 
+    /**
+     * Returns true if music have to be announced.
+     * @return Setting value
+     */
+	public Setting<Boolean> getAnnouncements() {
+	    return this.announcements;
+    }
+
 	/**
 	 * Returns the interaction permission of the linked jukebox
 	 * @return The permission node
@@ -170,6 +184,7 @@ public class JukeboxSettings {
 			this.useGlobalMusics.setValue(settingsSection.getBoolean("globalmusics"));
 			this.particles.setValue(settingsSection.getBoolean("particles"));
 			this.playWithRedstone.setValue(settingsSection.getBoolean("playwithredstone"));
+			this.announcements.setValue(settingsSection.getBoolean("announcements"));
 		}
 
 		// Load permissions
@@ -191,6 +206,7 @@ public class JukeboxSettings {
 		section.set("globalmusics", this.useGlobalMusics.getValue());
 		section.set("particles", this.particles.getValue());
 		section.set("playwithredstone", this.playWithRedstone.getValue());
+		section.set("announcements", this.announcements.getValue());
 	}
 
 	/**

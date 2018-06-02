@@ -23,6 +23,7 @@ jukeboxconfiguration:
     autoplay: false
     particles: true
     playwithredstone: false
+    announcements: true
 
   # In this section, you can use OP, WITH_PERM or EVERYONE.
   permissions:
