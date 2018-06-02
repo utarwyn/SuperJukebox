@@ -13,6 +13,8 @@ import java.util.List;
 
 public class Music {
 
+	private String filename;
+
 	private short length;
 
 	private short height;
@@ -33,7 +35,8 @@ public class Music {
 
 	private ItemStack icon;
 
-	public Music(short length, short height, String name, String author, String originalAuthor, String desc, float tempo) {
+	public Music(String filename, short length, short height, String name, String author, String originalAuthor, String desc, float tempo) {
+		this.filename = filename;
 		this.length = length;
 		this.height = height;
 		this.name = name;
@@ -49,6 +52,10 @@ public class Music {
 
 	public List<Layer> getLayers() {
 		return new ArrayList<>(this.layers);
+	}
+
+	public String getFilename() {
+		return this.filename;
 	}
 
 	public short getLength() {

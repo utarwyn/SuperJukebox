@@ -74,12 +74,23 @@ public class NBSDecoder {
 			readInt(dis);
 			readString(dis);
 		} catch (IOException e) {
+            try {
+                dis.close();
+                fis.close();
+            } catch (IOException e2) {
+                e2.printStackTrace();
+            }
+
 			// Argh! An error in the format of the file maybe?
 			throw new NBSDecodeException(file, "Cannot read NBS description!", e);
 		}
 
 		// Instanciate a new music object with all data
-		Music music = new Music(length, height, name, author, originalAuthor, description, tempo/100f);
+		Music music = new Music(
+				file.getName(), length, height, name,
+				author, originalAuthor, description,
+				tempo/100f
+		);
 
 		// Reading notes and layers...
 		short tick = -1;
@@ -109,7 +120,14 @@ public class NBSDecoder {
 		} catch (IOException e) {
 			// Argh! Cannot read layers and notes... Failure.
 			throw new NBSDecodeException(file, "Cannot read NBS music notes!", e);
-		}
+		} finally {
+            try {
+                dis.close();
+                fis.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
 		// All seems to be good!
 		return music;

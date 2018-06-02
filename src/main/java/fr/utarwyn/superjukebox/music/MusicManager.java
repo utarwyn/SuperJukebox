@@ -43,32 +43,52 @@ public class MusicManager extends AbstractManager {
 
 	}
 
-	public boolean importMusic(String url) {
+	public MusicImportResult importMusic(String endpoint) {
+	    File musicsFolder = new File(SuperJukebox.getInstance().getDataFolder().getAbsolutePath() + File.separator + "musics");
+        File targetFile = null;
+
 		try {
-			URL urlObject = new URL(url);
-			String fileName = url.substring(url.lastIndexOf('/') + 1, url.length());
-			if (!fileName.endsWith(".nbs")) return false;
+			URL urlObject = new URL(endpoint);
+			String fileName = endpoint.substring(endpoint.lastIndexOf('/') + 1, endpoint.length());
+			if (!fileName.toLowerCase().endsWith(".nbs")) return MusicImportResult.MALFORMATED_URL;
 
 			fileName = fileName.replace("%20", " ");
-
-			File targetFile = new File(SuperJukebox.getInstance().getDataFolder().getAbsolutePath() + File.separator + "musics" + File.separator + fileName);
+			targetFile = new File(musicsFolder, fileName);
 
 			// Copy the file into the disk
 			Files.copy(urlObject.openStream(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-			// Add it to the configuration (and the memory!)
-			if (this.createMusicConfigurationSection(targetFile)) {
-				return true;
-			} else {
-				if (targetFile.exists()) {
-					// Music cannot been loaded, remove the imported file.
-					targetFile.delete();
-				}
-
-				return false;
-			}
 		} catch (IOException e) {
-			return false;
+		    File[] musicsFiles = musicsFolder.listFiles((dir, name) -> name.toLowerCase().endsWith(".nbs"));
+		    if (musicsFiles == null) {
+		        return MusicImportResult.UNKNOWN_FILE;
+            }
+
+			for (File musicFile : musicsFiles) {
+		        String simpleName = musicFile.getName().substring(0, musicFile.getName().lastIndexOf("."));
+
+		        if (simpleName.replace(" ", "").equalsIgnoreCase(endpoint)) {
+                    targetFile = musicFile;
+                    break;
+                }
+            }
+		}
+
+		if (targetFile == null || !targetFile.exists() || !targetFile.isFile()) {
+		    return MusicImportResult.UNKNOWN_FILE;
+        }
+
+        // Check if the target is already imported into the configuration
+        for (Music music : this.getMusics()) {
+		    if (music.getFilename().equalsIgnoreCase(targetFile.getName())) {
+		        return MusicImportResult.ALREADY_IMPORTED;
+            }
+        }
+
+		// Add it to the configuration (and the memory!)
+		if (this.createMusicConfigurationSection(targetFile)) {
+			return MusicImportResult.GOOD;
+		} else {
+			return MusicImportResult.DECODING_ERROR;
 		}
 	}
 
@@ -139,7 +159,13 @@ public class MusicManager extends AbstractManager {
 		this.database.save();
 
 		// And load the new configuration section into memory!
-		return this.loadMusicFile(section);
+		if (this.loadMusicFile(section)) {
+		    return true;
+        } else {
+		    section.getRoot().set(section.getName(), null);
+		    this.database.save();
+		    return false;
+        }
 	}
 
 	private int getNewMusicId() {

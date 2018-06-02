@@ -10,6 +10,7 @@ public class MusicCommand extends AbstractCommand {
 		super("music");
 
 		this.addSubCommand(new MusicImportCommand());
+		this.addSubCommand(new MusicListCommand());
 	}
 
 	@Override

@@ -18,7 +18,7 @@ public class MusicImportCommand extends AbstractCommand {
 
 		this.manager = SuperJukebox.getInstance().getInstance(MusicManager.class);
 
-		this.setParameters(Parameter.STRING);
+		this.addParameter(Parameter.STRING);
 	}
 
 	@Override
@@ -28,14 +28,26 @@ public class MusicImportCommand extends AbstractCommand {
 
 	@Override
 	public void performPlayer(Player player) {
-		String url = this.readArg();
+		String endpoint = this.readArg();
 
 		Bukkit.getScheduler().runTaskAsynchronously(SuperJukebox.getInstance(), () -> {
-			if (this.manager.importMusic(url)) {
-				player.sendMessage(Config.PREFIX + "§aMusic imported and ready to be played!");
-			} else {
-				player.sendMessage(Config.PREFIX + "§cWe cannot import your music. Check your url.");
-			}
+            switch (this.manager.importMusic(endpoint)) {
+                case GOOD:
+                    player.sendMessage(Config.PREFIX + "§aMusic imported and ready to be played!");
+                    break;
+                case MALFORMATED_URL:
+                    player.sendMessage(Config.PREFIX + "§cWe cannot import your music: check your url.");
+                    break;
+                case UNKNOWN_FILE:
+                    player.sendMessage(Config.PREFIX + "§cWe cannot import your music: unknown file.");
+                    break;
+                case DECODING_ERROR:
+                    player.sendMessage(Config.PREFIX + "§cWe cannot import your music: nbs decoding error.");
+                    break;
+                case ALREADY_IMPORTED:
+                    player.sendMessage(Config.PREFIX + "§cWe cannot import your music: music already imported. Check your console to have more info.");
+                    break;
+            }
 		});
 	}
 
