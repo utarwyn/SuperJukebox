@@ -43,7 +43,7 @@ public class NBSDecoder {
 		}
 
 		short length, height, tempo;
-		String name, author, description;
+		String name, author, originalAuthor, description;
 
 		// Read metadata of the music first
 		// All explanations of this part of the code is on the Minecraft Note Block Studio's Wiki here:
@@ -58,7 +58,7 @@ public class NBSDecoder {
 			name = readString(dis);
 			// Author(s)
 			author = readString(dis);
-			readString(dis);
+			originalAuthor = readString(dis);
 			// Description
 			description = readString(dis);
 			// Tempo
@@ -79,7 +79,7 @@ public class NBSDecoder {
 		}
 
 		// Instanciate a new music object with all data
-		Music music = new Music(length, height, name, author, description, tempo/100f);
+		Music music = new Music(length, height, name, author, originalAuthor, description, tempo/100f);
 
 		// Reading notes and layers...
 		short tick = -1;

@@ -21,6 +21,8 @@ public class Music {
 
 	private String author;
 
+	private String originalAuthor;
+
 	private String description;
 
 	private float tempo;
@@ -31,11 +33,12 @@ public class Music {
 
 	private ItemStack icon;
 
-	public Music(short length, short height, String name, String author, String desc, float tempo) {
+	public Music(short length, short height, String name, String author, String originalAuthor, String desc, float tempo) {
 		this.length = length;
 		this.height = height;
 		this.name = name;
 		this.author = author;
+		this.originalAuthor = originalAuthor;
 		this.description = desc;
 		this.tempo = tempo;
 		this.delay = 20 / this.tempo;
@@ -62,6 +65,10 @@ public class Music {
 
 	public String getAuthor() {
 		return this.author;
+	}
+
+	public String getOriginalAuthor() {
+		return this.originalAuthor;
 	}
 
 	public String getDescription() {
@@ -107,6 +114,7 @@ public class Music {
 				ChatColor.DARK_GRAY + "*-------------------------*",
 				ChatColor.GRAY + "Duration: " + ChatColor.YELLOW + this.getFormattedLength(),
 				ChatColor.GRAY + "Author: " + ChatColor.AQUA + this.author,
+				ChatColor.GRAY + "Original author: " + ChatColor.AQUA + this.originalAuthor,
 				ChatColor.GRAY + "Description: " + ChatColor.WHITE + this.description,
 				ChatColor.DARK_GRAY + "*-------------------------*",
 				"",
@@ -122,7 +130,7 @@ public class Music {
 		// Convert the music length into seconds ...
 		int seconds = this.length / 20;
 		// ... and into a readable time!
-		return (seconds / 60) + ":" + (seconds % 60);
+		return (seconds / 60) + ":" + String.format("%02d", seconds % 60);
 	}
 
 }
