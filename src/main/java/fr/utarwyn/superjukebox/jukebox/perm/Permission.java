@@ -35,6 +35,7 @@ public class Permission {
 
 	/**
 	 * Returns the type of this permission
+	 *
 	 * @return Type of the permission
 	 */
 	public PermissionType getType() {
@@ -43,6 +44,7 @@ public class Permission {
 
 	/**
 	 * Returns the bukkit permission
+	 *
 	 * @return Bukkit permission
 	 */
 	public String getBukkitPermission() {
@@ -51,6 +53,7 @@ public class Permission {
 
 	/**
 	 * Redefines the type of this permission
+	 *
 	 * @param type Permission type
 	 */
 	public void setType(PermissionType type) {

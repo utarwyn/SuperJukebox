@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 
 /**
  * With this command, this is very easy to convert a jukebox into a SuperJukebox!
+ *
  * @author Utarwyn
  * @since 1.0.0
  */

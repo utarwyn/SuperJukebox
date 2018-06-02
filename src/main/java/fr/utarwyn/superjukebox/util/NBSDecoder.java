@@ -74,12 +74,12 @@ public class NBSDecoder {
 			readInt(dis);
 			readString(dis);
 		} catch (IOException e) {
-            try {
-                dis.close();
-                fis.close();
-            } catch (IOException e2) {
-                e2.printStackTrace();
-            }
+			try {
+				dis.close();
+				fis.close();
+			} catch (IOException e2) {
+				e2.printStackTrace();
+			}
 
 			// Argh! An error in the format of the file maybe?
 			throw new NBSDecodeException(file, "Cannot read NBS description!", e);
@@ -89,7 +89,7 @@ public class NBSDecoder {
 		Music music = new Music(
 				file.getName(), length, height, name,
 				author, originalAuthor, description,
-				tempo/100f
+				tempo / 100f
 		);
 
 		// Reading notes and layers...
@@ -121,13 +121,13 @@ public class NBSDecoder {
 			// Argh! Cannot read layers and notes... Failure.
 			throw new NBSDecodeException(file, "Cannot read NBS music notes!", e);
 		} finally {
-            try {
-                dis.close();
-                fis.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+			try {
+				dis.close();
+				fis.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 
 		// All seems to be good!
 		return music;
@@ -137,11 +137,11 @@ public class NBSDecoder {
 	 * Adds a note to a specific Layer Java object.
 	 * If the layer does not exist, this method will create a new one.
 	 *
-	 * @param music Music where the layer has to be referenced
-	 * @param layer Specific layer level aimed
-	 * @param tick Tick where the note is played
+	 * @param music      Music where the layer has to be referenced
+	 * @param layer      Specific layer level aimed
+	 * @param tick       Tick where the note is played
 	 * @param instrument Instrument of the note
-	 * @param note The decimal note
+	 * @param note       The decimal note
 	 */
 	private static void addNoteToLayer(Music music, int layer, int tick, byte instrument, byte note) {
 		music.getLayerOrDefault(layer).addNote(tick, new Note(instrument, note));
@@ -149,6 +149,7 @@ public class NBSDecoder {
 
 	/**
 	 * Read a short value in little-endian (32bit)
+	 *
 	 * @param dis The data input stream
 	 * @return Read value in the stream
 	 * @throws IOException Throwed if the method cannot read a short at the stream cursor
@@ -162,6 +163,7 @@ public class NBSDecoder {
 
 	/**
 	 * Read an integer value in little-endian (32bit)
+	 *
 	 * @param dis The data input stream
 	 * @return Read value in the stream
 	 * @throws IOException Throwed if the method cannot read an integer at the stream cursor
@@ -177,6 +179,7 @@ public class NBSDecoder {
 
 	/**
 	 * Read a string, byte by byte.
+	 *
 	 * @param dis The data input stream
 	 * @return Read value in the stream
 	 * @throws IOException Throwed if the method cannot read a string at the stream cursor

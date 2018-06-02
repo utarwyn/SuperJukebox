@@ -15,6 +15,7 @@ import java.util.*;
 
 /**
  * Represents a SuperJukebox's command, that's all!
+ *
  * @author Utarwyn
  * @since 1.0.0
  */
@@ -52,7 +53,8 @@ public abstract class AbstractCommand extends Command implements TabCompleter, C
 
 	/**
 	 * Construct a command!
-	 * @param name Name of ths command
+	 *
+	 * @param name    Name of ths command
 	 * @param aliases Aliases of the command
 	 */
 	public AbstractCommand(String name, String... aliases) {
@@ -111,14 +113,13 @@ public abstract class AbstractCommand extends Command implements TabCompleter, C
 
 			this.nextArg = 0;
 			this.performPlayer(player);
-		} else
-			if (sender instanceof ConsoleCommandSender) {
-				this.nextArg = 0;
-				this.perform(sender);
+		} else if (sender instanceof ConsoleCommandSender) {
+			this.nextArg = 0;
+			this.perform(sender);
 
-				this.nextArg = 0;
-				this.performConsole(sender);
-			}
+			this.nextArg = 0;
+			this.performConsole(sender);
+		}
 
 		return true;
 	}
@@ -294,10 +295,8 @@ public abstract class AbstractCommand extends Command implements TabCompleter, C
 	@SuppressWarnings("unchecked")
 	private <T> T parseArg(String arg) {
 		if (JUtil.isInteger(arg)) return (T) new Integer(arg);
-		else
-			if (JUtil.isDouble(arg)) return (T) new Double(arg);
-			else
-				if (JUtil.isFloat(arg)) return (T) new Float(arg);
+		else if (JUtil.isDouble(arg)) return (T) new Double(arg);
+		else if (JUtil.isFloat(arg)) return (T) new Float(arg);
 
 		return (T) arg;
 	}
@@ -305,6 +304,7 @@ public abstract class AbstractCommand extends Command implements TabCompleter, C
 	/**
 	 * Register an abstract command directly inside the server's command map.
 	 * This method is called by the AsbtractCommand class.
+	 *
 	 * @param command Object to register inside the Bukkit server
 	 */
 	public static void register(AbstractCommand command) {

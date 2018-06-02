@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 /**
  * Main command of the plugin.
+ *
  * @author Utarwyn
  * @since 1.0.0
  */

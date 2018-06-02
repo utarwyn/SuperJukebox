@@ -173,11 +173,10 @@ public class JUtil {
 
 		if (JUtil.soundExists(sound18))
 			sound = Sound.valueOf(sound18);   // 1.8
+		else if (JUtil.soundExists(sound19))
+			sound = Sound.valueOf(sound19);   // 1.9+
 		else
-			if (JUtil.soundExists(sound19))
-				sound = Sound.valueOf(sound19);   // 1.9+
-			else
-				return null;                      // Else? Not supported.
+			return null;                      // Else? Not supported.
 
 		return sound;
 	}

@@ -41,6 +41,7 @@ public class Jukebox {
 
 	/**
 	 * Returns the unique identifier of the jukebox
+	 *
 	 * @return A decimal identifier
 	 */
 	public int getId() {
@@ -49,6 +50,7 @@ public class Jukebox {
 
 	/**
 	 * Returns the Bukkit block used by this jukebox class.
+	 *
 	 * @return This jukebox Bukkit block.
 	 */
 	public Block getBlock() {
@@ -57,6 +59,7 @@ public class Jukebox {
 
 	/**
 	 * Returns the settings associated with this jukebox.
+	 *
 	 * @return All settings of the jukebox.
 	 */
 	public JukeboxSettings getSettings() {
@@ -66,6 +69,7 @@ public class Jukebox {
 	/**
 	 * Get all musics used by this jukebox.
 	 * We have to check in the settings to return globals musics or custom musics.
+	 *
 	 * @return All musics that can be played by this jukebox.
 	 */
 	public List<Music> getMusics() {
@@ -78,6 +82,7 @@ public class Jukebox {
 
 	/**
 	 * Returns the current music played by this jukebox.
+	 *
 	 * @return The current musics for this jukebox.
 	 */
 	public Music getCurrentMusic() {
@@ -107,6 +112,7 @@ public class Jukebox {
 
 	/**
 	 * Play a specific music!
+	 *
 	 * @param music Music to be played.
 	 */
 	public void play(Music music) {
@@ -138,6 +144,7 @@ public class Jukebox {
 
 	/**
 	 * Loads musics from the jukebox configuration (with a list which contains all music ids)
+	 *
 	 * @param musicIdsList Music ids list extracted from the configuration
 	 */
 	void loadMusicsFromConfiguration(List<Integer> musicIdsList) {

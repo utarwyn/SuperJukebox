@@ -19,8 +19,8 @@ import java.util.Set;
  * Used as a listener too, this class makes the creation
  * of menus a very simple action.
  *
- * @since 1.0.0
  * @author Utarwyn
+ * @since 1.0.0
  */
 public class Menus implements Listener {
 
@@ -32,10 +32,12 @@ public class Menus implements Listener {
 	/**
 	 * No constructor, its an utility class
 	 */
-	private Menus() { }
+	private Menus() {
+	}
 
 	/**
 	 * Register an AbstractMenu
+	 *
 	 * @param menu Menu to register
 	 */
 	static void registerMenu(AbstractMenu menu) {
@@ -94,6 +96,7 @@ public class Menus implements Listener {
 
 	/**
 	 * Gets a registered menu linked to a given inventory
+	 *
 	 * @param inventory Inventory to check
 	 * @return Menu if found, otherwise null
 	 */

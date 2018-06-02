@@ -8,8 +8,9 @@ import java.util.List;
 
 /**
  * Abtsract base class for creating an EnderContainers manager
- * @since 1.0.0
+ *
  * @author Utarwyn
+ * @since 1.0.0
  */
 public abstract class AbstractManager implements Listener {
 
@@ -20,10 +21,11 @@ public abstract class AbstractManager implements Listener {
 
 	/**
 	 * Constructs the manager
-	 * @param plugin Main class of the plugin
+	 *
+	 * @param plugin    Main class of the plugin
 	 * @param listeners List of listeners to automatically load during the initialization of the manager
 	 */
-	public AbstractManager(SuperJukebox plugin, Listener ... listeners) {
+	public AbstractManager(SuperJukebox plugin, Listener... listeners) {
 		this.plugin = plugin;
 
 		// Now we register all listeners (and the manager too)
@@ -49,6 +51,7 @@ public abstract class AbstractManager implements Listener {
 
 	/**
 	 * Register a specific listener to the server
+	 *
 	 * @param listener Listener to register
 	 */
 	protected void registerListener(Listener listener) {
@@ -57,6 +60,7 @@ public abstract class AbstractManager implements Listener {
 
 	/**
 	 * Returns the main class of the plugin. Only a shortcut.
+	 *
 	 * @return Main class
 	 */
 	public SuperJukebox getPlugin() {

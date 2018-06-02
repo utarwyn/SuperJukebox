@@ -43,7 +43,7 @@ public class SuperJukebox extends JavaPlugin {
 	 * it's not a normal phenomenon.
 	 *
 	 * @param clazz Class searched into the manager collection
-	 * @param <T> Generic type which represents the manager object
+	 * @param <T>   Generic type which represents the manager object
 	 * @return Registered manager if found otherwise null
 	 */
 	public final <T> T getInstance(Class<T> clazz) {

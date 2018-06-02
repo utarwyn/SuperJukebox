@@ -21,8 +21,8 @@ import java.util.Map;
  * It has many improvements instead of a simple {@link org.bukkit.inventory.InventoryHolder}.
  * Events onClick and onClose are supported.
  *
- * @since 1.0.0
  * @author Utarwyn
+ * @since 1.0.0
  */
 public abstract class AbstractMenu implements InventoryHolder {
 
@@ -68,7 +68,8 @@ public abstract class AbstractMenu implements InventoryHolder {
 
 	/**
 	 * Construct a menu with a number of rows and a title
-	 * @param rows Number of rows of the container
+	 *
+	 * @param rows  Number of rows of the container
 	 * @param title Title of the container
 	 */
 	AbstractMenu(int rows, String title) {
@@ -84,6 +85,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 
 	/**
 	 * Construct a menu with a title
+	 *
 	 * @param title Title of the container
 	 */
 	AbstractMenu(String title) {
@@ -105,6 +107,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 
 	/**
 	 * Returns the number of filled slots in the container
+	 *
 	 * @return Number of fileld slots
 	 */
 	public int getFilledSlotsNb() {
@@ -116,6 +119,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 
 	/**
 	 * Gets the parent menu of this one
+	 *
 	 * @return The parent menu
 	 */
 	AbstractMenu getParentMenu() {
@@ -124,6 +128,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 
 	/**
 	 * Open the container to a specific player
+	 *
 	 * @param player Player that will receive the container
 	 */
 	public void open(Player player) {
@@ -132,8 +137,9 @@ public abstract class AbstractMenu implements InventoryHolder {
 
 	/**
 	 * Set an item in a specific position in the container
+	 *
 	 * @param position The position where the item will be setted
-	 * @param item The item to set
+	 * @param item     The item to set
 	 */
 	void setItem(int position, ItemStack item) {
 		if (!this.items.containsKey(position))
@@ -142,6 +148,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 
 	/**
 	 * Set a parent menu of this one
+	 *
 	 * @param parentMenu The parent menu
 	 */
 	void setParentMenu(AbstractMenu parentMenu) {
@@ -150,6 +157,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 
 	/**
 	 * Set the number of rows of the container
+	 *
 	 * @param rows Number of rows
 	 */
 	public void setRows(int rows) {
@@ -161,6 +169,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 
 	/**
 	 * Returns an item at a given position in the container
+	 *
 	 * @param position Position where to search for an item
 	 * @return The item found at the position
 	 */
@@ -170,6 +179,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 
 	/**
 	 * Remove an item at a given position
+	 *
 	 * @param position The position where to remove the item
 	 */
 	public void removeItemAt(int position) {
@@ -185,6 +195,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 
 	/**
 	 * Returns all the viewers of the container. Uses the method {@link Inventory#getViewers()}.
+	 *
 	 * @return The list of viewers of the container
 	 */
 	public List<HumanEntity> getViewers() {
@@ -221,6 +232,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 
 	/**
 	 * Returns the generated inventory with items stored before
+	 *
 	 * @return The generated inventory
 	 */
 	@Override
@@ -237,7 +249,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 
 				size = ((int) Math.ceil((maxPos + 1) / 9.0D)) * 9;
 
-				if (size <  1) size =  1;
+				if (size < 1) size = 1;
 				if (size > 54) size = 54;
 			}
 
@@ -258,6 +270,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 
 	/**
 	 * Returns the size of the container (mesured in slots)
+	 *
 	 * @return Size of the chest's container
 	 */
 	private int getSize() {
@@ -273,12 +286,14 @@ public abstract class AbstractMenu implements InventoryHolder {
 
 	/**
 	 * Called when a player click on an item in the menu
+	 *
 	 * @param event Event object used to retreive all needed information about the click
 	 */
 	abstract void onClick(InventoryClickEvent event);
 
 	/**
 	 * Called when a player closes the menu
+	 *
 	 * @param player The player who closes the menu
 	 */
 	public abstract void onClose(Player player);

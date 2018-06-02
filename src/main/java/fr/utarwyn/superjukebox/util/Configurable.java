@@ -8,8 +8,9 @@ import java.lang.annotation.Target;
 /**
  * Annotation Configurable
  * Used to fill attributes in {@link fr.utarwyn.superjukebox.Config Config class}.
- * @since 1.0.0
+ *
  * @author Utarwyn
+ * @since 1.0.0
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
@@ -17,6 +18,7 @@ public @interface Configurable {
 
 	/**
 	 * Custom key in the config YML file
+	 *
 	 * @return The config key
 	 */
 	String key() default "";

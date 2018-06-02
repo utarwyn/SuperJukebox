@@ -4,8 +4,9 @@ import java.util.HashMap;
 
 /**
  * Class used to manage managers (manager-ception).
- * @since 1.0.0
+ *
  * @author Utarwyn
+ * @since 1.0.0
  */
 public class Managers {
 
@@ -16,7 +17,8 @@ public class Managers {
 
 	/**
 	 * Register a specific manager in the memory
-	 * @param clazz Class of the manager
+	 *
+	 * @param clazz    Class of the manager
 	 * @param instance Instance of the manager (Object)
 	 * @throws Exception If the manager is already registered
 	 */
@@ -29,8 +31,9 @@ public class Managers {
 
 	/**
 	 * Gets an instance of a manager by its class
+	 *
 	 * @param clazz Class of the manager to get
-	 * @param <T> Class type of the manager
+	 * @param <T>   Class type of the manager
 	 * @return Manager if found otherwise null
 	 */
 	@SuppressWarnings("unchecked")
@@ -65,6 +68,7 @@ public class Managers {
 
 	/**
 	 * Reload manager by its class
+	 *
 	 * @param managerClazz Class of the manager to reload
 	 */
 	public static void reload(Class<? extends AbstractManager> managerClazz) {

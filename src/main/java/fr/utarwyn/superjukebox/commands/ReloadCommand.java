@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 /**
  * This command just add a possibility to reload the plugin
  * directly in game, that's not incredible.
+ *
  * @author Utarwyn
  * @since 1.0.0
  */

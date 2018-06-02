@@ -8,8 +8,9 @@ import java.io.IOException;
 
 /**
  * Manages a flat file stored on the disk.
- * @since 1.0.0
+ *
  * @author Utarwyn
+ * @since 1.0.0
  */
 public class FlatFile {
 
@@ -25,6 +26,7 @@ public class FlatFile {
 
 	/**
 	 * Constructs a new flat file object
+	 *
 	 * @param path Path where the config file is located (under the plugin's data folder)
 	 */
 	public FlatFile(String path) {
@@ -33,6 +35,7 @@ public class FlatFile {
 
 	/**
 	 * Returns the configuration object
+	 *
 	 * @return Bukkit configuration object
 	 */
 	public YamlConfiguration getConfiguration() {
@@ -55,6 +58,7 @@ public class FlatFile {
 
 	/**
 	 * Load a .yml file into memory and load the configuration object
+	 *
 	 * @param path Path where the config file is located (under the plugin's data folder)
 	 */
 	private void load(String path) {

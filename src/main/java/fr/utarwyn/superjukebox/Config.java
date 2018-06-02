@@ -9,8 +9,9 @@ import java.io.File;
 
 /**
  * Configuration class. Reflets the config.yml
- * @since 1.0.0
+ *
  * @author Utarwyn
+ * @since 1.0.0
  */
 public class Config extends YamlLinker {
 
@@ -22,7 +23,8 @@ public class Config extends YamlLinker {
 	/**
 	 * No constructor, its an utility class
 	 */
-	private Config() {}
+	private Config() {
+	}
 
 	/**
 	 * Download link of the plugin
@@ -95,6 +97,7 @@ public class Config extends YamlLinker {
 	/**
 	 * Gets the Config instance from anywhere!
 	 * (Create it if it don't exists)
+	 *
 	 * @return The config instance.
 	 */
 	public static Config get() {

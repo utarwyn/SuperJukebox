@@ -99,7 +99,8 @@ public class MusicPlayer implements Runnable {
 			if (diff < delay) {
 				try {
 					Thread.sleep((long) (delay - diff));
-				} catch (InterruptedException ignored) {  }
+				} catch (InterruptedException ignored) {
+				}
 			}
 		}
 	}
@@ -114,7 +115,7 @@ public class MusicPlayer implements Runnable {
 			this.jukebox.getBlock().getWorld().playSound(
 					this.jukebox.getBlock().getLocation(),
 					note.getInstrument().getSound(),
-					(1/16f) * this.jukebox.getSettings().getDistance().getValue() *
+					(1 / 16f) * this.jukebox.getSettings().getDistance().getValue() *
 							(this.jukebox.getSettings().getVolume().getValue() / 100f),
 					note.getPitch().getPitch()
 			);

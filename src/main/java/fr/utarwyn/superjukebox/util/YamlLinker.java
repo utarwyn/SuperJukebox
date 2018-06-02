@@ -14,13 +14,14 @@ import java.lang.reflect.Field;
  * for each Yaml key and the value will be loaded inside it.
  * </p>
  *
- * @since 1.0.0
  * @author Utarwyn
+ * @since 1.0.0
  */
 public abstract class YamlLinker {
 
 	/**
 	 * Initialize the config from the file.
+	 *
 	 * @param plugin Bukkit plugin used to locate the config file.
 	 * @return True if the initialization phase succeed.
 	 */
@@ -30,6 +31,7 @@ public abstract class YamlLinker {
 
 	/**
 	 * Reload the configuration from the Plugin config file.
+	 *
 	 * @return True if the reload was a success.
 	 */
 	public boolean reload() {
@@ -43,7 +45,7 @@ public abstract class YamlLinker {
 	 * Parses a value loaded from the Yaml file.
 	 * The method do nothing by default.
 	 *
-	 * @param key Key linked to the value
+	 * @param key   Key linked to the value
 	 * @param value The value to parse
 	 * @return Parsed value. Returns the same value by default.
 	 */
@@ -53,6 +55,7 @@ public abstract class YamlLinker {
 
 	/**
 	 * Fill all configurable attributes in this class with the {@link fr.utarwyn.superjukebox.util.Configurable Configurable} annotation.
+	 *
 	 * @param configuration Configuration used to load all Yaml key/values.
 	 * @return True if all configuration values has been loaded.
 	 */

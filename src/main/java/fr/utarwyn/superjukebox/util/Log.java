@@ -8,8 +8,9 @@ import java.util.logging.Logger;
 
 /**
  * Class used to log messages in the console
- * @since 1.0.0
+ *
  * @author Utarwyn
+ * @since 1.0.0
  */
 public class Log {
 
@@ -31,6 +32,7 @@ public class Log {
 
 	/**
 	 * Send an error message to the console
+	 *
 	 * @param message Message to send
 	 */
 	public static void error(String message) {
@@ -39,6 +41,7 @@ public class Log {
 
 	/**
 	 * Send a warning message to the console
+	 *
 	 * @param message Message to send
 	 */
 	public static void warn(String message) {
@@ -47,6 +50,7 @@ public class Log {
 
 	/**
 	 * Send an info message to the console only in debug mode
+	 *
 	 * @param message Message to send
 	 */
 	public static void log(String message) {
@@ -58,7 +62,7 @@ public class Log {
 	 * to send to force even if the plugin is not in debug mode.
 	 *
 	 * @param message Message to send
-	 * @param force Force to send even if the plugin is in debug mode?
+	 * @param force   Force to send even if the plugin is in debug mode?
 	 */
 	public static void log(String message, boolean force) {
 		if (!force && !Config.debug) return;

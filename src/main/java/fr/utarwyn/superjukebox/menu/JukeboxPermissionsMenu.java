@@ -45,10 +45,10 @@ public class JukeboxPermissionsMenu extends AbstractMenu {
 		this.createPermissionItem(12, Material.COMMAND, this.jukebox.getSettings().getEditSettingsPerm());
 
 		// Separators
-		for (int i = 0; i < 10; i ++) {
+		for (int i = 0; i < 10; i++) {
 			this.setItem(i, SEPARATOR);
 		}
-		for (int i = 17; i < 27; i ++) {
+		for (int i = 17; i < 27; i++) {
 			if (i == 18) continue;
 			this.setItem(i, SEPARATOR);
 		}
@@ -86,8 +86,8 @@ public class JukeboxPermissionsMenu extends AbstractMenu {
 	 * Creates an itemstack for a particular SuperJukebox permission.
 	 * This stores also the itemstack in a hasmap for the onclick Bukkit event.
 	 *
-	 * @param slot Slot where the item have to be added
-	 * @param material Material used for the itemstack
+	 * @param slot       Slot where the item have to be added
+	 * @param material   Material used for the itemstack
 	 * @param permission Permission on which the item is based
 	 */
 	private void createPermissionItem(int slot, Material material, Permission permission) {
@@ -103,7 +103,8 @@ public class JukeboxPermissionsMenu extends AbstractMenu {
 
 	/**
 	 * Update an itemstack with informations about a permission
-	 * @param itemStack The itemstack which have to be updated
+	 *
+	 * @param itemStack  The itemstack which have to be updated
 	 * @param permission The permission used to do the update
 	 */
 	private void updateItemMeta(ItemStack itemStack, Permission permission) {

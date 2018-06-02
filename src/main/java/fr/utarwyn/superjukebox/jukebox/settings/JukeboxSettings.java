@@ -49,9 +49,9 @@ public class JukeboxSettings {
 	 */
 	private Setting<Boolean> playWithRedstone;
 
-    /**
-     * Activate music announcements
-     */
+	/**
+	 * Activate music announcements
+	 */
 	private Setting<Boolean> announcements;
 
 	/**
@@ -92,6 +92,7 @@ public class JukeboxSettings {
 
 	/**
 	 * Returns the max distance of the jukebox
+	 *
 	 * @return Max distance of the jukebox
 	 */
 	public Setting<Integer> getDistance() {
@@ -100,6 +101,7 @@ public class JukeboxSettings {
 
 	/**
 	 * Returns the volume of the jukebox, in percent.
+	 *
 	 * @return Volume in percent.
 	 */
 	public Setting<Integer> getVolume() {
@@ -108,6 +110,7 @@ public class JukeboxSettings {
 
 	/**
 	 * Returns true if the jukebox is in an auto-playing mode
+	 *
 	 * @return True if autoplay option is activated for the linked jukebox
 	 */
 	public Setting<Boolean> getAutoplay() {
@@ -116,6 +119,7 @@ public class JukeboxSettings {
 
 	/**
 	 * Returns true is the jukebox uses the global musics system.
+	 *
 	 * @return True for global musics.
 	 */
 	public Setting<Boolean> getUseGlobalMusics() {
@@ -124,6 +128,7 @@ public class JukeboxSettings {
 
 	/**
 	 * Returns true is the jukebox has the particles system activated
+	 *
 	 * @return True is the plugin has to display particles
 	 */
 	public Setting<Boolean> getParticles() {
@@ -132,22 +137,25 @@ public class JukeboxSettings {
 
 	/**
 	 * Returns true is the jukebox has to be powered to play music
+	 *
 	 * @return True if redstone has an impact on the jukebox behavior.
 	 */
 	public Setting<Boolean> getPlayWithRedstone() {
 		return this.playWithRedstone;
 	}
 
-    /**
-     * Returns true if music have to be announced.
-     * @return Setting value
-     */
+	/**
+	 * Returns true if music have to be announced.
+	 *
+	 * @return Setting value
+	 */
 	public Setting<Boolean> getAnnouncements() {
-	    return this.announcements;
-    }
+		return this.announcements;
+	}
 
 	/**
 	 * Returns the interaction permission of the linked jukebox
+	 *
 	 * @return The permission node
 	 */
 	public Permission getInteractPerm() {
@@ -156,6 +164,7 @@ public class JukeboxSettings {
 
 	/**
 	 * Returns the musics edition permission of the linked jukebox
+	 *
 	 * @return The permission node
 	 */
 	public Permission getEditMusicsPerm() {
@@ -164,6 +173,7 @@ public class JukeboxSettings {
 
 	/**
 	 * Returns the settings edition permission of the linked jukebox
+	 *
 	 * @return The permission node
 	 */
 	public Permission getEditSettingsPerm() {
@@ -172,8 +182,9 @@ public class JukeboxSettings {
 
 	/**
 	 * Loads all the jukebox settings from a Bukkit configuration section
+	 *
 	 * @param settingsSection Configuration section where all jukebox settings are stored
-	 * @param permsSection Configuration section where all jukebox permissions are stored
+	 * @param permsSection    Configuration section where all jukebox permissions are stored
 	 */
 	public void loadFromConfiguration(ConfigurationSection settingsSection, ConfigurationSection permsSection) {
 		// Load settings
@@ -197,6 +208,7 @@ public class JukeboxSettings {
 
 	/**
 	 * Applies all settings values in a Bukkit configuration section
+	 *
 	 * @param section The Bukkit configuration section
 	 */
 	public void applySettingsToConfiguration(ConfigurationSection section) {
@@ -211,6 +223,7 @@ public class JukeboxSettings {
 
 	/**
 	 * Applies all permissions in a Bukkit configuration section
+	 *
 	 * @param section The Bukkit configuration section
 	 */
 	public void applyPermissionsToConfiguration(ConfigurationSection section) {
@@ -221,7 +234,8 @@ public class JukeboxSettings {
 
 	/**
 	 * Creates a permission node from a name and the configuration section
-	 * @param configSection Configuration section used to get the type of the permission
+	 *
+	 * @param configSection  Configuration section used to get the type of the permission
 	 * @param permissionName Permission name used to create the Bukkit permission
 	 * @return The generated permission node
 	 */
@@ -231,6 +245,7 @@ public class JukeboxSettings {
 
 	/**
 	 * Creates a permission node from a permission type and a name
+	 *
 	 * @param permissionType Permission type
 	 * @param permissionName Permission name used to create the Bukkit permission
 	 * @return The generated permission node
