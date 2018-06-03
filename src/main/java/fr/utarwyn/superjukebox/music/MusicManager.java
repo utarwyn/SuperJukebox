@@ -20,6 +20,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Manages all musics registered for the plugin.
+ *
+ * @author Utarwyn
+ * @since 1.0.0
+ */
 public class MusicManager extends AbstractManager {
 
 	private FlatFile database;

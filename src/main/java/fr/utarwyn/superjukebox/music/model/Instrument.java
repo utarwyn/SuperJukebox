@@ -3,6 +3,12 @@ package fr.utarwyn.superjukebox.music.model;
 import fr.utarwyn.superjukebox.util.MinecraftVersion;
 import org.bukkit.Sound;
 
+/**
+ * A music instrument
+ *
+ * @author Utarwyn
+ * @since 1.0.0
+ */
 public enum Instrument {
 
 	HARP(0, "NOTE_PIANO", "BLOCK_NOTE_HARP"),

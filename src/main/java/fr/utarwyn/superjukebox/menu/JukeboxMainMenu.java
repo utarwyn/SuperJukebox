@@ -15,6 +15,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * The main menu of a SuperJukebox!
+ *
+ * @author Utarwyn
+ * @since 1.0.0
+ */
 public class JukeboxMainMenu extends AbstractMenu {
 
 	private static final int MUSICS_PER_PAGE = 27;

@@ -3,6 +3,12 @@ package fr.utarwyn.superjukebox.music.model;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A music layer
+ *
+ * @author Utarwyn
+ * @since 1.0.0
+ */
 public class Layer {
 
 	private int key;

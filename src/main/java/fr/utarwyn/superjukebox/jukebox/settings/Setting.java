@@ -2,6 +2,13 @@ package fr.utarwyn.superjukebox.jukebox.settings;
 
 import java.util.function.Predicate;
 
+/**
+ * Represents a jukebox setting!
+ * (a java type must be provided to deals with the setting)
+ *
+ * @author Utarwyn
+ * @since 1.0.0
+ */
 public class Setting<T> {
 
 	private String key;

@@ -13,6 +13,12 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Manages all super jukeboxes of the server!
+ *
+ * @author Utarwyn
+ * @since 1.0.0
+ */
 public class JukeboxesManager extends AbstractManager {
 
 	private FlatFile database;

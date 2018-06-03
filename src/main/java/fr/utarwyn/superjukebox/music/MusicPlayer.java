@@ -10,6 +10,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitTask;
 import org.inventivetalent.particle.ParticleEffect;
 
+/**
+ * Capable of playing musics from SuperJukeboxes!
+ *
+ * @author Utarwyn
+ * @since 1.0.0
+ */
 public class MusicPlayer implements Runnable {
 
 	private Jukebox jukebox;

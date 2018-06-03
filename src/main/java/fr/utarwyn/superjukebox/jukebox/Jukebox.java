@@ -10,22 +10,55 @@ import org.bukkit.block.Block;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Respresents a SuperJukebox!
+ *
+ * @author Utarwyn
+ * @since 1.0.0
+ */
 public class Jukebox {
 
+	/**
+	 * Id of the jukebox
+	 */
 	private int id;
 
+	/**
+	 * Block linked with the jukebox
+	 */
 	private Block block;
 
+	/**
+	 * Contains all settings of this jukebox
+	 */
 	private JukeboxSettings settings;
 
+	/**
+	 * The music player which played music of this jukebox!
+	 */
 	private MusicPlayer player;
 
+	/**
+	 * List of all custom musics for this jukebox
+	 */
 	private List<Music> musics;
 
+	/**
+	 * Stores the current music played by the jukebox.
+	 */
 	private Music currentMusic;
 
+	/**
+	 * Stores the current music id
+	 */
 	private int currentMusicIdx;
 
+	/**
+	 * Construct a super jukebox!
+	 *
+	 * @param id Id of the jukebox
+	 * @param block Block to link with
+	 */
 	Jukebox(int id, Block block) {
 		this.id = id;
 		this.block = block;

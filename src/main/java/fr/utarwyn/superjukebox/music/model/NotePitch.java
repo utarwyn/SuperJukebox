@@ -1,5 +1,11 @@
 package fr.utarwyn.superjukebox.music.model;
 
+/**
+ * A note pitch, that's all.
+ *
+ * @author Utarwyn
+ * @since 1.0.0
+ */
 public enum NotePitch {
 
 	NOTE_00(0, 0.500000F),

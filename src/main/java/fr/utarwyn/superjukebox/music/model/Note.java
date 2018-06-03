@@ -1,5 +1,11 @@
 package fr.utarwyn.superjukebox.music.model;
 
+/**
+ * A music note
+ *
+ * @author Utarwyn
+ * @since 1.0.0
+ */
 public class Note {
 
 	private Instrument instrument;

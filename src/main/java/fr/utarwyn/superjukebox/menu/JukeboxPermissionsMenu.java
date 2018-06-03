@@ -18,6 +18,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The permissions menu of a SuperJukebox!
+ *
+ * @author Utarwyn
+ * @since 1.0.0
+ */
 public class JukeboxPermissionsMenu extends AbstractMenu {
 
 	private Jukebox jukebox;

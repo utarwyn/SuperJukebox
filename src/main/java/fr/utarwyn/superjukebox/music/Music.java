@@ -11,6 +11,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Represents a music which can be played by a MusicPlayer object.
+ *
+ * @author Utarwyn
+ * @since 1.0.0
+ */
 public class Music {
 
 	private String filename;

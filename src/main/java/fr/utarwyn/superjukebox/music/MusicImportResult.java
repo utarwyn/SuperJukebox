@@ -1,5 +1,11 @@
 package fr.utarwyn.superjukebox.music;
 
+/**
+ * Allows the plugin to known the result of a music importation.
+ *
+ * @author Utarwyn
+ * @since 1.0.0
+ */
 public enum MusicImportResult {
 
 	GOOD,
