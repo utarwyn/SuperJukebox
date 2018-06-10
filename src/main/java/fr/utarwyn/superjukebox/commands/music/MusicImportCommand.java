@@ -37,10 +37,10 @@ public class MusicImportCommand extends AbstractCommand {
 					sender.sendMessage(Config.PREFIX + "§cWe cannot import your music: unknown file.");
 					break;
 				case DECODING_ERROR:
-					sender.sendMessage(Config.PREFIX + "§cWe cannot import your music: nbs decoding error.");
+					sender.sendMessage(Config.PREFIX + "§cWe cannot import your music: nbs decoding error. Check your console to have more info.");
 					break;
 				case ALREADY_IMPORTED:
-					sender.sendMessage(Config.PREFIX + "§cWe cannot import your music: music already imported. Check your console to have more info.");
+					sender.sendMessage(Config.PREFIX + "§cWe cannot import your music: music already imported.");
 					break;
 			}
 		});

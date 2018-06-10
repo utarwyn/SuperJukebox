@@ -105,8 +105,7 @@ public class MusicPlayer implements Runnable {
 			if (diff < delay) {
 				try {
 					Thread.sleep((long) (delay - diff));
-				} catch (InterruptedException ignored) {
-				}
+				} catch (InterruptedException ignored) { }
 			}
 		}
 	}

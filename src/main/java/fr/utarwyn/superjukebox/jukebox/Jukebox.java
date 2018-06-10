@@ -134,16 +134,19 @@ public class Jukebox {
 	/**
 	 * Change to the next music!
 	 */
-	public void nextMusic() {
+	public boolean nextMusic() {
+		if (this.getMusics().isEmpty()) return false;
+
 		this.currentMusicIdx = (this.currentMusicIdx + 1) % this.getMusics().size();
 		this.currentMusic = this.getMusics().get(this.currentMusicIdx);
+		return true;
 	}
 
 	/**
 	 * Play the next music!
 	 */
 	public void playNext() {
-		this.nextMusic();
+		if (!this.nextMusic()) return;
 
 		// Start the player!
 		if (!this.player.isTaskRunned())
