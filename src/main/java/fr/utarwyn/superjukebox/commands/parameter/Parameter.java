@@ -51,8 +51,9 @@ public class Parameter {
 	}
 
 	public Parameter optional() {
-		this.optional = true;
-		return this;
+		Parameter parameter = new Parameter(this.checker, this.tabCompletions);
+		parameter.optional = true;
+		return parameter;
 	}
 
 	public Parameter withPlayersCompletion() {
