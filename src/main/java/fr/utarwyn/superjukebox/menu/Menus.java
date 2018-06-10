@@ -71,6 +71,7 @@ public class Menus implements Listener {
 
 			// Prepare the parent menu before displaying it
 			menu.getParentMenu().prepare();
+			menu.getParentMenu().updateInventory();
 			menu.getParentMenu().open(player);
 			return;
 		}

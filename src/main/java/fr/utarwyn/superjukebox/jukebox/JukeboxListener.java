@@ -11,6 +11,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 
 /**
  * Contains all events for interactions with super-jukeboxes!
@@ -31,6 +32,9 @@ public class JukeboxListener implements Listener {
 		// Initial verifications
 		if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock() == null) return;
 		if (event.getClickedBlock().getType() != Config.MAT_JUKEBOX) return;
+
+		// Optimization trick to disable double interaction with the block
+		if (!event.getHand().equals(EquipmentSlot.HAND)) return;
 
 		// Is there a super jukebox here?
 		Jukebox jukebox = this.manager.getJukeboxAt(event.getClickedBlock());
