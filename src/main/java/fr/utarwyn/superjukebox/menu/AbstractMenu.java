@@ -29,12 +29,12 @@ public abstract class AbstractMenu implements InventoryHolder {
 	/**
 	 * The separator item used for many menus
 	 */
-	static final ItemStack SEPARATOR = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 1, (byte) 15);
+	public static final ItemStack SEPARATOR = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 1, (byte) 15);
 
 	/**
 	 * The item used to create a way to go to a parent menu
 	 */
-	static final ItemStack BACK_ITEM = new ItemStack(Material.ARROW);
+	public static final ItemStack BACK_ITEM = new ItemStack(Material.ARROW);
 
 	/**
 	 * The number of rows of the menu
@@ -72,7 +72,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 	 * @param rows  Number of rows of the container
 	 * @param title Title of the container
 	 */
-	AbstractMenu(int rows, String title) {
+	public AbstractMenu(int rows, String title) {
 		this.rows = rows;
 		this.title = title;
 		this.items = new HashMap<>();
@@ -88,7 +88,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 	 *
 	 * @param title Title of the container
 	 */
-	AbstractMenu(String title) {
+	public AbstractMenu(String title) {
 		this(-1, title);
 		this.dynamicSize = true;
 	}
@@ -141,7 +141,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 	 * @param position The position where the item will be setted
 	 * @param item     The item to set
 	 */
-	void setItem(int position, ItemStack item) {
+	public void setItem(int position, ItemStack item) {
 		if (!this.items.containsKey(position))
 			this.items.put(position, item);
 	}
@@ -151,7 +151,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 	 *
 	 * @param parentMenu The parent menu
 	 */
-	void setParentMenu(AbstractMenu parentMenu) {
+	public void setParentMenu(AbstractMenu parentMenu) {
 		this.parentMenu = parentMenu;
 	}
 
@@ -173,7 +173,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 	 * @param position Position where to search for an item
 	 * @return The item found at the position
 	 */
-	ItemStack getItemAt(int position) {
+	public ItemStack getItemAt(int position) {
 		return this.items.get(position);
 	}
 
@@ -206,7 +206,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 	 * Update all items in the container with items stored in the menu.
 	 * (Not the same object, so the container has to be updated sometimes and vice versa)
 	 */
-	void updateItems() {
+	public void updateItems() {
 		// Update item list with items in the inventory
 		for (int i = 0; i < this.inventory.getSize(); i++) {
 			ItemStack itemStack = this.inventory.getItem(i);
@@ -221,7 +221,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 	/**
 	 * Update all items in the inventory with items in memory.
 	 */
-	void updateInventory() {
+	public void updateInventory() {
 		if (this.inventory == null) return;
 
 		for (int i = 0; i < this.inventory.getSize(); i++) {
@@ -289,7 +289,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 	 *
 	 * @param event Event object used to retreive all needed information about the click
 	 */
-	abstract void onClick(InventoryClickEvent event);
+	public abstract void onClick(InventoryClickEvent event);
 
 	/**
 	 * Called when a player closes the menu

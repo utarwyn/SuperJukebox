@@ -59,6 +59,7 @@ public class MusicPlayer implements Runnable {
 
 		// Send announcements to all players
 		if (this.jukebox.getSettings().getAnnouncements().getValue()) {
+			// TODO: only send to players which can hear the music!
 			ActionBarUtil.sendActionTitleToAllPlayers(ChatColor.GREEN + "♫ " + this.jukebox.getCurrentMusic().getName() + " §e(" + this.jukebox.getCurrentMusic().getOriginalAuthor() + ")");
 		}
 	}

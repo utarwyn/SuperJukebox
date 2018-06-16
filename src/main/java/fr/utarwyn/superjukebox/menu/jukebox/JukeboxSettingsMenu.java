@@ -1,9 +1,10 @@
-package fr.utarwyn.superjukebox.menu;
+package fr.utarwyn.superjukebox.menu.jukebox;
 
 import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.jukebox.Jukebox;
 import fr.utarwyn.superjukebox.jukebox.JukeboxesManager;
 import fr.utarwyn.superjukebox.jukebox.settings.Setting;
+import fr.utarwyn.superjukebox.menu.AbstractMenu;
 import fr.utarwyn.superjukebox.util.JUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

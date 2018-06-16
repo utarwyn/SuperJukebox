@@ -1,7 +1,7 @@
 package fr.utarwyn.superjukebox.jukebox;
 
 import fr.utarwyn.superjukebox.Config;
-import fr.utarwyn.superjukebox.menu.JukeboxMainMenu;
+import fr.utarwyn.superjukebox.menu.jukebox.JukeboxMainMenu;
 import fr.utarwyn.superjukebox.util.JUtil;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;

@@ -47,7 +47,7 @@ public class MusicListCommand extends AbstractCommand {
 		for (int i = begin; i < begin + MUSICS_PER_PAGE && i < musics.size(); i++) {
 			Music music = musics.get(i);
 			sender.sendMessage(
-					"§7#" + String.format("%02d", i + 1) + ": §f" + music.getName() + " §b(" + music.getOriginalAuthor() + ")"
+					"§7#" + String.format("%02d", i + 1) + ": §f" + music.getName() + "§b (" + music.getOriginalAuthor() + "§b)"
 			);
 		}
 	}
