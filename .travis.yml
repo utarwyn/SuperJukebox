@@ -1,7 +1,16 @@
 language: java
+dist: trusty
+sudo: false
+
 jdk:
   - oraclejdk8
-install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -DoutputDirectory="./" -B -V
-script: "mvn cobertura:cobertura"
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+
+install:
+  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -DoutputDirectory="./" -B -V
+
+script:
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar
+
+addons:
+  sonarcloud:
+    organization: "utarwyn-github"

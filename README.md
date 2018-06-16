@@ -2,7 +2,11 @@
 
 # SuperJukebox (under development)
 
-[![Travis](https://img.shields.io/travis/utarwyn/SuperJukebox.svg?style=flat-square)](https://travis-ci.org/utarwyn/SuperJukebox) [![GitHub last commit (branch)](https://img.shields.io/github/last-commit/utarwyn/superjukebox/master.svg?style=flat-square)](https://github.com/utarwyn/SuperJukebox/commits/master) \
+[![Travis](https://img.shields.io/travis/utarwyn/SuperJukebox.svg?style=flat-square)](https://travis-ci.org/utarwyn/SuperJukebox)
+[![SonarQube quality gate](https://sonarcloud.io/api/project_badges/measure?project=fr.utarwyn%3ASuperJukebox&metric=alert_status)](https://sonarcloud.io/dashboard?id=fr.utarwyn%3ASuperJukebox)
+[![SonarQube maintainability](https://sonarcloud.io/api/project_badges/measure?project=fr.utarwyn%3ASuperJukebox&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=fr.utarwyn%3ASuperJukebox)
+[![SonarQube coverage](https://sonarcloud.io/api/project_badges/measure?project=fr.utarwyn%3ASuperJukebox&metric=coverage)](https://sonarcloud.io/component_measures?id=fr.utarwyn%3ASuperJukebox&metric=coverage) \
+[![GitHub last commit (branch)](https://img.shields.io/github/last-commit/utarwyn/superjukebox/master.svg?style=flat-square)](https://github.com/utarwyn/SuperJukebox/commits/master)
 [![license](https://img.shields.io/github/license/utarwyn/superjukebox.svg?style=flat-square)](https://github.com/utarwyn/SuperJukebox/blob/master/LICENSE) \
 \
 SuperJukebox is a Bukkit/Spigot plugin (Minecraft) which allows you to play custom musics from jukeboxes.  
