@@ -4,6 +4,7 @@ import fr.utarwyn.superjukebox.Config;
 import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.commands.parameter.Parameter;
 import fr.utarwyn.superjukebox.util.JUtil;
+import fr.utarwyn.superjukebox.util.Log;
 import org.bukkit.Server;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
@@ -12,6 +13,7 @@ import org.bukkit.util.StringUtil;
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.logging.Level;
 
 /**
  * Represents a SuperJukebox's command, that's all!
@@ -286,7 +288,7 @@ public abstract class AbstractCommand extends Command implements TabCompleter, C
 
 		String arg = this.args.get(idx);
 
-		if (this.parameters.get(idx).equals(Parameter.STRING))
+		if (this.parameters.get(idx).equalsTo(Parameter.STRING))
 			return (T) arg;
 
 		return (T) this.parseArg(arg);
@@ -317,13 +319,10 @@ public abstract class AbstractCommand extends Command implements TabCompleter, C
 				fMap.setAccessible(true);
 				commandMap = (SimpleCommandMap) fMap.get(server);
 				fMap.setAccessible(false);
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (Exception ex) {
+				Log.log(Level.WARNING, "Cannot fetch the command map from the server!", ex);
+				return;
 			}
-		}
-
-		if (commandMap == null) {
-			throw new NullPointerException("We cannot register command '" + command.getName() + "' because the Bukkit's command map is not accessible!");
 		}
 
 		commandMap.register("superjukebox", command);

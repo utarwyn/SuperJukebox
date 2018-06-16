@@ -5,6 +5,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 
 /**
  * Manages a flat file stored on the disk.
@@ -51,8 +52,8 @@ public class FlatFile {
 
 		try {
 			this.configuration.save(this.file);
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException ex) {
+			Log.log(Level.SEVERE, "Cannot save the configuration in " + this.file.getName() + "!", ex);
 		}
 	}
 
@@ -72,8 +73,8 @@ public class FlatFile {
 
 			try {
 				if (!file.createNewFile()) return;
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (IOException ex) {
+				Log.log(Level.SEVERE, "Cannot create the configuration file" + this.file.getName() + "!", ex);
 			}
 		}
 

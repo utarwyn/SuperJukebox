@@ -6,10 +6,10 @@ jdk:
   - oraclejdk8
 
 install:
-  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -DoutputDirectory="./" -B -V
+  - mvn install -Dmaven.javadoc.skip=true -DoutputDirectory="./" -B -V
 
 script:
-  - mvn sonar:sonar -DoutputDirectory="./"
+  - mvn sonar:sonar
 
 addons:
   sonarcloud:

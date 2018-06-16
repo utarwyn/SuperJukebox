@@ -14,7 +14,7 @@ public class SuperJukebox extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		instance = this;
+		SuperJukebox.instance = this;
 
 		// Load main configuration ...
 		if (!Config.get().initialize(this))

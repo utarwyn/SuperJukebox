@@ -7,6 +7,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.logging.Level;
 
 /**
  * Used to send action message to players.
@@ -54,7 +55,7 @@ public class ActionBarUtil {
 				public void run() {
 					sendActionTitle(player, "");
 				}
-			}.runTaskLater(SuperJukebox.getInstance(), duration + 1);
+			}.runTaskLater(SuperJukebox.getInstance(), duration + 1L);
 		}
 
 		// Re-sends the messages every 3 seconds so it doesn't go away from the player's screen.
@@ -107,7 +108,7 @@ public class ActionBarUtil {
 			Method m5 = pc.getClass().getDeclaredMethod("sendPacket", c5);
 			m5.invoke(pc, ppoc);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Log.log(Level.WARNING, "Cannot send action title packet (<1.12) for " + player.getName() + "!", ex);
 		}
 	}
 
@@ -137,7 +138,7 @@ public class ActionBarUtil {
 			Method m5 = pc.getClass().getDeclaredMethod("sendPacket", c5);
 			m5.invoke(pc, ppoc);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Log.log(Level.WARNING, "Cannot send action title packet (>=1.12) for " + player.getName() + "!", ex);
 		}
 	}
 

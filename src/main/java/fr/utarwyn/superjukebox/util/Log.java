@@ -69,4 +69,15 @@ public class Log {
 		logger.log(Level.INFO, message);
 	}
 
+	/**
+	 * Send a log message to the console and precise the level of the message.
+	 *
+	 * @param level     Level of the log message!
+	 * @param message   Message to send
+	 * @param throwable A throwable to run
+	 */
+	public static void log(Level level, String message, Throwable throwable) {
+		logger.log(level, message, throwable);
+	}
+
 }

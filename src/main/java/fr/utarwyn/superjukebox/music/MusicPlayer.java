@@ -10,6 +10,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitTask;
 import org.inventivetalent.particle.ParticleEffect;
 
+import java.util.logging.Level;
+
 /**
  * Capable of playing musics from SuperJukeboxes!
  *
@@ -106,7 +108,10 @@ public class MusicPlayer implements Runnable {
 			if (diff < delay) {
 				try {
 					Thread.sleep((long) (delay - diff));
-				} catch (InterruptedException ignored) { }
+				} catch (InterruptedException ex) {
+					SuperJukebox.getInstance().getLogger().log(Level.WARNING, "Music player interrupted!", ex);
+					Thread.currentThread().interrupt();
+				}
 			}
 		}
 	}

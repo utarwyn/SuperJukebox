@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 /**
  * Manages all musics registered for the plugin.
@@ -181,9 +182,8 @@ public class MusicManager extends AbstractManager {
 
 			this.musics.put(id, music);
 			return true;
-		} catch (NBSDecodeException e) {
-			Log.warn("Music #" + id + " (" + filename + ") cannot be loaded! Details below.");
-			e.printStackTrace();
+		} catch (NBSDecodeException ex) {
+			Log.log(Level.WARNING, "Music #" + id + " (" + filename + ") cannot be loaded! Details below.", ex);
 			return false;
 		}
 	}

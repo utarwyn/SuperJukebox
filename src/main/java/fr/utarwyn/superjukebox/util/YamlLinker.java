@@ -5,6 +5,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Field;
+import java.util.logging.Level;
 
 /**
  * Represents a link to a particular Yaml config.
@@ -75,7 +76,7 @@ public abstract class YamlLinker {
 					throw new NullPointerException("Yaml value doesn't exist for key " + configKey + "!");
 
 				field.set(null, parseValue(configKey, value));
-			} catch (Exception e) {
+			} catch (Exception ex) {
 				Log.error("");
 				Log.error(">> --------------- <<");
 				Log.error(">> CRITICAL ERROR! <<");
@@ -85,7 +86,7 @@ public abstract class YamlLinker {
 				Log.error(">> Are you sure that value '" + configuration.get(configKey) + "' is good?");
 				Log.error("");
 
-				e.printStackTrace();
+				Log.log(Level.SEVERE, "Detailed Java error:", ex);
 
 				SuperJukebox.getInstance().getPluginLoader().disablePlugin(SuperJukebox.getInstance());
 				return false;

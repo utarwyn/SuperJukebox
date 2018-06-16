@@ -3,7 +3,11 @@ package fr.utarwyn.superjukebox.util;
 import fr.utarwyn.superjukebox.music.Music;
 import fr.utarwyn.superjukebox.music.model.Note;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.logging.Level;
 
 /**
  * This object decodes given NBS files to create a readable Music object
@@ -30,103 +34,92 @@ public class NBSDecoder {
 	 * @throws NBSDecodeException Throwed if the NBS cannot be decoded correctly.
 	 */
 	public static Music decode(File file) throws NBSDecodeException {
-		FileInputStream fis;
-		DataInputStream dis;
+		Music music;
 
 		// Create streams to read the file in a binary mode
-		try {
-			fis = new FileInputStream(file);
-			dis = new DataInputStream(fis);
-		} catch (FileNotFoundException e) {
+		try (FileInputStream fis = new FileInputStream(file); DataInputStream dis = new DataInputStream(fis)) {
+			short length, height, tempo;
+			String name, author, originalAuthor, description;
+
+			// Read metadata of the music first
+			// All explanations of this part of the code is on the Minecraft Note Block Studio's Wiki here:
+			// https://www.stuffbydavid.com/mcnbs/format
+			// Thank you David for this good help!
+			try {
+				// Max length of the music
+				length = readShort(dis);
+				// Max height of the music
+				height = readShort(dis);
+				// Music name
+				name = readString(dis);
+				// Author(s)
+				author = readString(dis);
+				originalAuthor = readString(dis);
+				// Description
+				description = readString(dis);
+				// Tempo
+				tempo = readShort(dis);
+				// Auto-save and more data not needed
+				dis.readByte();
+				dis.readByte();
+				dis.readByte();
+				readInt(dis);
+				readInt(dis);
+				readInt(dis);
+				readInt(dis);
+				readInt(dis);
+				readString(dis);
+			} catch (IOException ex) {
+				try {
+					dis.close();
+					fis.close();
+				} catch (IOException e2) {
+					Log.log(Level.WARNING, "Cannot close nbs file streams!", e2);
+				}
+
+				// Argh! An error in the format of the file maybe?
+				throw new NBSDecodeException(file, "Cannot read NBS description!", ex);
+			}
+
+			// Instanciate a new music object with all data
+			music = new Music(
+					file.getName(), length, height, name,
+					author, originalAuthor, description,
+					tempo / 100f
+			);
+
+			// Reading notes and layers...
+			short tick = -1;
+
+			try {
+				while (true) {
+					// Read all layers of the song
+					short jumpsT = readShort(dis);
+					if (jumpsT == 0) break;
+
+					tick += jumpsT;
+
+					short layer = -1;
+					while (true) {
+						// Read all notes for this layer
+						short jumpsL = readShort(dis);
+						if (jumpsL == 0) break;
+						layer += jumpsL;
+
+						// Read the instrument and the note pitch!
+						byte instrument = dis.readByte();
+						byte note = dis.readByte();
+
+						addNoteToLayer(music, layer, tick, instrument, note);
+					}
+				}
+			} catch (IOException ex) {
+				// Argh! Cannot read layers and notes... Failure.
+				throw new NBSDecodeException(file, "Cannot read NBS music notes!", ex);
+			}
+		} catch (IOException e) {
 			// We cannot open the file :(
 			throw new NBSDecodeException(file, "Cannot open the file!", e);
-		}
-
-		short length, height, tempo;
-		String name, author, originalAuthor, description;
-
-		// Read metadata of the music first
-		// All explanations of this part of the code is on the Minecraft Note Block Studio's Wiki here:
-		// https://www.stuffbydavid.com/mcnbs/format
-		// Thank you David for this good help!
-		try {
-			// Max length of the music
-			length = readShort(dis);
-			// Max height of the music
-			height = readShort(dis);
-			// Music name
-			name = readString(dis);
-			// Author(s)
-			author = readString(dis);
-			originalAuthor = readString(dis);
-			// Description
-			description = readString(dis);
-			// Tempo
-			tempo = readShort(dis);
-			// Auto-save and more data not needed
-			dis.readByte();
-			dis.readByte();
-			dis.readByte();
-			readInt(dis);
-			readInt(dis);
-			readInt(dis);
-			readInt(dis);
-			readInt(dis);
-			readString(dis);
-		} catch (IOException e) {
-			try {
-				dis.close();
-				fis.close();
-			} catch (IOException e2) {
-				e2.printStackTrace();
-			}
-
-			// Argh! An error in the format of the file maybe?
-			throw new NBSDecodeException(file, "Cannot read NBS description!", e);
-		}
-
-		// Instanciate a new music object with all data
-		Music music = new Music(
-				file.getName(), length, height, name,
-				author, originalAuthor, description,
-				tempo / 100f
-		);
-
-		// Reading notes and layers...
-		short tick = -1;
-
-		try {
-			while (true) {
-				// Read all layers of the song
-				short jumpsT = readShort(dis);
-				if (jumpsT == 0) break;
-
-				tick += jumpsT;
-
-				short layer = -1;
-				while (true) {
-					// Read all notes for this layer
-					short jumpsL = readShort(dis);
-					if (jumpsL == 0) break;
-					layer += jumpsL;
-
-					// Read the instrument and the note pitch!
-					byte instrument = dis.readByte();
-					byte note = dis.readByte();
-
-					addNoteToLayer(music, layer, tick, instrument, note);
-				}
-			}
-		} catch (IOException e) {
-			// Argh! Cannot read layers and notes... Failure.
-			throw new NBSDecodeException(file, "Cannot read NBS music notes!", e);
-		} finally {
-			try {
-				dis.close();
-				fis.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 
 		// All seems to be good!

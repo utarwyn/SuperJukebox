@@ -1,10 +1,12 @@
 package fr.utarwyn.superjukebox;
 
+import fr.utarwyn.superjukebox.util.Log;
 import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * Abtsract base class for creating an EnderContainers manager
@@ -44,8 +46,8 @@ public abstract class AbstractManager implements Listener {
 		// Register the manager for the plugin
 		try {
 			Managers.registerManager(this.getClass(), this);
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception ex) {
+			Log.log(Level.WARNING, "Cannot register the manager " + this.getClass().getSimpleName() + "!", ex);
 		}
 	}
 

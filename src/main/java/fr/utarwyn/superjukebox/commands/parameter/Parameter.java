@@ -64,7 +64,7 @@ public class Parameter {
 		return this.checker == null || this.checker.checkParam(value);
 	}
 
-	public boolean equals(Parameter parameter) {
+	public boolean equalsTo(Parameter parameter) {
 		return this.checker == parameter.checker;
 	}
 
