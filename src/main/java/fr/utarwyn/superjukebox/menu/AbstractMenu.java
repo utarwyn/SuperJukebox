@@ -141,7 +141,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 	 * @param position The position where the item will be setted
 	 * @param item     The item to set
 	 */
-	public void setItem(int position, ItemStack item) {
+	protected void setItem(int position, ItemStack item) {
 		if (!this.items.containsKey(position))
 			this.items.put(position, item);
 	}
@@ -151,7 +151,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 	 *
 	 * @param parentMenu The parent menu
 	 */
-	public void setParentMenu(AbstractMenu parentMenu) {
+	protected void setParentMenu(AbstractMenu parentMenu) {
 		this.parentMenu = parentMenu;
 	}
 
@@ -160,7 +160,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 	 *
 	 * @param rows Number of rows
 	 */
-	public void setRows(int rows) {
+	protected void setRows(int rows) {
 		this.rows = rows;
 
 		if (this.inventory != null && this.inventory.getViewers().size() == 0)
@@ -173,7 +173,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 	 * @param position Position where to search for an item
 	 * @return The item found at the position
 	 */
-	public ItemStack getItemAt(int position) {
+	protected ItemStack getItemAt(int position) {
 		return this.items.get(position);
 	}
 
@@ -182,15 +182,26 @@ public abstract class AbstractMenu implements InventoryHolder {
 	 *
 	 * @param position The position where to remove the item
 	 */
-	public void removeItemAt(int position) {
+	protected void removeItemAt(int position) {
 		this.items.remove(position);
 	}
 
 	/**
 	 * Clear all items of the menu
 	 */
-	public void clear() {
+	protected void clear() {
 		this.items.clear();
+	}
+
+	/**
+	 * Displays the parent menu to a player
+	 * @param player Player who wants to see the parent menu
+	 */
+	protected void goToParentMenu(Player player) {
+		if (this.parentMenu != null) {
+			this.parentMenu.prepare();
+			this.parentMenu.open(player);
+		}
 	}
 
 	/**
@@ -206,7 +217,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 	 * Update all items in the container with items stored in the menu.
 	 * (Not the same object, so the container has to be updated sometimes and vice versa)
 	 */
-	public void updateItems() {
+	void updateItems() {
 		// Update item list with items in the inventory
 		for (int i = 0; i < this.inventory.getSize(); i++) {
 			ItemStack itemStack = this.inventory.getItem(i);
@@ -221,7 +232,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 	/**
 	 * Update all items in the inventory with items in memory.
 	 */
-	public void updateInventory() {
+	protected void updateInventory() {
 		if (this.inventory == null) return;
 
 		for (int i = 0; i < this.inventory.getSize(); i++) {
@@ -256,15 +267,9 @@ public abstract class AbstractMenu implements InventoryHolder {
 			this.inventory = Bukkit.createInventory(this, size, this.title);
 		}
 
-		if (this.inventory.getViewers().size() == 0)
-			for (Integer index : items.keySet()) {
-				if (index < 0 || index >= this.inventory.getSize())
-					continue;
-
-				ItemStack i = items.get(index);
-				this.inventory.setItem(index, i);
-			}
-
+		// Update the inventory each time a player would like to display it
+		// (with items stored in the memory)
+		this.updateInventory();
 		return this.inventory;
 	}
 

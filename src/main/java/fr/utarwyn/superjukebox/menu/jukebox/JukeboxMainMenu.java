@@ -41,7 +41,7 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
 	private JukeboxMenuEditingMode editingMode;
 
 	public JukeboxMainMenu(Jukebox jukebox, Player player) {
-		super("SuperJukebox main menu", player, jukebox.getMusics());
+		super("SuperJukebox main menu", player);
 
 		this.jukebox = jukebox;
 		this.editingMode = JukeboxMenuEditingMode.DISABLE;
@@ -51,9 +51,6 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
 
 	@Override
 	public void prepare() {
-		// Refresh the music list!
-		this.setMusicList(this.jukebox.getMusics());
-
 		// Reprepare all discs items
 		super.prepare();
 
@@ -149,6 +146,11 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
 	public void onDiscClick(InventoryClickEvent event, Music music) {
 		this.jukebox.play(music);
 		this.player.sendMessage(ChatColor.GREEN + "Have a great moment with " + ChatColor.YELLOW + music.getName() + ChatColor.GREEN + " !");
+	}
+
+	@Override
+	public List<Music> getMusicList() {
+		return this.jukebox.getMusics();
 	}
 
 	@Override

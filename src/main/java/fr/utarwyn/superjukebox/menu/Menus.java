@@ -68,11 +68,7 @@ public class Menus implements Listener {
 		// Click on a back item!
 		if (menu.getParentMenu() != null && event.getCurrentItem().equals(AbstractMenu.BACK_ITEM)) {
 			event.setCancelled(true);
-
-			// Prepare the parent menu before displaying it
-			menu.getParentMenu().prepare();
-			menu.getParentMenu().updateInventory();
-			menu.getParentMenu().open(player);
+			menu.goToParentMenu(player);
 			return;
 		}
 

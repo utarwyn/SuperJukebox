@@ -3,6 +3,8 @@ package fr.utarwyn.superjukebox.jukebox;
 import fr.utarwyn.superjukebox.AbstractManager;
 import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.menu.Menus;
+import fr.utarwyn.superjukebox.music.Music;
+import fr.utarwyn.superjukebox.music.MusicManager;
 import fr.utarwyn.superjukebox.util.FlatFile;
 import fr.utarwyn.superjukebox.util.JUtil;
 import org.bukkit.Location;
@@ -98,6 +100,28 @@ public class JukeboxesManager extends AbstractManager {
 		}
 
 		JUtil.saveLocationIntoConfig(section.getConfigurationSection("location"), jukebox.getBlock().getLocation());
+		this.database.save();
+	}
+
+	public void saveJukeboxMusicsOnDisk(Jukebox jukebox) {
+		ConfigurationSection section = this.getJukeboxConfigSection(jukebox);
+		MusicManager musicManager = SuperJukebox.getInstance().getInstance(MusicManager.class);
+		List<Integer> musicIdList = new ArrayList<>();
+
+		for (Music music : jukebox.getMusics()) {
+			Integer musicId = musicManager.getMusicId(music);
+
+			if (musicId != null) {
+				musicIdList.add(musicId);
+			}
+		}
+
+		// Remove the list if there is no music to be saved!
+		if (musicIdList.isEmpty()) {
+			musicIdList = null;
+		}
+
+		section.set("musics", musicIdList);
 		this.database.save();
 	}
 

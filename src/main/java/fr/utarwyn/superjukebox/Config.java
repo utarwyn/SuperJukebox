@@ -85,6 +85,7 @@ public class Config extends YamlLinker {
 	@Configurable(key = "jukeboxconfiguration.permissions.editsettings")
 	public static String jukeboxDefaultEditSettingsPerm;
 
+	@Override
 	public boolean initialize(JavaPlugin plugin) {
 		// Create config.yml file if not exists
 		if (!new File(plugin.getDataFolder(), "config.yml").exists())
@@ -102,7 +103,8 @@ public class Config extends YamlLinker {
 	 */
 	public static Config get() {
 		if (instance != null) return instance;
-		return instance = new Config();
+		instance = new Config();
+		return instance;
 	}
 
 }

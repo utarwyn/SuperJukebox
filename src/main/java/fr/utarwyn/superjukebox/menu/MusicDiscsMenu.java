@@ -8,7 +8,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,28 +17,21 @@ public abstract class MusicDiscsMenu extends AbstractMenu {
 
 	protected Player player;
 
-	private List<Music> musicList;
-
 	private int currentPage;
 
-	public MusicDiscsMenu(String title, Player player, List<Music> musicList) {
-		this(title, player, musicList, null);
+	public MusicDiscsMenu(String title, Player player) {
+		this(title, player, null);
 	}
 
-	public MusicDiscsMenu(String title, Player player, List<Music> musicList, AbstractMenu parentMenu) {
+	public MusicDiscsMenu(String title, Player player, AbstractMenu parentMenu) {
 		super(4, title);
 
 		this.player = player;
-		this.setMusicList(musicList);
 		this.currentPage = 1;
 
 		if (parentMenu != null) {
 			this.setParentMenu(parentMenu);
 		}
-	}
-
-	public void setMusicList(List<Music> musicList) {
-		this.musicList = new ArrayList<>(musicList);
 	}
 
 	@Override
@@ -48,13 +40,14 @@ public abstract class MusicDiscsMenu extends AbstractMenu {
 		this.clear();
 
 		// Discs items
-		int musicCount = this.musicList.size();
+		List<Music> musicList = this.getMusicList();
+		int musicCount = musicList.size();
 
 		if (musicCount > 0) {
 			int begin = (this.currentPage - 1) * MUSICS_PER_PAGE;
 
 			for (int i = begin; i < begin + MUSICS_PER_PAGE && i < musicCount; i++) {
-				this.setItem(i % MUSICS_PER_PAGE, this.musicList.get(i).getIcon());
+				this.setItem(i % MUSICS_PER_PAGE, musicList.get(i).getIcon());
 			}
 		} else {
 			ItemStack noMusicItem = new ItemStack(Material.BARRIER);
@@ -79,7 +72,7 @@ public abstract class MusicDiscsMenu extends AbstractMenu {
 		}
 
 		// Page items
-		if (this.musicList.size() > MUSICS_PER_PAGE) {
+		if (musicList.size() > MUSICS_PER_PAGE) {
 			// TODO
 		}
 	}
@@ -87,10 +80,11 @@ public abstract class MusicDiscsMenu extends AbstractMenu {
 	@Override
 	public void onClick(InventoryClickEvent event) {
 		if (event.getSlot() < MUSICS_PER_PAGE) {
+			List<Music> musicList = this.getMusicList();
 			int musicId = (this.currentPage - 1) * MUSICS_PER_PAGE + event.getSlot();
 
-			if (musicId < this.musicList.size()) {
-				Music music = this.musicList.get(musicId);
+			if (musicId < musicList.size()) {
+				Music music = musicList.get(musicId);
 				this.onDiscClick(event, music);
 			}
 		}
@@ -98,10 +92,17 @@ public abstract class MusicDiscsMenu extends AbstractMenu {
 		event.setCancelled(true);
 	}
 
+	/**
+	 * Method called when a player click on a disc in the menu!
+	 * @param event Event fired by Bukkit
+	 * @param music Music object represented by the clicked disc
+	 */
 	public abstract void onDiscClick(InventoryClickEvent event, Music music);
 
-	protected boolean isDiscItemStack(ItemStack itemStack) {
-		return itemStack.getType().name().startsWith("RECORD_");
-	}
+	/**
+	 * Method called to get the list of music discs to be displayed!
+	 * @return Music discs needed
+	 */
+	public abstract List<Music> getMusicList();
 
 }

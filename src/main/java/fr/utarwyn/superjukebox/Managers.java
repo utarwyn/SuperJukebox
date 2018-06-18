@@ -11,6 +11,13 @@ import java.util.HashMap;
 public class Managers {
 
 	/**
+	 * It's an utility class
+	 */
+	private Managers() {
+
+	}
+
+	/**
 	 * Cache map for instances of managers
 	 */
 	private static HashMap<Class<? extends AbstractManager>, AbstractManager> instances = new HashMap<>();
@@ -20,11 +27,11 @@ public class Managers {
 	 *
 	 * @param clazz    Class of the manager
 	 * @param instance Instance of the manager (Object)
-	 * @throws Exception If the manager is already registered
+	 * @throws IllegalAccessException If the manager is already registered
 	 */
-	static void registerManager(Class<? extends AbstractManager> clazz, AbstractManager instance) throws Exception {
+	static void registerManager(Class<? extends AbstractManager> clazz, AbstractManager instance) throws IllegalAccessException {
 		if (instances.containsKey(clazz))
-			throw new Exception("Manager " + clazz + " duplicated! " + instance);
+			throw new IllegalAccessException("Manager " + clazz + " duplicated! " + instance);
 
 		instances.put(clazz, instance);
 	}

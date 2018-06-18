@@ -1,12 +1,11 @@
 package fr.utarwyn.superjukebox;
 
+import com.google.common.base.Preconditions;
 import fr.utarwyn.superjukebox.commands.AbstractCommand;
 import fr.utarwyn.superjukebox.commands.MainCommand;
 import fr.utarwyn.superjukebox.jukebox.JukeboxesManager;
 import fr.utarwyn.superjukebox.music.MusicManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.logging.Level;
 
 public class SuperJukebox extends JavaPlugin {
 
@@ -48,9 +47,7 @@ public class SuperJukebox extends JavaPlugin {
 	 */
 	public final <T> T getInstance(Class<T> clazz) {
 		T inst = Managers.getInstance(clazz);
-
-		if (inst == null)
-			this.getLogger().log(Level.WARNING, clazz + " instance is null!");
+		Preconditions.checkState(inst != null, clazz + " instance is null!");
 
 		return inst;
 	}

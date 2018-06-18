@@ -127,7 +127,7 @@ public abstract class AbstractCommand extends Command implements TabCompleter, C
 	}
 
 	@Override
-	public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
+	public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalStateException {
 		List<String> customCompletions = new ArrayList<>();
 
 		// Check sub-commands completions first

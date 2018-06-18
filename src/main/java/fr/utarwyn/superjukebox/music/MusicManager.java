@@ -145,6 +145,14 @@ public class MusicManager extends AbstractManager {
 		return this.musics.getOrDefault(id, null);
 	}
 
+	public Integer getMusicId(Music music) {
+		for (Map.Entry<Integer, Music> entry : this.musics.entrySet())
+			if (entry.getValue() == music)
+				return entry.getKey();
+
+		return null;
+	}
+
 	private synchronized void reloadDatabase() {
 		ConfigurationSection section;
 		YamlConfiguration conf = this.database.getConfiguration();

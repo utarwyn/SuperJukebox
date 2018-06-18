@@ -62,7 +62,7 @@ public class FlatFile {
 	 *
 	 * @param path Path where the config file is located (under the plugin's data folder)
 	 */
-	private void load(String path) {
+	protected void load(String path) {
 		this.file = new File(SuperJukebox.getInstance().getDataFolder(), path);
 
 		// Create the flat configuration file if doesn't exists.

@@ -132,6 +132,16 @@ public class Jukebox {
 	}
 
 	/**
+	 * Add a custom music to this jukebox
+	 * @param music Music to add!
+	 */
+	public void addCustomMusic(Music music) {
+		if (!this.musics.contains(music)) {
+			this.musics.add(music);
+		}
+	}
+
+	/**
 	 * Change to the next music!
 	 */
 	public boolean nextMusic() {

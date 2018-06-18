@@ -7,7 +7,6 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.logging.Level;
 
 /**
  * This object decodes given NBS files to create a readable Music object
@@ -70,13 +69,6 @@ public class NBSDecoder {
 				readInt(dis);
 				readString(dis);
 			} catch (IOException ex) {
-				try {
-					dis.close();
-					fis.close();
-				} catch (IOException e2) {
-					Log.log(Level.WARNING, "Cannot close nbs file streams!", e2);
-				}
-
 				// Argh! An error in the format of the file maybe?
 				throw new NBSDecodeException(file, "Cannot read NBS description!", ex);
 			}
