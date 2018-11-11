@@ -34,7 +34,7 @@ public class Config extends YamlLinker {
 	/**
 	 * The plugin prefix
 	 */
-	public static final String PREFIX = "§8[§3SuperJukebox§8] §7";
+	//public static final String PREFIX = "§8[§3SuperJukebox§8] §7";
 
 	/**
 	 * Bukkit material used to distinguish super jukeboxes!
@@ -48,6 +48,9 @@ public class Config extends YamlLinker {
 
 	@Configurable
 	public static boolean debug;
+
+	@Configurable(key = "chat.prefix")
+	public static String PREFIX;
 
 	@Configurable
 	public static String locale;

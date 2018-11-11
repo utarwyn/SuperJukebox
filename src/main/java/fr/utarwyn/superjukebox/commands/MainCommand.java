@@ -21,11 +21,12 @@ public class MainCommand extends AbstractCommand {
 		this.addSubCommand(new MusicCommand());
 		this.addSubCommand(new HelpCommand());
 		this.addSubCommand(new ReloadCommand());
+		this.addSubCommand(new SupportCommand());
 	}
 
 	@Override
 	public void perform(CommandSender sender) {
-		sender.sendMessage(Config.PREFIX + "Created by §3Utarwyn§7. Version §e" + SuperJukebox.getInstance().getDescription().getVersion() + "§7.");
+		sender.sendMessage(Config.PREFIX + "Created by §3Utarwyn§7 edited by §3TCOOfficiall.§7 Version §e" + SuperJukebox.getInstance().getDescription().getVersion() + "§7.");
 		sender.sendMessage(Config.PREFIX + "To show plugin's help: §d/sj help§7.");
 	}
 
