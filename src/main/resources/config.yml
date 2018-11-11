@@ -1,14 +1,18 @@
-# # # # # # # # # # # # # # # # # # # # #
-#  SuperJukebox configuration           #
-#  Version: 1.0.0                       #
-#  An awesome music plugin by Utarwyn!  #
-# # # # # # # # # # # # # # # # # # # # #
+  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#  SuperJukebox configuration                                      #
+#  Version: 1.0.0                                                  #
+#  An awesome music plugin by Utarwyn and edited by TCOOfficiall!  #
+  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 # Enable debugging (use this only when you have a problem with the plugin)
 debug: false
 
 # The locale of the plugin
 locale: en
+
+#The prefix of the plugin!  Use § for colorcodes
+chat:
+  prefix: '§8[§3SuperJukebox§8]§7'
 
 # Let this config to true if you want to convert all jukeboxes into
 # super jukeboxes! (apply only on new placed jukeboxes)

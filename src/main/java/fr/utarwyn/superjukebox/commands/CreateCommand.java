@@ -20,7 +20,7 @@ public class CreateCommand extends AbstractCommand {
 	private JukeboxesManager manager;
 
 	CreateCommand() {
-		super("create");
+		super("create", "c");
 
 		this.manager = SuperJukebox.getInstance().getInstance(JukeboxesManager.class);
 	}

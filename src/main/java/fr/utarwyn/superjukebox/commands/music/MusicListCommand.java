@@ -14,7 +14,7 @@ import java.util.List;
 
 public class MusicListCommand extends AbstractCommand {
 
-	private static final int MUSICS_PER_PAGE = 10;
+	private static final int MUSICS_PER_PAGE = 2;
 
 	private MusicManager manager;
 
@@ -41,7 +41,8 @@ public class MusicListCommand extends AbstractCommand {
 			return;
 		}
 
-		sender.sendMessage("§a§lMusic list §2§l(page " + page + ")§a§l:");
+
+        sender.sendMessage("§a§lMusic list §2§l(§a§lPage " + page + "§2§l)§a§l:");
 
 		int begin = MUSICS_PER_PAGE * (page - 1);
 		for (int i = begin; i < begin + MUSICS_PER_PAGE && i < musics.size(); i++) {

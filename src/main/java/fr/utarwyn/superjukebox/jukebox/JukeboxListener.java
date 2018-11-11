@@ -3,6 +3,7 @@ package fr.utarwyn.superjukebox.jukebox;
 import fr.utarwyn.superjukebox.Config;
 import fr.utarwyn.superjukebox.menu.jukebox.JukeboxMainMenu;
 import fr.utarwyn.superjukebox.util.JUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -60,8 +61,15 @@ public class JukeboxListener implements Listener {
 		// Create a new super jukebox if needed!
 		if (block.getType() == Config.MAT_JUKEBOX && Config.allJukeboxAreSuper) {
 			JUtil.runSync(() -> this.manager.createSuperJukebox(block));
+            event.getPlayer().sendMessage(Config.PREFIX + ChatColor.translateAlternateColorCodes('&', "&7You just placed a &6SuperJukebox&7, right-click it to choose a song!"));
+
+        } else if (block.getType() == Config.MAT_JUKEBOX && event.getPlayer().isSneaking() && event.getPlayer().hasPermission("SuperJukebox.place")) {
+            JUtil.runSync(() -> this.manager.createSuperJukebox(block));
+			event.getPlayer().sendMessage(Config.PREFIX + ChatColor.translateAlternateColorCodes('&', "&7You just placed a &6SuperJukebox&7, right-click it to choose a song!"));
 		}
 	}
+
+
 
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
@@ -74,6 +82,8 @@ public class JukeboxListener implements Listener {
 
 		// Remove it!
 		JUtil.runSync(() -> this.manager.removeSuperJukebox(block));
-	}
+        event.getPlayer().sendMessage(Config.PREFIX + ChatColor.translateAlternateColorCodes('&', "&7You just removed a &6SuperJukebox&7!"));
+
+    }
 
 }
