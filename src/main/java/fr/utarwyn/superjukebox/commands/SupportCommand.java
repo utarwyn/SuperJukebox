@@ -1,6 +1,5 @@
 package fr.utarwyn.superjukebox.commands;
 
-
 import fr.utarwyn.superjukebox.Config;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

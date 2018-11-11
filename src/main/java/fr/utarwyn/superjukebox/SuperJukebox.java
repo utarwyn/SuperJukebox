@@ -8,26 +8,26 @@ import fr.utarwyn.superjukebox.music.MusicManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SuperJukebox extends JavaPlugin {
-    private static SuperJukebox instance;
+	private static SuperJukebox instance;
 
-    @Override
-    public void onEnable() {
-        SuperJukebox.instance = this;
+	@Override
+	public void onEnable() {
+		SuperJukebox.instance = this;
 
-        // Load main configuration ...
-        if (!Config.get().initialize(this))
-            return;
+		// Load main configuration ...
+		if (!Config.get().initialize(this))
+			return;
 
 
-        // Register all managers
-        new MusicManager();
-        new JukeboxesManager();
+		// Register all managers
+		new MusicManager();
+		new JukeboxesManager();
 
-        // Register the main command!
-        AbstractCommand.register(new MainCommand());
-    }
+		// Register the main command!
+		AbstractCommand.register(new MainCommand());
+	}
 
-    @Override
+	@Override
 	public void onDisable() {
 		Managers.unloadAll();
 	}
@@ -47,11 +47,8 @@ public class SuperJukebox extends JavaPlugin {
 	 */
 	public final <T> T getInstance(Class<T> clazz) {
 		T inst = Managers.getInstance(clazz);
-		Preconditions.checkState(inst != null, clazz + " instance is null!");
+		Preconditions.checkState(inst != null, "%s instance is null!", clazz);
 
 		return inst;
 	}
-
-
-
 }
