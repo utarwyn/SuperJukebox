@@ -6,7 +6,7 @@
 
     <groupId>fr.utarwyn</groupId>
     <artifactId>SuperJukebox</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>SuperJukebox</name>
@@ -33,13 +33,14 @@
     </repositories>
 
     <dependencies>
-        <!-- Bukkit API -->
+        <!-- Spigot API -->
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
             <version>1.12.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+
         <!-- Particle Lib (1.8 to 1.12+) -->
         <dependency>
             <groupId>org.inventivetalent</groupId>

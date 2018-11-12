@@ -4,6 +4,7 @@ import fr.utarwyn.superjukebox.Config;
 import fr.utarwyn.superjukebox.Managers;
 import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.util.JUtil;
+import fr.utarwyn.superjukebox.util.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -25,13 +26,13 @@ public class ReloadCommand extends AbstractCommand {
 	@Override
 	public void perform(CommandSender sender) {
 		if (!JUtil.senderHasPerm(sender, "reload")) {
-			sender.sendMessage(Config.PREFIX + ChatColor.RED + "You don't have permission to do that!");
+			sender.sendMessage(Messages.PREFIX + ChatColor.RED + "You don't have permission to do that!");
 			return;
 		}
 
 		if (!Config.get().reload()) {
-			sender.sendMessage(Config.PREFIX + "§cError when reloading config! See the console for more info!");
-			sender.sendMessage(Config.PREFIX + "§8Plugin now disabled.");
+			sender.sendMessage(Messages.PREFIX + "§cError when reloading config! See the console for more info!");
+			sender.sendMessage(Messages.PREFIX + "§8Plugin now disabled.");
 
 			Bukkit.getPluginManager().disablePlugin(SuperJukebox.getInstance());
 			return;
@@ -39,7 +40,7 @@ public class ReloadCommand extends AbstractCommand {
 
 		Managers.reloadAll();
 
-		sender.sendMessage(Config.PREFIX + "§aConfiguration reloaded!");
+		sender.sendMessage(Messages.PREFIX + "§aConfiguration reloaded!");
 	}
 
 	@Override

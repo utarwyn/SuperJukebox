@@ -10,9 +10,9 @@ debug: false
 # The locale of the plugin
 locale: en
 
-#The prefix of the plugin!  Use § for colorcodes
+#The prefix of the plugin!  Use & for colorcodes
 chat:
-  prefix: '§8[§3SuperJukebox§8]§7'
+  prefix: '&8[&3SuperJukebox&8]&7'
 
 # Let this config to true if you want to convert all jukeboxes into
 # super jukeboxes! (apply only on new placed jukeboxes)

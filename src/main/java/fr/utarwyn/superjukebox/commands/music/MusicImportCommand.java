@@ -5,6 +5,7 @@ import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.commands.AbstractCommand;
 import fr.utarwyn.superjukebox.commands.parameter.Parameter;
 import fr.utarwyn.superjukebox.music.MusicManager;
+import fr.utarwyn.superjukebox.util.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -28,19 +29,19 @@ public class MusicImportCommand extends AbstractCommand {
 		Bukkit.getScheduler().runTaskAsynchronously(SuperJukebox.getInstance(), () -> {
 			switch (this.manager.importMusic(endpoint)) {
 				case GOOD:
-					sender.sendMessage(Config.PREFIX + "§aMusic imported and ready to be played!");
+					sender.sendMessage(Messages.PREFIX + "§aMusic imported and ready to be played!");
 					break;
 				case MALFORMATED_URL:
-					sender.sendMessage(Config.PREFIX + "§cWe cannot import your music: check your url.");
+					sender.sendMessage(Messages.PREFIX + "§cWe cannot import your music: check your url.");
 					break;
 				case UNKNOWN_FILE:
-					sender.sendMessage(Config.PREFIX + "§cWe cannot import your music: unknown file.");
+					sender.sendMessage(Messages.PREFIX + "§cWe cannot import your music: unknown file.");
 					break;
 				case DECODING_ERROR:
-					sender.sendMessage(Config.PREFIX + "§cWe cannot import your music: nbs decoding error. Check your console to have more info.");
+					sender.sendMessage(Messages.PREFIX + "§cWe cannot import your music: nbs decoding error. Check your console to have more info.");
 					break;
 				case ALREADY_IMPORTED:
-					sender.sendMessage(Config.PREFIX + "§cWe cannot import your music: music already imported.");
+					sender.sendMessage(Messages.PREFIX + "§cWe cannot import your music: music already imported.");
 					break;
 			}
 		});
