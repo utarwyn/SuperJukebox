@@ -33,7 +33,7 @@ public class JukeboxListener implements Listener {
 	@EventHandler
 	public void onBlockInteract(PlayerInteractEvent event) {
 		// Initial verifications
-		if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock().getState() instanceof NoteBlock) return;
+		if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock() == null) return;
 		if (event.getClickedBlock().getType() != Config.MAT_JUKEBOX) return;
 
 		// Optimization trick to disable double interaction with the block

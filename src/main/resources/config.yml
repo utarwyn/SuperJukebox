@@ -10,7 +10,7 @@ debug: false
 # The locale of the plugin
 locale: en
 
-#The prefix of the plugin!  Use & for colorcodes
+#The prefix of the plugin!  Use & for colorcodes (Having error's in 1.8)
 chat:
   prefix: '&8[&3SuperJukebox&8]&7'
 
