@@ -39,7 +39,7 @@ public class MusicPlayer implements Runnable {
 	}
 
 	public boolean isTaskRunned() {
-		return this.task != null && !this.task.isCancelled();
+		return this.task != null && !Bukkit.getScheduler().isCurrentlyRunning(this.task.getTaskId());
 	}
 
 	public synchronized void runTask() {

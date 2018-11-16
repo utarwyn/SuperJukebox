@@ -4,10 +4,14 @@ import fr.utarwyn.superjukebox.Config;
 import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.jukebox.JukeboxesManager;
 import fr.utarwyn.superjukebox.util.JUtil;
+import fr.utarwyn.superjukebox.util.Messages;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.Set;
 
 /**
  * With this command, this is very easy to convert a jukebox into a SuperJukebox!
@@ -33,25 +37,25 @@ public class CreateCommand extends AbstractCommand {
 	@Override
 	public void performPlayer(Player player) {
 		if (!JUtil.playerHasPerm(player, "create")) {
-			player.sendMessage(Config.PREFIX + ChatColor.RED + "You don't have permission to do that!");
+			player.sendMessage(Messages.PREFIX + ChatColor.RED + "You don't have permission to do that!");
 			return;
 		}
 
-		Block block = player.getTargetBlock(null, 6);
+		Block block = player.getTargetBlock((Set<Material>) null, 6);
 
 		if (block == null || block.getType() != Config.MAT_JUKEBOX) {
-			player.sendMessage(Config.PREFIX + ChatColor.RED + "The aimed block is not a valid jukebox.");
+			player.sendMessage(Messages.PREFIX + ChatColor.RED + "The aimed block is not a valid jukebox.");
 			return;
 		}
 
 		if (this.manager.getJukeboxAt(block) != null) {
-			player.sendMessage(Config.PREFIX + ChatColor.RED + "The aimed block is already a super jukebox!");
+			player.sendMessage(Messages.PREFIX + ChatColor.RED + "The aimed block is already a super jukebox!");
 			return;
 		}
 
 		// Create a superjukebox here!
 		this.manager.createSuperJukebox(block);
-		player.sendMessage(Config.PREFIX + ChatColor.GREEN + "This jukebox is now " + ChatColor.GOLD + "A SuperJukebox " + ChatColor.GREEN + "!");
+		player.sendMessage(Messages.PREFIX + ChatColor.GREEN + "This jukebox is now " + ChatColor.GOLD + "A SuperJukebox " + ChatColor.GREEN + "!");
 	}
 
 	@Override

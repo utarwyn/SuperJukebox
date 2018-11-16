@@ -5,14 +5,18 @@ import fr.utarwyn.superjukebox.commands.AbstractCommand;
 import fr.utarwyn.superjukebox.commands.MainCommand;
 import fr.utarwyn.superjukebox.jukebox.JukeboxesManager;
 import fr.utarwyn.superjukebox.music.MusicManager;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.logging.Level;
 
 public class SuperJukebox extends JavaPlugin {
 	private static SuperJukebox instance;
 
-	@Override
-	public void onEnable() {
-		SuperJukebox.instance = this;
+    @Override
+    public void onEnable() {
+        checkVersion();
+        SuperJukebox.instance = this;
 
 		// Load main configuration ...
 		if (!Config.get().initialize(this))
@@ -30,6 +34,18 @@ public class SuperJukebox extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		Managers.unloadAll();
+	}
+
+	private void checkVersion() {
+		if(Bukkit.getVersion().contains("1.8")) {
+		    Bukkit.getLogger().log(Level.SEVERE, "---------------------\n" +
+                    "Sorry, but this plugin doesn't work in 1.8 yet!\n" +
+                    "We're trying to get a fix for this!\n" +
+                    "---------------------");
+			Bukkit.getServer().getPluginManager().disablePlugin(this);
+			return;
+		}
+
 	}
 
 	public static SuperJukebox getInstance() {

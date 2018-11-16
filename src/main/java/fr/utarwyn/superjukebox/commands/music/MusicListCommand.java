@@ -6,6 +6,7 @@ import fr.utarwyn.superjukebox.commands.AbstractCommand;
 import fr.utarwyn.superjukebox.commands.parameter.Parameter;
 import fr.utarwyn.superjukebox.music.Music;
 import fr.utarwyn.superjukebox.music.MusicManager;
+import fr.utarwyn.superjukebox.util.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -31,13 +32,13 @@ public class MusicListCommand extends AbstractCommand {
 		List<Music> musics = this.manager.getMusics();
 
 		if (musics.isEmpty()) {
-			sender.sendMessage(Config.PREFIX + ChatColor.RED + "There is no music yet.");
+			sender.sendMessage(Messages.PREFIX + ChatColor.RED + "There is no music yet.");
 			return;
 		}
 
 		int page = this.readArgOrDefault(1);
 		if (page <= 0 || page > Math.ceil(musics.size() / (double) MUSICS_PER_PAGE)) {
-			sender.sendMessage(Config.PREFIX + ChatColor.RED + "This page does not exist!");
+			sender.sendMessage(Messages.PREFIX + ChatColor.RED + "This page does not exist!");
 			return;
 		}
 

@@ -2,6 +2,7 @@ package fr.utarwyn.superjukebox;
 
 import fr.utarwyn.superjukebox.util.Configurable;
 import fr.utarwyn.superjukebox.util.YamlLinker;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -46,8 +47,8 @@ public class Config extends YamlLinker {
 	 */
 	public static final String MUSICS_FOLDER = "musics";
 
-	@Configurable
-	public static boolean debug;
+    @Configurable
+    public static boolean debug;
 
 	@Configurable(key = "chat.prefix")
 	public static String PREFIX;
@@ -88,7 +89,8 @@ public class Config extends YamlLinker {
 	@Configurable(key = "jukeboxconfiguration.permissions.editsettings")
 	public static String jukeboxDefaultEditSettingsPerm;
 
-	@Override
+
+    @Override
 	public boolean initialize(JavaPlugin plugin) {
 		// Create config.yml file if not exists
 		if (!new File(plugin.getDataFolder(), "config.yml").exists())

@@ -1,6 +1,7 @@
 package fr.utarwyn.superjukebox.commands;
 
 import fr.utarwyn.superjukebox.Config;
+import fr.utarwyn.superjukebox.util.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -13,7 +14,7 @@ public class SupportCommand extends AbstractCommand {
 
     @Override
     public void perform(CommandSender sender) {
-        sender.sendMessage(Config.PREFIX + "If you ever need help with the plugin," +
+        sender.sendMessage(Messages.PREFIX + "If you ever need help with the plugin," +
                 " or you want to report a bug." +
                 "Join the discord here: " + ChatColor.AQUA + "https://discord.gg/ZrZvV2s");
     }
