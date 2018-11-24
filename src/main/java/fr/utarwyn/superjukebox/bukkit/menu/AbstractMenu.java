@@ -1,4 +1,4 @@
-package fr.utarwyn.superjukebox.menu;
+package fr.utarwyn.superjukebox.bukkit.menu;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

@@ -1,10 +1,10 @@
-package fr.utarwyn.superjukebox.jukebox;
+package fr.utarwyn.superjukebox.bukkit.jukebox;
 
-import fr.utarwyn.superjukebox.SuperJukebox;
-import fr.utarwyn.superjukebox.jukebox.settings.JukeboxSettings;
-import fr.utarwyn.superjukebox.music.Music;
-import fr.utarwyn.superjukebox.music.MusicManager;
-import fr.utarwyn.superjukebox.music.MusicPlayer;
+import fr.utarwyn.superjukebox.bukkit.SuperJukebox;
+import fr.utarwyn.superjukebox.bukkit.jukebox.settings.JukeboxSettings;
+import fr.utarwyn.superjukebox.bukkit.music.Music;
+import fr.utarwyn.superjukebox.bukkit.music.MusicManager;
+import fr.utarwyn.superjukebox.bukkit.music.MusicPlayer;
 import org.bukkit.block.Block;
 
 import java.util.ArrayList;

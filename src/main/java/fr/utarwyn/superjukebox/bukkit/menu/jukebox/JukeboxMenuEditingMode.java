@@ -1,4 +1,4 @@
-package fr.utarwyn.superjukebox.menu.jukebox;
+package fr.utarwyn.superjukebox.bukkit.menu.jukebox;
 
 /**
  * Represents an edition mode for the jukebox main menu!

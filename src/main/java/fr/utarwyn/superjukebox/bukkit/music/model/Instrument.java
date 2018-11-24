@@ -1,6 +1,6 @@
-package fr.utarwyn.superjukebox.music.model;
+package fr.utarwyn.superjukebox.bukkit.music.model;
 
-import fr.utarwyn.superjukebox.util.MinecraftVersion;
+import fr.utarwyn.superjukebox.bukkit.util.MinecraftVersion;
 import org.bukkit.Sound;
 
 /**

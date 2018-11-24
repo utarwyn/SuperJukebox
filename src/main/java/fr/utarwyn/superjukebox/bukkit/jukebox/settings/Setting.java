@@ -1,4 +1,4 @@
-package fr.utarwyn.superjukebox.jukebox.settings;
+package fr.utarwyn.superjukebox.bukkit.jukebox.settings;
 
 import java.util.function.Predicate;
 

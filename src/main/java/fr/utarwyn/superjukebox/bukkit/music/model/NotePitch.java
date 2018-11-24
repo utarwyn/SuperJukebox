@@ -1,4 +1,4 @@
-package fr.utarwyn.superjukebox.music.model;
+package fr.utarwyn.superjukebox.bukkit.music.model;
 
 /**
  * A note pitch, that's all.

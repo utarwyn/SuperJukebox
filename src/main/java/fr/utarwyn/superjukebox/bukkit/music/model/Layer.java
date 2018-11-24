@@ -1,4 +1,4 @@
-package fr.utarwyn.superjukebox.music.model;
+package fr.utarwyn.superjukebox.bukkit.music.model;
 
 import java.util.HashMap;
 import java.util.Map;

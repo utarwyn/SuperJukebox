@@ -1,6 +1,6 @@
-package fr.utarwyn.superjukebox.menu;
+package fr.utarwyn.superjukebox.bukkit.menu;
 
-import fr.utarwyn.superjukebox.music.Music;
+import fr.utarwyn.superjukebox.bukkit.music.Music;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

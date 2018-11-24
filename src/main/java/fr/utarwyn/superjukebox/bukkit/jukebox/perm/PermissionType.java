@@ -1,6 +1,6 @@
-package fr.utarwyn.superjukebox.jukebox.perm;
+package fr.utarwyn.superjukebox.bukkit.jukebox.perm;
 
-import fr.utarwyn.superjukebox.util.Log;
+import fr.utarwyn.superjukebox.bukkit.util.Log;
 
 /**
  * Type that a permission can have.

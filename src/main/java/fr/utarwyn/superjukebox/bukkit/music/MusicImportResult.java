@@ -1,4 +1,4 @@
-package fr.utarwyn.superjukebox.music;
+package fr.utarwyn.superjukebox.bukkit.music;
 
 /**
  * Allows the plugin to known the result of a music importation.

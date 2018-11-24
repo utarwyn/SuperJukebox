@@ -1,6 +1,6 @@
-package fr.utarwyn.superjukebox.menu;
+package fr.utarwyn.superjukebox.bukkit.menu;
 
-import fr.utarwyn.superjukebox.SuperJukebox;
+import fr.utarwyn.superjukebox.bukkit.SuperJukebox;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

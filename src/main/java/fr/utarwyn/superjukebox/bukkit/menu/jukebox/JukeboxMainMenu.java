@@ -1,10 +1,10 @@
-package fr.utarwyn.superjukebox.menu.jukebox;
+package fr.utarwyn.superjukebox.bukkit.menu.jukebox;
 
-import fr.utarwyn.superjukebox.jukebox.Jukebox;
-import fr.utarwyn.superjukebox.menu.AbstractMenu;
-import fr.utarwyn.superjukebox.menu.MusicDiscsMenu;
-import fr.utarwyn.superjukebox.music.Music;
-import fr.utarwyn.superjukebox.util.JUtil;
+import fr.utarwyn.superjukebox.bukkit.jukebox.Jukebox;
+import fr.utarwyn.superjukebox.bukkit.menu.AbstractMenu;
+import fr.utarwyn.superjukebox.bukkit.menu.MusicDiscsMenu;
+import fr.utarwyn.superjukebox.bukkit.music.Music;
+import fr.utarwyn.superjukebox.bukkit.util.JUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;

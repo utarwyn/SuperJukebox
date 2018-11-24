@@ -1,6 +1,6 @@
-package fr.utarwyn.superjukebox.jukebox.perm;
+package fr.utarwyn.superjukebox.bukkit.jukebox.perm;
 
-import fr.utarwyn.superjukebox.util.JUtil;
+import fr.utarwyn.superjukebox.bukkit.util.JUtil;
 import org.bukkit.entity.Player;
 
 /**

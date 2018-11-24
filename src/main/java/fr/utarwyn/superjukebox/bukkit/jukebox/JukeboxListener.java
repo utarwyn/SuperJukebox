@@ -1,12 +1,11 @@
-package fr.utarwyn.superjukebox.jukebox;
+package fr.utarwyn.superjukebox.bukkit.jukebox;
 
-import fr.utarwyn.superjukebox.Config;
-import fr.utarwyn.superjukebox.menu.jukebox.JukeboxMainMenu;
-import fr.utarwyn.superjukebox.util.JUtil;
-import fr.utarwyn.superjukebox.util.Messages;
+import fr.utarwyn.superjukebox.bukkit.Config;
+import fr.utarwyn.superjukebox.bukkit.menu.jukebox.JukeboxMainMenu;
+import fr.utarwyn.superjukebox.bukkit.util.JUtil;
+import fr.utarwyn.superjukebox.bukkit.util.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
-import org.bukkit.block.NoteBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,7 +13,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
 
 /**
  * Contains all events for interactions with super-jukeboxes!

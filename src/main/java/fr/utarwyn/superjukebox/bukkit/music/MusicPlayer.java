@@ -1,10 +1,10 @@
-package fr.utarwyn.superjukebox.music;
+package fr.utarwyn.superjukebox.bukkit.music;
 
-import fr.utarwyn.superjukebox.SuperJukebox;
-import fr.utarwyn.superjukebox.jukebox.Jukebox;
-import fr.utarwyn.superjukebox.music.model.Layer;
-import fr.utarwyn.superjukebox.music.model.Note;
-import fr.utarwyn.superjukebox.util.ActionBarUtil;
+import fr.utarwyn.superjukebox.bukkit.SuperJukebox;
+import fr.utarwyn.superjukebox.bukkit.jukebox.Jukebox;
+import fr.utarwyn.superjukebox.bukkit.music.model.Layer;
+import fr.utarwyn.superjukebox.bukkit.music.model.Note;
+import fr.utarwyn.superjukebox.bukkit.util.ActionBarUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitTask;

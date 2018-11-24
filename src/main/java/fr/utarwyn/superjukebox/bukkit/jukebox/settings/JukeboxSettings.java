@@ -1,8 +1,8 @@
-package fr.utarwyn.superjukebox.jukebox.settings;
+package fr.utarwyn.superjukebox.bukkit.jukebox.settings;
 
-import fr.utarwyn.superjukebox.Config;
-import fr.utarwyn.superjukebox.jukebox.perm.Permission;
-import fr.utarwyn.superjukebox.jukebox.perm.PermissionType;
+import fr.utarwyn.superjukebox.bukkit.Config;
+import fr.utarwyn.superjukebox.bukkit.jukebox.perm.Permission;
+import fr.utarwyn.superjukebox.bukkit.jukebox.perm.PermissionType;
 import org.bukkit.configuration.ConfigurationSection;
 
 /**

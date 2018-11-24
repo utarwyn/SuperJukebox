@@ -1,12 +1,12 @@
-package fr.utarwyn.superjukebox.jukebox;
+package fr.utarwyn.superjukebox.bukkit.jukebox;
 
-import fr.utarwyn.superjukebox.AbstractManager;
-import fr.utarwyn.superjukebox.SuperJukebox;
-import fr.utarwyn.superjukebox.menu.Menus;
-import fr.utarwyn.superjukebox.music.Music;
-import fr.utarwyn.superjukebox.music.MusicManager;
-import fr.utarwyn.superjukebox.util.FlatFile;
-import fr.utarwyn.superjukebox.util.JUtil;
+import fr.utarwyn.superjukebox.bukkit.AbstractManager;
+import fr.utarwyn.superjukebox.bukkit.SuperJukebox;
+import fr.utarwyn.superjukebox.bukkit.menu.Menus;
+import fr.utarwyn.superjukebox.bukkit.music.Music;
+import fr.utarwyn.superjukebox.bukkit.music.MusicManager;
+import fr.utarwyn.superjukebox.bukkit.util.FlatFile;
+import fr.utarwyn.superjukebox.bukkit.util.JUtil;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
