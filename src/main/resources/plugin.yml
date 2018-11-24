@@ -1,4 +1,4 @@
 name: SuperJukebox
 authors: [Utarwyn, TCOOfficiall]
 version: 1.0.2
-main: fr.utarwyn.superjukebox.SuperJukebox
+main: fr.utarwyn.superjukebox.bukkit.SuperJukebox
