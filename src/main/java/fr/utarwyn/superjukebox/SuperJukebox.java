@@ -5,6 +5,7 @@ import fr.utarwyn.superjukebox.commands.AbstractCommand;
 import fr.utarwyn.superjukebox.commands.MainCommand;
 import fr.utarwyn.superjukebox.jukebox.JukeboxesManager;
 import fr.utarwyn.superjukebox.music.MusicManager;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SuperJukebox extends JavaPlugin {
@@ -12,6 +13,7 @@ public class SuperJukebox extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
         SuperJukebox.instance = this;
 
         // Load main configuration ...
@@ -25,6 +27,7 @@ public class SuperJukebox extends JavaPlugin {
 
         // Register the main command!
         AbstractCommand.register(new MainCommand());
+        Bukkit.getPluginManager().registerEvents(new listeners(), this);
     }
 
     @Override

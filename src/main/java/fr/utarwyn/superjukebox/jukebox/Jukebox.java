@@ -36,7 +36,7 @@ public class Jukebox {
 	/**
 	 * The music player which played music of this jukebox!
 	 */
-	private MusicPlayer player;
+	public MusicPlayer player;
 
 	/**
 	 * List of all custom musics for this jukebox
