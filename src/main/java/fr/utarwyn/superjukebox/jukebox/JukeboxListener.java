@@ -3,8 +3,10 @@ package fr.utarwyn.superjukebox.jukebox;
 import fr.utarwyn.superjukebox.Config;
 import fr.utarwyn.superjukebox.menu.jukebox.JukeboxMainMenu;
 import fr.utarwyn.superjukebox.util.JUtil;
+import fr.utarwyn.superjukebox.util.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
+import org.bukkit.block.NoteBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,7 +37,8 @@ public class JukeboxListener implements Listener {
 		if (event.getClickedBlock().getType() != Config.MAT_JUKEBOX) return;
 
 		// Optimization trick to disable double interaction with the block
-		if (!event.getHand().equals(EquipmentSlot.HAND)) return;
+		//if (!event.getHand().equals(EquipmentSlot.HAND) || !event.getPlayer().getItemInHand().equals(EquipmentSlot.HAND)) return;
+
 
 		// Is there a super jukebox here?
 		Jukebox jukebox = this.manager.getJukeboxAt(event.getClickedBlock());
@@ -61,11 +64,11 @@ public class JukeboxListener implements Listener {
 		// Create a new super jukebox if needed!
 		if (block.getType() == Config.MAT_JUKEBOX && Config.allJukeboxAreSuper) {
 			JUtil.runSync(() -> this.manager.createSuperJukebox(block));
-            event.getPlayer().sendMessage(Config.PREFIX + ChatColor.translateAlternateColorCodes('&', "&7You just placed a &6SuperJukebox&7, right-click it to choose a song!"));
+            event.getPlayer().sendMessage(Messages.PREFIX + ChatColor.translateAlternateColorCodes('&', "&7You just placed a &6SuperJukebox&7, right-click it to choose a song!"));
 
         } else if (block.getType() == Config.MAT_JUKEBOX && event.getPlayer().isSneaking() && event.getPlayer().hasPermission("SuperJukebox.place")) {
             JUtil.runSync(() -> this.manager.createSuperJukebox(block));
-			event.getPlayer().sendMessage(Config.PREFIX + ChatColor.translateAlternateColorCodes('&', "&7You just placed a &6SuperJukebox&7, right-click it to choose a song!"));
+			event.getPlayer().sendMessage(Messages.PREFIX + ChatColor.translateAlternateColorCodes('&', "&7You just placed a &6SuperJukebox&7, right-click it to choose a song!"));
 		}
 	}
 
@@ -82,7 +85,7 @@ public class JukeboxListener implements Listener {
 
 		// Remove it!
 		JUtil.runSync(() -> this.manager.removeSuperJukebox(block));
-        event.getPlayer().sendMessage(Config.PREFIX + ChatColor.translateAlternateColorCodes('&', "&7You just removed a &6SuperJukebox&7!"));
+        event.getPlayer().sendMessage(Messages.PREFIX + ChatColor.translateAlternateColorCodes('&', "&7You just removed a &6SuperJukebox&7!"));
 
     }
 

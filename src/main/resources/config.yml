@@ -1,8 +1,9 @@
-  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#  SuperJukebox configuration                                      #
-#  Version: 1.0.0                                                  #
-#  An awesome music plugin by Utarwyn and edited by TCOOfficiall!  #
-  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # #
+#  SuperJukebox configuration           #
+#  An awesome music plugin by Utarwyn!  #
+#  Version: 1.0.0                       #
+#  Contributors: Utarwyn, TCOOfficiall  #
+# # # # # # # # # # # # # # # # # # # # #
 
 # Enable debugging (use this only when you have a problem with the plugin)
 debug: false
@@ -10,7 +11,7 @@ debug: false
 # The locale of the plugin
 locale: en
 
-#The prefix of the plugin!  Use § for colorcodes
+#The prefix of the plugin!  Use & for colorcodes (Having error's in 1.8)
 chat:
   prefix: '§8[§3SuperJukebox§8] §7'
 
