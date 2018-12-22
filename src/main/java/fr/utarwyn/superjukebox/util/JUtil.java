@@ -9,6 +9,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
+import java.security.SecureRandom;
 import java.util.Random;
 
 /**
@@ -19,7 +20,7 @@ import java.util.Random;
  */
 public class JUtil {
 
-	public static final Random RND = new Random();
+	public static final Random RND = new SecureRandom();
 
 	/**
 	 * No constructor, it's an utility class!

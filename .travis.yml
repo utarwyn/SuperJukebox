@@ -1,16 +1,4 @@
 language: java
-dist: trusty
-sudo: false
-
 jdk:
   - oraclejdk8
-
-install:
-  - mvn install -Dmaven.javadoc.skip=true -DoutputDirectory="./" -B -V
-
-script:
-  - mvn sonar:sonar
-
-addons:
-  sonarcloud:
-    organization: "utarwyn-github"
+  - openjdk8
