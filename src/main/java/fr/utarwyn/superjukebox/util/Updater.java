@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -38,22 +39,28 @@ public class Updater extends AbstractManager {
 
 	@Override
 	protected void unload() {
-
+		// Updater do nothing at the disabling of the plugin
 	}
 
 	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent event) throws Exception {
+	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 
 		if (JUtil.playerHasPerm(player, "update")) {
-			if (this.isNotUpToDate()) {
-				player.sendMessage(Messages.PREFIX + "It looks like you don't have the latest version of the plugin. §8(§a"+ currentVersion +"§8)");
-				player.sendMessage(Messages.PREFIX + "Please download it at: §6" + PROJECT_URL);
-			}
+			JUtil.runSync(() -> {
+				try {
+					if (this.isNotUpToDate()) {
+						player.sendMessage(Messages.PREFIX + "It looks like you don't have the latest version of the plugin. §8(§a"+ currentVersion +"§8)");
+						player.sendMessage(Messages.PREFIX + "Please download it at: §6" + PROJECT_URL);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			});
 		}
 	}
 
-	private boolean isNotUpToDate() throws Exception {
+	private boolean isNotUpToDate() throws IOException {
 		URLConnection con = checkURL.openConnection();
 		this.currentVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
 		return !plugin.getDescription().getVersion().equals(currentVersion);

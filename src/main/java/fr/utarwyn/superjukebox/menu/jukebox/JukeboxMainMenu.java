@@ -4,7 +4,6 @@ import fr.utarwyn.superjukebox.jukebox.Jukebox;
 import fr.utarwyn.superjukebox.menu.AbstractMenu;
 import fr.utarwyn.superjukebox.menu.MusicDiscsMenu;
 import fr.utarwyn.superjukebox.music.Music;
-import fr.utarwyn.superjukebox.music.MusicPlayer;
 import fr.utarwyn.superjukebox.util.JUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -29,16 +28,11 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
 
     private Jukebox jukebox;
 
-    private MusicPlayer musicPlayer;
-
     private ItemStack settingItem;
 
     private ItemStack musicAddItem;
 
     private ItemStack musicStopItem;
-
-
-    private ItemStack musicEditingModeItem;
 
     private AbstractMenu settingsMenu;
 
@@ -51,8 +45,6 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
 
         this.jukebox = jukebox;
         this.editingMode = JukeboxMenuEditingMode.DISABLE;
-
-        this.musicPlayer = new MusicPlayer(jukebox);
 
         this.prepare();
     }
@@ -98,8 +90,8 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
             this.setItem(29, this.musicAddItem);
 
             // Music editing item
-            this.musicEditingModeItem = new ItemStack(Material.BEACON);
-            ItemMeta musicEditingMeta = this.musicEditingModeItem.getItemMeta();
+            ItemStack musicEditingModeItem = new ItemStack(Material.BEACON);
+            ItemMeta musicEditingMeta = musicEditingModeItem.getItemMeta();
 
             musicEditingMeta.setDisplayName(ChatColor.GOLD + "Menu editing mode");
             if (this.jukebox.getSettings().getUseGlobalMusics().getValue()) {
@@ -112,10 +104,10 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
                 musicEditingMeta.addEnchant(Enchantment.DURABILITY, 3, true);
                 musicEditingMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             }
-            this.musicEditingModeItem.setItemMeta(musicEditingMeta);
+            musicEditingModeItem.setItemMeta(musicEditingMeta);
 
             this.removeItemAt(30);
-            this.setItem(30, this.musicEditingModeItem);
+            this.setItem(30, musicEditingModeItem);
 
             // Music PauseItem
             this.musicStopItem = new ItemStack(Material.BARRIER);
@@ -123,22 +115,17 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
 
             musicStopMeta.setDisplayName(ChatColor.GOLD + "Stop music");
             if (this.jukebox.player.isTaskRunned()) {
-
-                musicStopMeta.setLore(Arrays.asList(
-                        "§cPress this iten to", "§cstop the music you're playing§c."));
-
+                musicStopMeta.setLore(Arrays.asList("§cPress this iten to", "§cstop the music you're playing§c."));
             } else {
                 musicStopMeta.setLore(Arrays.asList("§7You can't stop music", "§7that's not playing!"));
                 musicStopMeta.addEnchant(Enchantment.DURABILITY, 3, true);
                 musicStopMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-
             }
+
             this.musicStopItem.setItemMeta(musicStopMeta);
 
             this.removeItemAt(31);
             this.setItem(31, this.musicStopItem);
-
-
         }
     }
 
