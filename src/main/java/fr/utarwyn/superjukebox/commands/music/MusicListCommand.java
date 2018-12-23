@@ -1,6 +1,5 @@
 package fr.utarwyn.superjukebox.commands.music;
 
-import fr.utarwyn.superjukebox.Config;
 import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.commands.AbstractCommand;
 import fr.utarwyn.superjukebox.commands.parameter.Parameter;

@@ -2,7 +2,6 @@ package fr.utarwyn.superjukebox;
 
 import fr.utarwyn.superjukebox.util.Configurable;
 import fr.utarwyn.superjukebox.util.YamlLinker;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -28,16 +27,6 @@ public class Config extends YamlLinker {
 	}
 
 	/**
-	 * Download link of the plugin
-	 */
-	public static final String DOWNLOAD_LINK = "§c§l✖";
-
-	/**
-	 * The plugin prefix
-	 */
-	//public static final String PREFIX = "§8[§3SuperJukebox§8] §7";
-
-	/**
 	 * Bukkit material used to distinguish super jukeboxes!
 	 */
 	public static final Material MAT_JUKEBOX = Material.JUKEBOX;
@@ -47,11 +36,15 @@ public class Config extends YamlLinker {
 	 */
 	public static final String MUSICS_FOLDER = "musics";
 
-    @Configurable
-    public static boolean debug;
+	@Configurable
+	public static boolean debug;
 
+	/**
+	 * TODO This config key has to be removed in a neer future because
+	 *      it will be transfered to the locale file.
+	 */
 	@Configurable(key = "chat.prefix")
-	public static String PREFIX;
+	public static String prefix;
 
 	@Configurable
 	public static String locale;
@@ -90,7 +83,7 @@ public class Config extends YamlLinker {
 	public static String jukeboxDefaultEditSettingsPerm;
 
 
-    @Override
+	@Override
 	public boolean initialize(JavaPlugin plugin) {
 		// Create config.yml file if not exists
 		if (!new File(plugin.getDataFolder(), "config.yml").exists())

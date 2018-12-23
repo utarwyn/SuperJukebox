@@ -157,11 +157,6 @@ public class Jukebox {
 	 */
 	public void playNext() {
 		if (!this.nextMusic()) return;
-
-		// Start the player!
-		if (!this.player.isTaskRunned())
-			this.player.runTask();
-
 		this.player.start();
 	}
 
@@ -181,11 +176,7 @@ public class Jukebox {
 		this.currentMusicIdx = this.getMusics().indexOf(music);
 		this.currentMusic = music;
 
-		// Start the player!
-		if (!this.player.isTaskRunned())
-			this.player.runTask();
-
-		// Restart the player at the beginning of the music!
+		// Start the player at the beginning of the chosen music!
 		this.player.start();
 	}
 
@@ -196,8 +187,9 @@ public class Jukebox {
 	void unload() {
 		this.musics.clear();
 
-		if (this.player != null)
+		if (this.player != null) {
 			this.player.destroy();
+		}
 	}
 
 	/**

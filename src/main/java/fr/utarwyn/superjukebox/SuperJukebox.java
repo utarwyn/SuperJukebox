@@ -5,27 +5,30 @@ import fr.utarwyn.superjukebox.commands.AbstractCommand;
 import fr.utarwyn.superjukebox.commands.MainCommand;
 import fr.utarwyn.superjukebox.jukebox.JukeboxesManager;
 import fr.utarwyn.superjukebox.music.MusicManager;
+import fr.utarwyn.superjukebox.util.Updater;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Level;
 
 public class SuperJukebox extends JavaPlugin {
+
 	private static SuperJukebox instance;
 
-    @Override
-    public void onEnable() {
-        checkVersion();
-        SuperJukebox.instance = this;
+	@Override
+	public void onEnable() {
+		checkVersion();
+		SuperJukebox.instance = this;
 
 		// Load main configuration ...
-		if (!Config.get().initialize(this))
+		if (!Config.get().initialize(this)) {
 			return;
-
+		}
 
 		// Register all managers
 		new MusicManager();
 		new JukeboxesManager();
+		new Updater();
 
 		// Register the main command!
 		AbstractCommand.register(new MainCommand());
@@ -37,15 +40,13 @@ public class SuperJukebox extends JavaPlugin {
 	}
 
 	private void checkVersion() {
-		if(Bukkit.getVersion().contains("1.8")) {
-		    Bukkit.getLogger().log(Level.SEVERE, "---------------------\n" +
-                    "Sorry, but this plugin doesn't work in 1.8 yet!\n" +
-                    "We're trying to get a fix for this!\n" +
-                    "---------------------");
+		if (Bukkit.getVersion().contains("1.8")) {
+			Bukkit.getLogger().log(Level.SEVERE, "---------------------\n" +
+					"Sorry, but this plugin doesn't work in 1.8 yet!\n" +
+					"We're trying to get a fix for this!\n" +
+					"---------------------");
 			Bukkit.getServer().getPluginManager().disablePlugin(this);
-			return;
 		}
-
 	}
 
 	public static SuperJukebox getInstance() {

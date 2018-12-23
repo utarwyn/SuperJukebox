@@ -39,11 +39,10 @@ public class MusicPlayer implements Runnable {
 	}
 
 	public boolean isTaskRunned() {
-		return this.task != null && !Bukkit.getScheduler().isCurrentlyRunning(this.task.getTaskId());
+		return this.task != null;
 	}
 
 	public synchronized void runTask() {
-		if (this.isTaskRunned()) return;
 		this.task = Bukkit.getScheduler().runTaskAsynchronously(SuperJukebox.getInstance(), this);
 	}
 
@@ -56,6 +55,11 @@ public class MusicPlayer implements Runnable {
 	}
 
 	public synchronized void start() {
+		// Before we have to run this task if needed
+		if (!this.isTaskRunned()) {
+			this.runTask();
+		}
+
 		this.tick = -1;
 		this.resume();
 
@@ -73,6 +77,7 @@ public class MusicPlayer implements Runnable {
 
 	public synchronized void destroy() {
 		this.destroyed = true;
+		this.task = null;
 	}
 
 	@Override
@@ -95,8 +100,9 @@ public class MusicPlayer implements Runnable {
 						continue;
 					}
 
-					if (Bukkit.getOnlinePlayers().size() > 0)
+					if (Bukkit.getOnlinePlayers().size() > 0) {
 						Bukkit.getScheduler().runTask(SuperJukebox.getInstance(), this::playTick);
+					}
 				}
 			}
 
