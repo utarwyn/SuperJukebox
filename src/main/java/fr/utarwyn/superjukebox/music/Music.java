@@ -147,6 +147,7 @@ public class Music {
 				"",
 				ChatColor.GOLD + "Click to play this music!"
 		));
+
 		// Hide real music name from ths disc!
 		iconMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
 
@@ -155,7 +156,7 @@ public class Music {
 
 	private String getFormattedLength() {
 		// Convert the music length into seconds ...
-		int seconds = this.length / 20;
+		int seconds = (int) (this.length / this.tempo);
 		// ... and into a readable time!
 		return (seconds / 60) + ":" + String.format("%02d", seconds % 60);
 	}
