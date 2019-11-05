@@ -31,6 +31,8 @@ public class MusicManager extends AbstractManager {
 
 	private FlatFile database;
 
+	private File musicsFolder;
+
 	private Map<Integer, Music> musics;
 
 	public MusicManager() {
@@ -41,39 +43,45 @@ public class MusicManager extends AbstractManager {
 	public void initialize() {
 		this.musics = new HashMap<>();
 
-		if (this.database == null)
+		if (this.database == null) {
 			this.database = new FlatFile("musics.yml");
+		}
+
+		// Initialize the musics folder
+		this.musicsFolder = new File(this.plugin.getDataFolder(), Config.MUSICS_FOLDER);
+		if (!this.musicsFolder.exists() && !this.musicsFolder.mkdir()) {
+			throw new IllegalStateException("We can't create the musics folder. Please check folder permissions.");
+		}
 
 		this.reloadDatabase();
 	}
 
 	@Override
 	protected void unload() {
-
+		// Not implemented
 	}
 
 	public MusicImportResult importMusic(String endpoint) {
-		File musicsFolder = new File(SuperJukebox.getInstance().getDataFolder().getAbsolutePath() + File.separator + "musics");
 		File targetFile = null;
 
 		try {
 			URL urlObject = new URL(endpoint);
-			String fileName = endpoint.substring(endpoint.lastIndexOf('/') + 1, endpoint.length());
+			String fileName = endpoint.substring(endpoint.lastIndexOf('/') + 1);
 			if (!fileName.toLowerCase().endsWith(".nbs")) return MusicImportResult.MALFORMATED_URL;
 
 			fileName = fileName.replace("%20", " ");
-			targetFile = new File(musicsFolder, fileName);
+			targetFile = new File(this.musicsFolder, fileName);
 
 			// Copy the file into the disk
 			Files.copy(urlObject.openStream(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
-			File[] musicsFiles = musicsFolder.listFiles((dir, name) -> name.toLowerCase().endsWith(".nbs"));
+			File[] musicsFiles = this.musicsFolder.listFiles((dir, name) -> name.toLowerCase().endsWith(".nbs"));
 			if (musicsFiles == null) {
 				return MusicImportResult.UNKNOWN_FILE;
 			}
 
 			for (File musicFile : musicsFiles) {
-				String simpleName = musicFile.getName().substring(0, musicFile.getName().lastIndexOf("."));
+				String simpleName = musicFile.getName().substring(0, musicFile.getName().lastIndexOf('.'));
 
 				if (simpleName.replace(" ", "").equalsIgnoreCase(endpoint)) {
 					targetFile = musicFile;
@@ -122,11 +130,11 @@ public class MusicManager extends AbstractManager {
 			for (Jukebox jukebox : SuperJukebox.getInstance().getInstance(JukeboxesManager.class).getJukeboxes()) {
 				if (jukebox.getCurrentMusic() == music) {
 					int musicIndex = jukebox.getCurrentMusicIndex();
-					List<Music> musics = jukebox.getMusics();
+					List<Music> jukeboxMusics = jukebox.getMusics();
 					Music newMusic = null;
 
-					if (musicIndex < musics.size()) {
-						newMusic = musics.get(musicIndex);
+					if (musicIndex < jukeboxMusics.size()) {
+						newMusic = jukeboxMusics.get(musicIndex);
 					}
 
 					jukebox.play(newMusic);
@@ -174,7 +182,7 @@ public class MusicManager extends AbstractManager {
 		int id = section.getInt("id");
 		String filename = section.getString("file").replace("..", "");
 
-		File file = new File(this.getPlugin().getDataFolder(), Config.MUSICS_FOLDER + File.separator + filename);
+		File file = new File(this.musicsFolder, filename);
 
 		if (!file.exists()) {
 			Log.warn("Music #" + id + " (" + filename + ") doesn't exist anymore! Deleting from configuration.");

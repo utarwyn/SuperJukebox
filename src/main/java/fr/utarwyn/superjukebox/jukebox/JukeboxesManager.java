@@ -155,8 +155,9 @@ public class JukeboxesManager extends AbstractManager {
 
 		for (String confKey : conf.getKeys(false)) {
 			// Not a good jukebox?
-			if (!confKey.contains("jukebox"))
+			if (!confKey.contains("jukebox")) {
 				continue;
+			}
 
 			section = conf.getConfigurationSection(confKey);
 
@@ -171,8 +172,9 @@ public class JukeboxesManager extends AbstractManager {
 			);
 
 			// Import custom musics into the jukebox object
-			if (section.isList("musics"))
+			if (section.isList("musics")) {
 				jukebox.loadMusicsFromConfiguration(section.getIntegerList("musics"));
+			}
 
 			// And put the jukebox into the memory list!
 			this.jukeboxes.add(jukebox);
@@ -186,9 +188,11 @@ public class JukeboxesManager extends AbstractManager {
 	private int getNewJukeboxId() {
 		int max = 0;
 
-		for (Jukebox jukebox : this.jukeboxes)
-			if (jukebox.getId() > max)
+		for (Jukebox jukebox : this.jukeboxes) {
+			if (jukebox.getId() > max) {
 				max = jukebox.getId();
+			}
+		}
 
 		return max + 1;
 	}
