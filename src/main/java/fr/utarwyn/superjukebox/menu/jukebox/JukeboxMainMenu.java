@@ -114,7 +114,7 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
             ItemMeta musicStopMeta = this.musicStopItem.getItemMeta();
 
             musicStopMeta.setDisplayName(ChatColor.GOLD + "Stop music");
-            if (this.jukebox.player.isTaskRunned()) {
+            if (this.jukebox.getPlayer().isTaskRunned()) {
                 musicStopMeta.setLore(Arrays.asList("§cPress this iten to", "§cstop the music you're playing§c."));
             } else {
                 musicStopMeta.setLore(Arrays.asList("§7You can't stop music", "§7that's not playing!"));
@@ -159,7 +159,7 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
             });
         }
         if (this.musicStopItem != null && event.getCurrentItem().equals(this.musicStopItem)) {
-            this.jukebox.player.pause();
+            this.jukebox.getPlayer().pause();
 
             this.clear();
             this.prepare();
@@ -179,7 +179,7 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
 
     @Override
     public void onClose(Player player) {
-
+        // Not implemented
     }
 
     private static void updateEditingModeItem(ItemMeta meta, JukeboxMenuEditingMode currentEditingMode) {

@@ -5,7 +5,11 @@ import fr.utarwyn.superjukebox.Config;
 import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.jukebox.Jukebox;
 import fr.utarwyn.superjukebox.jukebox.JukeboxesManager;
-import fr.utarwyn.superjukebox.util.*;
+import fr.utarwyn.superjukebox.nbs.NBSDecodeException;
+import fr.utarwyn.superjukebox.nbs.NBSFileReader;
+import fr.utarwyn.superjukebox.util.FlatFile;
+import fr.utarwyn.superjukebox.util.JUtil;
+import fr.utarwyn.superjukebox.util.Log;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -31,6 +35,8 @@ public class MusicManager extends AbstractManager {
 
 	private FlatFile database;
 
+	private NBSFileReader fileReader;
+
 	private File musicsFolder;
 
 	private Map<Integer, Music> musics;
@@ -42,10 +48,12 @@ public class MusicManager extends AbstractManager {
 	@Override
 	public void initialize() {
 		this.musics = new HashMap<>();
+		this.fileReader = new NBSFileReader();
 
 		if (this.database == null) {
 			this.database = new FlatFile("musics.yml");
 		}
+
 
 		// Initialize the musics folder
 		this.musicsFolder = new File(this.plugin.getDataFolder(), Config.MUSICS_FOLDER);
@@ -191,7 +199,7 @@ public class MusicManager extends AbstractManager {
 		}
 
 		try {
-			Music music = NBSDecoder.decode(file);
+			Music music = this.fileReader.read(file);
 
 			// Update the icon of the music
 			music.setIconWithMaterialId(section.getString("icon"));

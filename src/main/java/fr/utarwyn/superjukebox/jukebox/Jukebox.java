@@ -36,7 +36,7 @@ public class Jukebox {
 	/**
 	 * The music player which played music of this jukebox!
 	 */
-	public MusicPlayer player;
+	private MusicPlayer player;
 
 	/**
 	 * List of all custom musics for this jukebox
@@ -97,6 +97,14 @@ public class Jukebox {
 	 */
 	public JukeboxSettings getSettings() {
 		return this.settings;
+	}
+
+	/**
+	 * Returns the music player created for this jukebox.
+	 * @return the music player
+	 */
+	public MusicPlayer getPlayer() {
+		return this.player;
 	}
 
 	/**
