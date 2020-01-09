@@ -1,6 +1,7 @@
 package fr.utarwyn.superjukebox.music;
 
 import fr.utarwyn.superjukebox.music.model.Layer;
+import fr.utarwyn.superjukebox.util.MaterialHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
@@ -53,7 +54,7 @@ public class Music {
 		this.delay = 20 / this.tempo;
 
 		this.layers = new ArrayList<>();
-		this.setIconWithMaterialId("RECORD_10");
+		this.setIconWithMaterial(MaterialHelper.findMaterial("RECORD_10", "MUSIC_DISC_13"));
 
 		// Initialize fields that can be empty
 		if (this.name.isEmpty()) {
@@ -124,8 +125,8 @@ public class Music {
 		return this.icon;
 	}
 
-	void setIconWithMaterialId(String material) {
-		this.icon = new ItemStack(Material.valueOf(material));
+	void setIconWithMaterial(Material material) {
+		this.icon = new ItemStack(material);
 		this.updateIconMetadatas();
 	}
 

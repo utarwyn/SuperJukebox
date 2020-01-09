@@ -1,5 +1,7 @@
 package fr.utarwyn.superjukebox.music;
 
+import fr.mrmicky.fastparticle.FastParticle;
+import fr.mrmicky.fastparticle.ParticleType;
 import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.jukebox.Jukebox;
 import fr.utarwyn.superjukebox.music.model.Layer;
@@ -7,8 +9,9 @@ import fr.utarwyn.superjukebox.music.model.Note;
 import fr.utarwyn.superjukebox.util.ActionBarUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.scheduler.BukkitTask;
-import org.inventivetalent.particle.ParticleEffect;
 
 import java.util.logging.Level;
 
@@ -141,12 +144,11 @@ public class MusicPlayer implements Runnable {
 		}
 
 		// Play particles at the same time if needed!
-		if (nbNote > 0 && this.jukebox.getSettings().getParticles().getValue()) {
-			ParticleEffect.NOTE.send(
-					Bukkit.getOnlinePlayers(),
-					this.jukebox.getBlock().getLocation().clone().add(.5, 1.2, .5),
-					.3f, .3f, .3f, 1f, nbNote
-			);
+		boolean particlesEnabled = this.jukebox.getSettings().getParticles().getValue();
+		if (nbNote > 0 && particlesEnabled) {
+			World world = this.jukebox.getBlock().getWorld();
+			Location location = this.jukebox.getBlock().getLocation().clone().add(.5, 1.2, .5);
+			FastParticle.spawnParticle(world, ParticleType.NOTE, location, nbNote, .3f, .3f, .3f);
 		}
 	}
 

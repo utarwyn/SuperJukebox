@@ -67,9 +67,8 @@ public class FlatFile {
 
 		// Create the flat configuration file if doesn't exists.
 		if (!file.exists()) {
-			if (!file.getParentFile().exists())
-				if (!file.getParentFile().mkdirs())
-					return;
+			if (!file.getParentFile().exists() && !file.getParentFile().mkdirs())
+				return;
 
 			try {
 				if (!file.createNewFile()) return;

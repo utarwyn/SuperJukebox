@@ -2,7 +2,7 @@ package fr.utarwyn.superjukebox.commands.music;
 
 import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.commands.AbstractCommand;
-import fr.utarwyn.superjukebox.commands.parameter.Parameter;
+import fr.utarwyn.superjukebox.commands.Parameter;
 import fr.utarwyn.superjukebox.music.Music;
 import fr.utarwyn.superjukebox.music.MusicManager;
 import fr.utarwyn.superjukebox.util.Messages;
@@ -23,7 +23,7 @@ public class MusicListCommand extends AbstractCommand {
 
 		this.manager = SuperJukebox.getInstance().getInstance(MusicManager.class);
 
-		this.addParameter(Parameter.INT.optional());
+		this.addParameter(Parameter.integer().optional());
 	}
 
 	@Override

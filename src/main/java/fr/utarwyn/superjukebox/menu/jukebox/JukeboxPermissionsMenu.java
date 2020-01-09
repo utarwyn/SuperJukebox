@@ -6,6 +6,7 @@ import fr.utarwyn.superjukebox.jukebox.JukeboxesManager;
 import fr.utarwyn.superjukebox.jukebox.perm.Permission;
 import fr.utarwyn.superjukebox.jukebox.perm.PermissionType;
 import fr.utarwyn.superjukebox.menu.AbstractMenu;
+import fr.utarwyn.superjukebox.util.MaterialHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -46,10 +47,13 @@ public class JukeboxPermissionsMenu extends AbstractMenu {
 		this.clear();
 		this.permissionItems.clear();
 
+		Material musicDisc = MaterialHelper.findMaterial("RECORD_3", "MUSIC_DISC_13");
+		Material commandBlock = MaterialHelper.findMaterial("COMMAND", "COMMAND_BLOCK");
+
 		// Create permission items
 		this.createPermissionItem(10, Material.JUKEBOX, this.jukebox.getSettings().getInteractPerm());
-		this.createPermissionItem(11, Material.RECORD_3, this.jukebox.getSettings().getEditMusicsPerm());
-		this.createPermissionItem(12, Material.COMMAND, this.jukebox.getSettings().getEditSettingsPerm());
+		this.createPermissionItem(11, musicDisc, this.jukebox.getSettings().getEditMusicsPerm());
+		this.createPermissionItem(12, commandBlock, this.jukebox.getSettings().getEditSettingsPerm());
 
 		// Separators
 		for (int i = 0; i < 10; i++) {

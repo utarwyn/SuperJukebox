@@ -6,6 +6,7 @@ import fr.utarwyn.superjukebox.jukebox.JukeboxesManager;
 import fr.utarwyn.superjukebox.jukebox.settings.Setting;
 import fr.utarwyn.superjukebox.menu.AbstractMenu;
 import fr.utarwyn.superjukebox.util.JUtil;
+import fr.utarwyn.superjukebox.util.MaterialHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -64,7 +65,7 @@ public class JukeboxSettingsMenu extends AbstractMenu {
 				this.jukebox.getSettings().getUseGlobalMusics()
 		);
 		this.createSettingItem(
-				13, Material.REDSTONE_COMPARATOR,
+				13, MaterialHelper.findMaterial("REDSTONE_COMPARATOR", "COMPARATOR"),
 				"Autoplay",
 				this.jukebox.getSettings().getAutoplay()
 		);
@@ -79,7 +80,7 @@ public class JukeboxSettingsMenu extends AbstractMenu {
 				this.jukebox.getSettings().getPlayWithRedstone()
 		);
 		this.createSettingItem(
-				20, Material.SIGN,
+				20, MaterialHelper.findMaterial("SIGN", "OAK_SIGN"),
 				"Announce music",
 				this.jukebox.getSettings().getAnnouncements()
 		);

@@ -7,9 +7,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- * Abtsract base class for creating an EnderContainers manager
+ * Abtsract base class for creating a SuperJukeboox manager
  *
  * @author Utarwyn
  * @since 1.0.0
@@ -22,6 +23,11 @@ public abstract class AbstractManager implements Listener {
 	protected SuperJukebox plugin;
 
 	/**
+	 * Stores the plugin logger
+	 */
+	protected Logger logger;
+
+	/**
 	 * Constructs the manager
 	 *
 	 * @param plugin    Main class of the plugin
@@ -29,6 +35,7 @@ public abstract class AbstractManager implements Listener {
 	 */
 	public AbstractManager(SuperJukebox plugin, Listener... listeners) {
 		this.plugin = plugin;
+		this.logger = plugin.getLogger();
 
 		// Now we register all listeners (and the manager too)
 		List<Listener> listenerList = new ArrayList<>();

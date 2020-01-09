@@ -15,11 +15,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Manages all musics registered for the plugin.
@@ -28,6 +27,8 @@ import java.util.logging.Level;
  * @since 1.0.0
  */
 public class MusicManager extends AbstractManager {
+
+	private static final Random RANDOM = new Random();
 
 	private FlatFile database;
 
@@ -194,7 +195,7 @@ public class MusicManager extends AbstractManager {
 			Music music = NBSDecoder.decode(file);
 
 			// Update the icon of the music
-			music.setIconWithMaterialId(section.getString("icon"));
+			music.setIconWithMaterial(Material.valueOf(section.getString("icon")));
 
 			this.musics.put(id, music);
 			return true;
@@ -214,7 +215,7 @@ public class MusicManager extends AbstractManager {
 
 		section.set("id", this.getNewMusicId());
 		section.set("file", file.getName());
-		section.set("icon", this.getRandomMusicMaterial().name());
+		section.set("icon", this.getRandomMusicMaterialName());
 
 		this.database.save();
 
@@ -252,8 +253,13 @@ public class MusicManager extends AbstractManager {
 		return max + 1;
 	}
 
-	private Material getRandomMusicMaterial() {
-		return Material.valueOf("RECORD_" + (JUtil.RND.nextInt(10) + 3));
+	private String getRandomMusicMaterialName() {
+		List<String> discMaterials = Stream.of(Material.values())
+				.map(Material::name)
+				.filter(name -> name.startsWith("RECORD") || name.startsWith("MUSIC_DISC"))
+				.collect(Collectors.toList());
+
+		return discMaterials.get(RANDOM.nextInt(discMaterials.size()));
 	}
 
 }

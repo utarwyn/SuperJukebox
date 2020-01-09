@@ -1,8 +1,9 @@
-package fr.utarwyn.superjukebox.commands;
+package fr.utarwyn.superjukebox.commands.main;
 
 import fr.utarwyn.superjukebox.Config;
 import fr.utarwyn.superjukebox.Managers;
 import fr.utarwyn.superjukebox.SuperJukebox;
+import fr.utarwyn.superjukebox.commands.AbstractCommand;
 import fr.utarwyn.superjukebox.util.JUtil;
 import fr.utarwyn.superjukebox.util.Messages;
 import org.bukkit.Bukkit;
@@ -19,7 +20,7 @@ import org.bukkit.entity.Player;
  */
 public class ReloadCommand extends AbstractCommand {
 
-	ReloadCommand() {
+	public ReloadCommand() {
 		super("reload", "rl");
 	}
 

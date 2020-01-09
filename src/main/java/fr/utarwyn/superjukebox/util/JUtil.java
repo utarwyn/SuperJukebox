@@ -119,33 +119,6 @@ public class JUtil {
 		player.playSound(player.getLocation(), sound, 1f, 1f);
 	}
 
-	public static boolean isInteger(String str) {
-		try {
-			Integer.parseInt(str);
-			return true;
-		} catch (Exception ex) {
-			return false;
-		}
-	}
-
-	public static boolean isDouble(String str) {
-		try {
-			Double.parseDouble(str);
-			return true;
-		} catch (Exception ex) {
-			return false;
-		}
-	}
-
-	public static boolean isFloat(String str) {
-		try {
-			Float.parseFloat(str);
-			return true;
-		} catch (Exception ex) {
-			return false;
-		}
-	}
-
 	/**
 	 * Returns the existance of a sound by its name
 	 *

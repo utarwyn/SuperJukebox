@@ -1,5 +1,6 @@
-package fr.utarwyn.superjukebox.commands;
+package fr.utarwyn.superjukebox.commands.main;
 
+import fr.utarwyn.superjukebox.commands.AbstractCommand;
 import fr.utarwyn.superjukebox.util.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -7,7 +8,7 @@ import org.bukkit.entity.Player;
 
 public class SupportCommand extends AbstractCommand {
 
-    SupportCommand() {
+    public SupportCommand() {
         super("support", "discord");
     }
 

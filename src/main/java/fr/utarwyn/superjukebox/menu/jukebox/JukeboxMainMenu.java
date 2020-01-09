@@ -5,6 +5,7 @@ import fr.utarwyn.superjukebox.menu.AbstractMenu;
 import fr.utarwyn.superjukebox.menu.MusicDiscsMenu;
 import fr.utarwyn.superjukebox.music.Music;
 import fr.utarwyn.superjukebox.util.JUtil;
+import fr.utarwyn.superjukebox.util.MaterialHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -56,7 +57,7 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
 
         // Settings items
         if (this.jukebox.getSettings().getEditSettingsPerm().has(this.player)) {
-            this.settingItem = new ItemStack(Material.COMMAND);
+            this.settingItem = new ItemStack(MaterialHelper.findMaterial("COMMAND", "COMMAND_BLOCK"));
             ItemMeta settingMeta = this.settingItem.getItemMeta();
 
             settingMeta.setDisplayName(ChatColor.YELLOW + "Jukebox's settings");

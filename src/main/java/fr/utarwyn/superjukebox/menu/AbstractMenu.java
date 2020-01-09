@@ -1,5 +1,7 @@
 package fr.utarwyn.superjukebox.menu;
 
+import fr.utarwyn.superjukebox.util.MaterialHelper;
+import fr.utarwyn.superjukebox.util.ServerVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -29,7 +31,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 	/**
 	 * The separator item used for many menus
 	 */
-	public static final ItemStack SEPARATOR = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 1, (byte) 15);
+	public static final ItemStack SEPARATOR;
 
 	/**
 	 * The item used to create a way to go to a parent menu
@@ -94,6 +96,12 @@ public abstract class AbstractMenu implements InventoryHolder {
 	}
 
 	static {
+		if (ServerVersion.isNewerThan(ServerVersion.V1_12)) {
+			SEPARATOR = new ItemStack(MaterialHelper.findMaterial("BLACK_STAINED_GLASS_PANE"));
+		} else {
+			SEPARATOR = new ItemStack(MaterialHelper.findMaterial("STAINED_GLASS_PANE"), 1, (byte) 15);
+		}
+
 		// Prepare the separator item
 		ItemMeta separatorMeta = SEPARATOR.getItemMeta();
 		separatorMeta.setDisplayName(ChatColor.BLACK + "");
@@ -113,7 +121,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 	public int getFilledSlotsNb() {
 		Map<Integer, ItemStack> copy = new HashMap<>(this.items);
 
-		copy.entrySet().removeIf((entry) -> entry.getValue() == null);
+		copy.entrySet().removeIf(entry -> entry.getValue() == null);
 		return copy.size();
 	}
 
@@ -163,7 +171,7 @@ public abstract class AbstractMenu implements InventoryHolder {
 	protected void setRows(int rows) {
 		this.rows = rows;
 
-		if (this.inventory != null && this.inventory.getViewers().size() == 0)
+		if (this.inventory != null && this.inventory.getViewers().isEmpty())
 			this.inventory = null;
 	}
 
