@@ -6,11 +6,12 @@
 
     <groupId>fr.utarwyn</groupId>
     <artifactId>SuperJukebox</artifactId>
-    <version>1.1</version>
+    <version>1.1.0</version>
     <packaging>jar</packaging>
 
     <name>SuperJukebox</name>
     <description>A bukkit plugin to create super jukeboxes!</description>
+    <url>https://github.com/utarwyn/SuperJukebox</url>
     <inceptionYear>2018</inceptionYear>
 
     <licenses>
@@ -20,6 +21,15 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+
+    <properties>
+        <bukkit.version>1.15.1-R0.1-SNAPSHOT</bukkit.version>
+        <fastparticles.version>1.2.3</fastparticles.version>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
 
     <repositories>
         <repository>
@@ -37,7 +47,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.15.1-R0.1-SNAPSHOT</version>
+            <version>${bukkit.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -45,7 +55,7 @@
         <dependency>
             <groupId>fr.mrmicky</groupId>
             <artifactId>FastParticles</artifactId>
-            <version>1.2.3</version>
+            <version>${fastparticles.version}</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -82,10 +92,33 @@
         </plugins>
     </build>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
+    <profiles>
+        <profile>
+            <id>coverage</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.8.3</version>
+                        <executions>
+                            <execution>
+                                <id>prepare-agent</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>report</id>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

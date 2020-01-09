@@ -3,11 +3,15 @@ dist: trusty
 sudo: false
 install: true
 
+git:
+  depth: false
+
 jdk:
   - oraclejdk8
 
 script:
-  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then mvn clean verify sonar:sonar -Pcoverage; fi'
+  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then mvn clean install; fi'
 
 cache:
   directories:
