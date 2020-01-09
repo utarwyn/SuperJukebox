@@ -1,7 +1,9 @@
 package fr.utarwyn.superjukebox.util;
 
 import fr.utarwyn.superjukebox.SuperJukebox;
+import fr.utarwyn.superjukebox.configuration.Files;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
@@ -20,139 +22,150 @@ import java.util.Random;
  */
 public class JUtil {
 
-	public static final Random RND = new SecureRandom();
+    public static final Random RND = new SecureRandom();
 
-	/**
-	 * No constructor, it's an utility class!
-	 */
-	private JUtil() {
+    /**
+     * No constructor, it's an utility class!
+     */
+    private JUtil() {
 
-	}
+    }
 
-	/**
-	 * Create a Bukkit Location object from a stored location in a Yaml configuration.
-	 * (This method only supports block coordinates)
-	 *
-	 * @param section Root configuration section where the location is stored.
-	 * @return A Bukkit Location object.
-	 */
-	public static Location getLocationFromConfig(ConfigurationSection section) {
-		return new Location(
-				Bukkit.getWorld(section.getString("world")),
-				section.getInt("x"), section.getInt("y"), section.getInt("z")
-		);
-	}
+    /**
+     * Send a prefixed message to a command sender.
+     *
+     * @param sender  receiver of the messsage
+     * @param message message to send
+     */
+    public static void sendMessage(CommandSender sender, String message) {
+        String prefix = ChatColor.translateAlternateColorCodes('&', Files.getConfiguration().getPrefix());
+        sender.sendMessage(prefix + message);
+    }
 
-	/**
-	 * Save a Bukkit Location object into a Yaml configuration.
-	 * (This method only supports block coordinates)
-	 *
-	 * @param section  Section where the location will be stored.
-	 * @param location Location to store into the configuration.
-	 */
-	public static void saveLocationIntoConfig(ConfigurationSection section, Location location) {
-		section.set("world", location.getWorld().getName());
-		section.set("x", location.getBlockX());
-		section.set("y", location.getBlockY());
-		section.set("z", location.getBlockZ());
-	}
+    /**
+     * Create a Bukkit Location object from a stored location in a Yaml configuration.
+     * (This method only supports block coordinates)
+     *
+     * @param section Root configuration section where the location is stored.
+     * @return A Bukkit Location object.
+     */
+    public static Location getLocationFromConfig(ConfigurationSection section) {
+        return new Location(
+                Bukkit.getWorld(section.getString("world")),
+                section.getInt("x"), section.getInt("y"), section.getInt("z")
+        );
+    }
 
-	/**
-	 * Shortcut used to create an synchronous Java thread
-	 *
-	 * @param runnable Runnable to run synchronously
-	 */
-	public static void runSync(Runnable runnable) {
-		Bukkit.getScheduler().runTask(SuperJukebox.getInstance(), runnable);
-	}
+    /**
+     * Save a Bukkit Location object into a Yaml configuration.
+     * (This method only supports block coordinates)
+     *
+     * @param section  Section where the location will be stored.
+     * @param location Location to store into the configuration.
+     */
+    public static void saveLocationIntoConfig(ConfigurationSection section, Location location) {
+        section.set("world", location.getWorld().getName());
+        section.set("x", location.getBlockX());
+        section.set("y", location.getBlockY());
+        section.set("z", location.getBlockZ());
+    }
 
-	/**
-	 * Checks if a player has a specific SuperJukebox permission.
-	 * Permissions are automatically prefixed by the name of the plugin.
-	 *
-	 * @param player Player to check
-	 * @param perm   Permission used for the test
-	 * @return True if the player has the given permission
-	 */
-	public static boolean playerHasPerm(Player player, String perm) {
-		return player.isOp() || player.hasPermission("superjukebox." + perm);
-	}
+    /**
+     * Shortcut used to create an synchronous Java thread
+     *
+     * @param runnable Runnable to run synchronously
+     */
+    public static void runSync(Runnable runnable) {
+        Bukkit.getScheduler().runTask(SuperJukebox.getInstance(), runnable);
+    }
 
-	/**
-	 * Checks if a command sender has a specific SuperJukebox permission.
-	 * Permissions are automatically prefixed by the name of the plugin.
-	 *
-	 * @param sender Command sender to check
-	 * @param perm   Permission used for the test
-	 * @return True if the command sender has the given permission
-	 */
-	public static boolean senderHasPerm(CommandSender sender, String perm) {
-		return !(sender instanceof Player && !playerHasPerm((Player) sender, perm)) || sender instanceof ConsoleCommandSender;
-	}
+    /**
+     * Checks if a player has a specific SuperJukebox permission.
+     * Permissions are automatically prefixed by the name of the plugin.
+     *
+     * @param player Player to check
+     * @param perm   Permission used for the test
+     * @return True if the player has the given permission
+     */
+    public static boolean playerHasPerm(Player player, String perm) {
+        return player.isOp() || player.hasPermission("superjukebox." + perm);
+    }
 
-	/**
-	 * Plays a sound at a specific location with support of 1.8 sound and 1.9+ sound.
-	 *
-	 * @param location Location where to play the sound
-	 * @param sound18  Sound string for 1.8 versions
-	 * @param sound19  Sound string for 1.9 versions
-	 */
-	public static void playSound(Location location, String sound18, String sound19) {
-		Sound sound = JUtil.generateSound(sound18, sound19);
-		if (sound == null) return;
+    /**
+     * Checks if a command sender has a specific SuperJukebox permission.
+     * Permissions are automatically prefixed by the name of the plugin.
+     *
+     * @param sender Command sender to check
+     * @param perm   Permission used for the test
+     * @return True if the command sender has the given permission
+     */
+    public static boolean senderHasPerm(CommandSender sender, String perm) {
+        return !(sender instanceof Player && !playerHasPerm((Player) sender, perm)) || sender instanceof ConsoleCommandSender;
+    }
 
-		location.getWorld().playSound(location, sound, 1f, 1f);
-	}
+    /**
+     * Plays a sound at a specific location with support of 1.8 sound and 1.9+ sound.
+     *
+     * @param location Location where to play the sound
+     * @param sound18  Sound string for 1.8 versions
+     * @param sound19  Sound string for 1.9 versions
+     */
+    public static void playSound(Location location, String sound18, String sound19) {
+        Sound sound = JUtil.generateSound(sound18, sound19);
+        if (sound == null) return;
 
-	/**
-	 * Plays a sound at a specific location with support of 1.8 sound and 1.9+ sound.
-	 * Plays the sound only for a specific player.
-	 *
-	 * @param player  Player which will receive the sound
-	 * @param sound18 Sound string for 1.8 versions
-	 * @param sound19 Sound string for 1.9 versions
-	 */
-	public static void playSound(Player player, String sound18, String sound19) {
-		Sound sound = JUtil.generateSound(sound18, sound19);
-		if (sound == null) return;
+        location.getWorld().playSound(location, sound, 1f, 1f);
+    }
 
-		player.playSound(player.getLocation(), sound, 1f, 1f);
-	}
+    /**
+     * Plays a sound at a specific location with support of 1.8 sound and 1.9+ sound.
+     * Plays the sound only for a specific player.
+     *
+     * @param player  Player which will receive the sound
+     * @param sound18 Sound string for 1.8 versions
+     * @param sound19 Sound string for 1.9 versions
+     */
+    public static void playSound(Player player, String sound18, String sound19) {
+        Sound sound = JUtil.generateSound(sound18, sound19);
+        if (sound == null) return;
 
-	/**
-	 * Returns the existance of a sound by its name
-	 *
-	 * @param soundName Sound name to check
-	 * @return True if the sound with the given name exists
-	 */
-	private static boolean soundExists(String soundName) {
-		for (Sound sound : Sound.values())
-			if (sound.name().equals(soundName))
-				return true;
+        player.playSound(player.getLocation(), sound, 1f, 1f);
+    }
 
-		return false;
-	}
+    /**
+     * Returns the existance of a sound by its name
+     *
+     * @param soundName Sound name to check
+     * @return True if the sound with the given name exists
+     */
+    private static boolean soundExists(String soundName) {
+        for (Sound sound : Sound.values())
+            if (sound.name().equals(soundName))
+                return true;
 
-	/**
-	 * Generates a sound from two string (one for 1.8 and one for 1.9+).
-	 * The method tries to generate the 1.8 sound, and if its not working it tries to
-	 * generate the 1.9+ sound, and if its not working too it generate nothing, without error.
-	 *
-	 * @param sound18 Sound key for MC 1.8 version.
-	 * @param sound19 Sound key for MC 1.9+ versions.
-	 * @return The generated sound, null otherwise.
-	 */
-	private static Sound generateSound(String sound18, String sound19) {
-		Sound sound;
+        return false;
+    }
 
-		if (JUtil.soundExists(sound18))
-			sound = Sound.valueOf(sound18);   // 1.8
-		else if (JUtil.soundExists(sound19))
-			sound = Sound.valueOf(sound19);   // 1.9+
-		else
-			return null;                      // Else? Not supported.
+    /**
+     * Generates a sound from two string (one for 1.8 and one for 1.9+).
+     * The method tries to generate the 1.8 sound, and if its not working it tries to
+     * generate the 1.9+ sound, and if its not working too it generate nothing, without error.
+     *
+     * @param sound18 Sound key for MC 1.8 version.
+     * @param sound19 Sound key for MC 1.9+ versions.
+     * @return The generated sound, null otherwise.
+     */
+    private static Sound generateSound(String sound18, String sound19) {
+        Sound sound;
 
-		return sound;
-	}
+        if (JUtil.soundExists(sound18))
+            sound = Sound.valueOf(sound18);   // 1.8
+        else if (JUtil.soundExists(sound19))
+            sound = Sound.valueOf(sound19);   // 1.9+
+        else
+            return null;                      // Else? Not supported.
+
+        return sound;
+    }
 
 }

@@ -1,11 +1,14 @@
 package fr.utarwyn.superjukebox.music;
 
 import fr.utarwyn.superjukebox.AbstractManager;
-import fr.utarwyn.superjukebox.Config;
 import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.jukebox.Jukebox;
 import fr.utarwyn.superjukebox.jukebox.JukeboxesManager;
-import fr.utarwyn.superjukebox.util.*;
+import fr.utarwyn.superjukebox.music.nbs.NBSDecodeException;
+import fr.utarwyn.superjukebox.music.nbs.NBSDecoder;
+import fr.utarwyn.superjukebox.util.FlatFile;
+import fr.utarwyn.superjukebox.util.JUtil;
+import fr.utarwyn.superjukebox.util.Log;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -15,6 +18,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.security.SecureRandom;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -28,238 +32,246 @@ import java.util.stream.Stream;
  */
 public class MusicManager extends AbstractManager {
 
-	private static final Random RANDOM = new Random();
+    /**
+     * Random generator used to choose a random disc icon
+     */
+    private static final Random RANDOM = new SecureRandom();
 
-	private FlatFile database;
+    /**
+     * Folder used to store all .nbs music files
+     */
+    private static final String MUSICS_FOLDER = "musics";
 
-	private File musicsFolder;
+    private FlatFile database;
 
-	private Map<Integer, Music> musics;
+    private File musicsFolder;
 
-	public MusicManager() {
-		super(SuperJukebox.getInstance());
-	}
+    private Map<Integer, Music> musics;
 
-	@Override
-	public void initialize() {
-		this.musics = new HashMap<>();
+    public MusicManager() {
+        super(SuperJukebox.getInstance());
+    }
 
-		if (this.database == null) {
-			this.database = new FlatFile("musics.yml");
-		}
+    @Override
+    public void initialize() {
+        this.musics = new HashMap<>();
 
-		// Initialize the musics folder
-		this.musicsFolder = new File(this.plugin.getDataFolder(), Config.MUSICS_FOLDER);
-		if (!this.musicsFolder.exists() && !this.musicsFolder.mkdir()) {
-			throw new IllegalStateException("We can't create the musics folder. Please check folder permissions.");
-		}
+        if (this.database == null) {
+            this.database = new FlatFile("musics.yml");
+        }
 
-		this.reloadDatabase();
-	}
+        // Initialize the musics folder
+        this.musicsFolder = new File(this.plugin.getDataFolder(), MUSICS_FOLDER);
+        if (!this.musicsFolder.exists() && !this.musicsFolder.mkdir()) {
+            throw new IllegalStateException("We can't create the musics folder. Please check folder permissions.");
+        }
 
-	@Override
-	protected void unload() {
-		// Not implemented
-	}
+        this.reloadDatabase();
+    }
 
-	public MusicImportResult importMusic(String endpoint) {
-		File targetFile = null;
+    @Override
+    protected void unload() {
+        // Not implemented
+    }
 
-		try {
-			URL urlObject = new URL(endpoint);
-			String fileName = endpoint.substring(endpoint.lastIndexOf('/') + 1);
-			if (!fileName.toLowerCase().endsWith(".nbs")) return MusicImportResult.MALFORMATED_URL;
+    public MusicImportResult importMusic(String endpoint) {
+        File targetFile = null;
 
-			fileName = fileName.replace("%20", " ");
-			targetFile = new File(this.musicsFolder, fileName);
+        try {
+            URL urlObject = new URL(endpoint);
+            String fileName = endpoint.substring(endpoint.lastIndexOf('/') + 1);
+            if (!fileName.toLowerCase().endsWith(".nbs")) return MusicImportResult.MALFORMATED_URL;
 
-			// Copy the file into the disk
-			Files.copy(urlObject.openStream(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-		} catch (IOException e) {
-			File[] musicsFiles = this.musicsFolder.listFiles((dir, name) -> name.toLowerCase().endsWith(".nbs"));
-			if (musicsFiles == null) {
-				return MusicImportResult.UNKNOWN_FILE;
-			}
+            fileName = fileName.replace("%20", " ");
+            targetFile = new File(this.musicsFolder, fileName);
 
-			for (File musicFile : musicsFiles) {
-				String simpleName = musicFile.getName().substring(0, musicFile.getName().lastIndexOf('.'));
+            // Copy the file into the disk
+            Files.copy(urlObject.openStream(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            File[] musicsFiles = this.musicsFolder.listFiles((dir, name) -> name.toLowerCase().endsWith(".nbs"));
+            if (musicsFiles == null) {
+                return MusicImportResult.UNKNOWN_FILE;
+            }
 
-				if (simpleName.replace(" ", "").equalsIgnoreCase(endpoint)) {
-					targetFile = musicFile;
-					break;
-				}
-			}
-		}
+            for (File musicFile : musicsFiles) {
+                String simpleName = musicFile.getName().substring(0, musicFile.getName().lastIndexOf('.'));
 
-		if (targetFile == null || !targetFile.exists() || !targetFile.isFile()) {
-			return MusicImportResult.UNKNOWN_FILE;
-		}
+                if (simpleName.replace(" ", "").equalsIgnoreCase(endpoint)) {
+                    targetFile = musicFile;
+                    break;
+                }
+            }
+        }
 
-		// Check if the target is already imported into the configuration
-		for (Music music : this.getMusics()) {
-			if (music.getFilename().equalsIgnoreCase(targetFile.getName())) {
-				return MusicImportResult.ALREADY_IMPORTED;
-			}
-		}
+        if (targetFile == null || !targetFile.exists() || !targetFile.isFile()) {
+            return MusicImportResult.UNKNOWN_FILE;
+        }
 
-		// Add it to the configuration (and the memory!)
-		if (this.createMusicConfigurationSection(targetFile)) {
-			return MusicImportResult.GOOD;
-		} else {
-			return MusicImportResult.DECODING_ERROR;
-		}
-	}
+        // Check if the target is already imported into the configuration
+        for (Music music : this.getMusics()) {
+            if (music.getFilename().equalsIgnoreCase(targetFile.getName())) {
+                return MusicImportResult.ALREADY_IMPORTED;
+            }
+        }
 
-	public synchronized boolean removeMusic(Music music) {
-		boolean deleted = false;
-		int musicId = -1;
+        // Add it to the configuration (and the memory!)
+        if (this.createMusicConfigurationSection(targetFile)) {
+            return MusicImportResult.GOOD;
+        } else {
+            return MusicImportResult.DECODING_ERROR;
+        }
+    }
 
-		// Delete the configuration section of the music
-		for (Map.Entry<Integer, Music> entry : this.musics.entrySet()) {
-			if (entry.getValue() == music) {
-				musicId = entry.getKey();
-				deleted = this.deleteMusicConfigurationSection(entry.getKey());
-				break;
-			}
-		}
+    public synchronized boolean removeMusic(Music music) {
+        boolean deleted = false;
+        int musicId = -1;
 
-		if (deleted) {
-			// Delete music from memory
-			this.musics.remove(musicId);
+        // Delete the configuration section of the music
+        for (Map.Entry<Integer, Music> entry : this.musics.entrySet()) {
+            if (entry.getValue() == music) {
+                musicId = entry.getKey();
+                deleted = this.deleteMusicConfigurationSection(entry.getKey());
+                break;
+            }
+        }
 
-			// Jump to next music for jukeboxes
-			for (Jukebox jukebox : SuperJukebox.getInstance().getInstance(JukeboxesManager.class).getJukeboxes()) {
-				if (jukebox.getCurrentMusic() == music) {
-					int musicIndex = jukebox.getCurrentMusicIndex();
-					List<Music> jukeboxMusics = jukebox.getMusics();
-					Music newMusic = null;
+        if (deleted) {
+            // Delete music from memory
+            this.musics.remove(musicId);
 
-					if (musicIndex < jukeboxMusics.size()) {
-						newMusic = jukeboxMusics.get(musicIndex);
-					}
+            // Jump to next music for jukeboxes
+            for (Jukebox jukebox : SuperJukebox.getInstance().getInstance(JukeboxesManager.class).getJukeboxes()) {
+                if (jukebox.getCurrentMusic() == music) {
+                    int musicIndex = jukebox.getCurrentMusicIndex();
+                    List<Music> jukeboxMusics = jukebox.getMusics();
+                    Music newMusic = null;
 
-					jukebox.play(newMusic);
-				}
-			}
-		}
+                    if (musicIndex < jukeboxMusics.size()) {
+                        newMusic = jukeboxMusics.get(musicIndex);
+                    }
 
-		return deleted;
-	}
+                    jukebox.play(newMusic);
+                }
+            }
+        }
 
-	public List<Music> getMusics() {
-		return new ArrayList<>(this.musics.values());
-	}
+        return deleted;
+    }
 
-	public Music getMusic(int id) {
-		return this.musics.getOrDefault(id, null);
-	}
+    public List<Music> getMusics() {
+        return new ArrayList<>(this.musics.values());
+    }
 
-	public Integer getMusicId(Music music) {
-		for (Map.Entry<Integer, Music> entry : this.musics.entrySet())
-			if (entry.getValue() == music)
-				return entry.getKey();
+    public Music getMusic(int id) {
+        return this.musics.getOrDefault(id, null);
+    }
 
-		return null;
-	}
+    public Integer getMusicId(Music music) {
+        for (Map.Entry<Integer, Music> entry : this.musics.entrySet())
+            if (entry.getValue() == music)
+                return entry.getKey();
 
-	private synchronized void reloadDatabase() {
-		ConfigurationSection section;
-		YamlConfiguration conf = this.database.getConfiguration();
+        return null;
+    }
 
-		this.musics.clear();
+    private synchronized void reloadDatabase() {
+        ConfigurationSection section;
+        YamlConfiguration conf = this.database.getConfiguration();
 
-		for (String confKey : conf.getKeys(false)) {
-			section = conf.getConfigurationSection(confKey);
-			this.loadMusicFile(section);
-		}
+        this.musics.clear();
 
-		Log.log(this.musics.size() + " musics loaded from config!");
+        for (String confKey : conf.getKeys(false)) {
+            section = conf.getConfigurationSection(confKey);
+            this.loadMusicFile(section);
+        }
 
-		// Save edited configuration! (when music doesn't exist)
-		this.database.save();
-	}
+        Log.log(this.musics.size() + " musics loaded from config!");
 
-	private boolean loadMusicFile(ConfigurationSection section) {
-		int id = section.getInt("id");
-		String filename = section.getString("file").replace("..", "");
+        // Save edited configuration! (when music doesn't exist)
+        this.database.save();
+    }
 
-		File file = new File(this.musicsFolder, filename);
+    private boolean loadMusicFile(ConfigurationSection section) {
+        int id = section.getInt("id");
+        String filename = section.getString("file").replace("..", "");
 
-		if (!file.exists()) {
-			Log.warn("Music #" + id + " (" + filename + ") doesn't exist anymore! Deleting from configuration.");
-			section.getRoot().set(section.getName(), null);
-			return false;
-		}
+        File file = new File(this.musicsFolder, filename);
 
-		try {
-			Music music = NBSDecoder.decode(file);
+        if (!file.exists()) {
+            this.logger.log(Level.WARNING, "Music #{} ({}) doesn't exist anymore! Deleting from configuration.", new Object[]{id, filename});
+            section.getRoot().set(section.getName(), null);
+            return false;
+        }
 
-			// Update the icon of the music
-			music.setIconWithMaterial(Material.valueOf(section.getString("icon")));
+        try {
+            Music music = NBSDecoder.decode(file);
 
-			this.musics.put(id, music);
-			return true;
-		} catch (NBSDecodeException ex) {
-			Log.log(Level.WARNING, "Music #" + id + " (" + filename + ") cannot be loaded! Details below.", ex);
-			return false;
-		}
-	}
+            // Update the icon of the music
+            music.setIconWithMaterial(Material.valueOf(section.getString("icon")));
 
-	private synchronized boolean createMusicConfigurationSection(File file) {
-		// Generate an unique number for the section name!
-		String ts = String.valueOf(System.currentTimeMillis());
-		String uniqueKey = ts + JUtil.RND.nextInt(1000);
+            this.musics.put(id, music);
+            return true;
+        } catch (NBSDecodeException ex) {
+            Log.log(Level.WARNING, "Music #" + id + " (" + filename + ") cannot be loaded! Details below.", ex);
+            return false;
+        }
+    }
 
-		// Create the configuration
-		ConfigurationSection section = this.database.getConfiguration().createSection("music" + uniqueKey);
+    private synchronized boolean createMusicConfigurationSection(File file) {
+        // Generate an unique number for the section name!
+        String ts = String.valueOf(System.currentTimeMillis());
+        String uniqueKey = ts + JUtil.RND.nextInt(1000);
 
-		section.set("id", this.getNewMusicId());
-		section.set("file", file.getName());
-		section.set("icon", this.getRandomMusicMaterialName());
+        // Create the configuration
+        ConfigurationSection section = this.database.getConfiguration().createSection("music" + uniqueKey);
 
-		this.database.save();
+        section.set("id", this.getNewMusicId());
+        section.set("file", file.getName());
+        section.set("icon", this.getRandomMusicMaterialName());
 
-		// And load the new configuration section into memory!
-		if (this.loadMusicFile(section)) {
-			return true;
-		} else {
-			section.getRoot().set(section.getName(), null);
-			this.database.save();
-			return false;
-		}
-	}
+        this.database.save();
 
-	private synchronized boolean deleteMusicConfigurationSection(int musicId) {
-		for (String sectionName : this.database.getConfiguration().getKeys(false)) {
-			ConfigurationSection section = this.database.getConfiguration().getConfigurationSection(sectionName);
+        // And load the new configuration section into memory!
+        if (this.loadMusicFile(section)) {
+            return true;
+        } else {
+            section.getRoot().set(section.getName(), null);
+            this.database.save();
+            return false;
+        }
+    }
 
-			if (section.getInt("id") == musicId) {
-				section.getRoot().set(sectionName, null);
-				this.database.save();
-				return true;
-			}
-		}
+    private synchronized boolean deleteMusicConfigurationSection(int musicId) {
+        for (String sectionName : this.database.getConfiguration().getKeys(false)) {
+            ConfigurationSection section = this.database.getConfiguration().getConfigurationSection(sectionName);
 
-		return false;
-	}
+            if (section.getInt("id") == musicId) {
+                section.getRoot().set(sectionName, null);
+                this.database.save();
+                return true;
+            }
+        }
 
-	private int getNewMusicId() {
-		int max = 0;
+        return false;
+    }
 
-		for (Integer musicId : this.musics.keySet())
-			if (musicId > max)
-				max = musicId;
+    private int getNewMusicId() {
+        int max = 0;
 
-		return max + 1;
-	}
+        for (Integer musicId : this.musics.keySet())
+            if (musicId > max)
+                max = musicId;
 
-	private String getRandomMusicMaterialName() {
-		List<String> discMaterials = Stream.of(Material.values())
-				.map(Material::name)
-				.filter(name -> name.startsWith("RECORD") || name.startsWith("MUSIC_DISC"))
-				.collect(Collectors.toList());
+        return max + 1;
+    }
 
-		return discMaterials.get(RANDOM.nextInt(discMaterials.size()));
-	}
+    private String getRandomMusicMaterialName() {
+        List<String> discMaterials = Stream.of(Material.values())
+                .map(Material::name)
+                .filter(name -> name.startsWith("RECORD") || name.startsWith("MUSIC_DISC"))
+                .collect(Collectors.toList());
+
+        return discMaterials.get(RANDOM.nextInt(discMaterials.size()));
+    }
 
 }

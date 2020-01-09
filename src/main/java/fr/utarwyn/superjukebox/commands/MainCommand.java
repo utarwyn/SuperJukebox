@@ -1,12 +1,8 @@
 package fr.utarwyn.superjukebox.commands;
 
 import fr.utarwyn.superjukebox.SuperJukebox;
-import fr.utarwyn.superjukebox.commands.main.CreateCommand;
-import fr.utarwyn.superjukebox.commands.main.HelpCommand;
-import fr.utarwyn.superjukebox.commands.main.ReloadCommand;
-import fr.utarwyn.superjukebox.commands.main.SupportCommand;
-import fr.utarwyn.superjukebox.commands.music.MusicCommand;
-import fr.utarwyn.superjukebox.util.Messages;
+import fr.utarwyn.superjukebox.commands.main.*;
+import fr.utarwyn.superjukebox.util.JUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -30,8 +26,8 @@ public class MainCommand extends AbstractCommand {
 
     @Override
     public void perform(CommandSender sender) {
-        sender.sendMessage(Messages.PREFIX + "Created by §3Utarwyn§7 edited by §3TCOOfficiall.§7 Version §e" + SuperJukebox.getInstance().getDescription().getVersion() + "§7.");
-        sender.sendMessage(Messages.PREFIX + "To show plugin's help: §d/sj help§7.");
+        JUtil.sendMessage(sender, "Created by §3Utarwyn§7 edited by §3TCOOfficiall.§7 Version §e" + SuperJukebox.getInstance().getDescription().getVersion() + "§7.");
+        JUtil.sendMessage(sender, "To show plugin's help: §d/sj help§7.");
     }
 
     @Override

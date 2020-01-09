@@ -11,25 +11,25 @@ import java.util.Map;
  */
 public class Layer {
 
-	private int key;
+    private int key;
 
-	private Map<Integer, Note> notes;
+    private Map<Integer, Note> notes;
 
-	public Layer(int key) {
-		this.key = key;
-		this.notes = new HashMap<>();
-	}
+    public Layer(int key) {
+        this.key = key;
+        this.notes = new HashMap<>();
+    }
 
-	public int getKey() {
-		return this.key;
-	}
+    public int getKey() {
+        return this.key;
+    }
 
-	public Note getNote(int tick) {
-		return this.notes.get(tick);
-	}
+    public Note getNote(int tick) {
+        return this.notes.get(tick);
+    }
 
-	public void addNote(int tick, Note note) {
-		this.notes.put(tick, note);
-	}
+    public void addNote(int tick, Note note) {
+        this.notes.put(tick, note);
+    }
 
 }

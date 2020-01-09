@@ -20,146 +20,146 @@ import java.util.List;
  */
 public class Music {
 
-	private String filename;
+    private String filename;
 
-	private short length;
+    private short length;
 
-	private short height;
+    private short height;
 
-	private String name;
+    private String name;
 
-	private String author;
+    private String author;
 
-	private String originalAuthor;
+    private String originalAuthor;
 
-	private String description;
+    private String description;
 
-	private float tempo;
+    private float tempo;
 
-	private float delay;
+    private float delay;
 
-	private List<Layer> layers;
+    private List<Layer> layers;
 
-	private ItemStack icon;
+    private ItemStack icon;
 
-	public Music(String filename, short length, short height, String name, String author, String originalAuthor, String desc, float tempo) {
-		this.filename = filename;
-		this.length = length;
-		this.height = height;
-		this.name = name;
-		this.author = author;
-		this.originalAuthor = originalAuthor;
-		this.description = desc;
-		this.tempo = tempo;
-		this.delay = 20 / this.tempo;
+    public Music(String filename, short length, short height, String name, String author, String originalAuthor, String desc, float tempo) {
+        this.filename = filename;
+        this.length = length;
+        this.height = height;
+        this.name = name;
+        this.author = author;
+        this.originalAuthor = originalAuthor;
+        this.description = desc;
+        this.tempo = tempo;
+        this.delay = 20 / this.tempo;
 
-		this.layers = new ArrayList<>();
-		this.setIconWithMaterial(MaterialHelper.findMaterial("RECORD_10", "MUSIC_DISC_13"));
+        this.layers = new ArrayList<>();
+        this.setIconWithMaterial(MaterialHelper.findMaterial("RECORD_10", "MUSIC_DISC_13"));
 
-		// Initialize fields that can be empty
-		if (this.name.isEmpty()) {
-			this.name = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No name";
-		}
-		if (this.author.isEmpty()) {
-			this.author = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No author";
-		}
-		if (this.originalAuthor.isEmpty()) {
-			this.originalAuthor = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No original author";
-		}
-		if (this.description.isEmpty()) {
-			this.description = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No description";
-		}
-	}
+        // Initialize fields that can be empty
+        if (this.name.isEmpty()) {
+            this.name = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No name";
+        }
+        if (this.author.isEmpty()) {
+            this.author = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No author";
+        }
+        if (this.originalAuthor.isEmpty()) {
+            this.originalAuthor = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No original author";
+        }
+        if (this.description.isEmpty()) {
+            this.description = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No description";
+        }
+    }
 
-	public List<Layer> getLayers() {
-		return new ArrayList<>(this.layers);
-	}
+    public List<Layer> getLayers() {
+        return new ArrayList<>(this.layers);
+    }
 
-	public String getFilename() {
-		return this.filename;
-	}
+    public String getFilename() {
+        return this.filename;
+    }
 
-	public short getLength() {
-		return this.length;
-	}
+    public short getLength() {
+        return this.length;
+    }
 
-	public short getHeight() {
-		return this.height;
-	}
+    public short getHeight() {
+        return this.height;
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public String getAuthor() {
-		return this.author;
-	}
+    public String getAuthor() {
+        return this.author;
+    }
 
-	public String getOriginalAuthor() {
-		return this.originalAuthor;
-	}
+    public String getOriginalAuthor() {
+        return this.originalAuthor;
+    }
 
-	public String getDescription() {
-		return this.description;
-	}
+    public String getDescription() {
+        return this.description;
+    }
 
-	public float getTempo() {
-		return this.tempo;
-	}
+    public float getTempo() {
+        return this.tempo;
+    }
 
-	public float getDelay() {
-		return this.delay;
-	}
+    public float getDelay() {
+        return this.delay;
+    }
 
-	public Layer getLayerOrDefault(int key) {
-		for (Layer l : this.layers)
-			if (l.getKey() == key)
-				return l;
+    public Layer getLayerOrDefault(int key) {
+        for (Layer l : this.layers)
+            if (l.getKey() == key)
+                return l;
 
-		Layer layer = new Layer(key);
-		this.layers.add(layer);
-		return layer;
-	}
+        Layer layer = new Layer(key);
+        this.layers.add(layer);
+        return layer;
+    }
 
-	public ItemStack getIcon() {
-		return this.icon;
-	}
+    public ItemStack getIcon() {
+        return this.icon;
+    }
 
-	void setIconWithMaterial(Material material) {
-		this.icon = new ItemStack(material);
-		this.updateIconMetadatas();
-	}
+    void setIconWithMaterial(Material material) {
+        this.icon = new ItemStack(material);
+        this.updateIconMetadatas();
+    }
 
-	/**
-	 * Updates the icon item to insert all music datas on it.
-	 */
-	private void updateIconMetadatas() {
-		ItemMeta iconMeta = this.icon.getItemMeta();
+    /**
+     * Updates the icon item to insert all music datas on it.
+     */
+    private void updateIconMetadatas() {
+        ItemMeta iconMeta = this.icon.getItemMeta();
 
-		// Set all metadatas on the Bukkit itemstack
-		iconMeta.setDisplayName(ChatColor.GREEN + "♫ " + this.name);
-		iconMeta.setLore(Arrays.asList(
-				ChatColor.DARK_GRAY + "*-------------------------*",
-				ChatColor.GRAY + "Duration: " + ChatColor.YELLOW + this.getFormattedLength(),
-				ChatColor.GRAY + "Author: " + ChatColor.AQUA + this.author,
-				ChatColor.GRAY + "Original author: " + ChatColor.AQUA + this.originalAuthor,
-				ChatColor.GRAY + "Description: " + ChatColor.WHITE + this.description,
-				ChatColor.DARK_GRAY + "*-------------------------*",
-				"",
-				ChatColor.GOLD + "Click to play this music!"
-		));
+        // Set all metadatas on the Bukkit itemstack
+        iconMeta.setDisplayName(ChatColor.GREEN + "♫ " + this.name);
+        iconMeta.setLore(Arrays.asList(
+                ChatColor.DARK_GRAY + "*-------------------------*",
+                ChatColor.GRAY + "Duration: " + ChatColor.YELLOW + this.getFormattedLength(),
+                ChatColor.GRAY + "Author: " + ChatColor.AQUA + this.author,
+                ChatColor.GRAY + "Original author: " + ChatColor.AQUA + this.originalAuthor,
+                ChatColor.GRAY + "Description: " + ChatColor.WHITE + this.description,
+                ChatColor.DARK_GRAY + "*-------------------------*",
+                "",
+                ChatColor.GOLD + "Click to play this music!"
+        ));
 
-		// Hide real music name from ths disc!
-		iconMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+        // Hide real music name from ths disc!
+        iconMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
 
-		this.icon.setItemMeta(iconMeta);
-	}
+        this.icon.setItemMeta(iconMeta);
+    }
 
-	private String getFormattedLength() {
-		// Convert the music length into seconds ...
-		int seconds = (int) (this.length / this.tempo);
-		// ... and into a readable time!
-		return (seconds / 60) + ":" + String.format("%02d", seconds % 60);
-	}
+    private String getFormattedLength() {
+        // Convert the music length into seconds ...
+        int seconds = (int) (this.length / this.tempo);
+        // ... and into a readable time!
+        return (seconds / 60) + ":" + String.format("%02d", seconds % 60);
+    }
 
 }

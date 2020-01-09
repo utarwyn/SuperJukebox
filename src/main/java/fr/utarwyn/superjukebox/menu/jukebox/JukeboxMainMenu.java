@@ -50,6 +50,25 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
         this.prepare();
     }
 
+    private static void updateEditingModeItem(ItemMeta meta, JukeboxMenuEditingMode currentEditingMode) {
+        List<String> lore = new ArrayList<>(Arrays.asList(
+                "",
+                ChatColor.GRAY + "Click to choose the editing mode",
+                ChatColor.GRAY + "you want for this menu!",
+                ""
+        ));
+
+        for (JukeboxMenuEditingMode editingMode : JukeboxMenuEditingMode.values()) {
+            if (editingMode == currentEditingMode) {
+                lore.add(ChatColor.GREEN + " - " + editingMode.getTitle() + " ✔");
+            } else {
+                lore.add(ChatColor.DARK_RED + " - " + editingMode.getTitle());
+            }
+        }
+
+        meta.setLore(lore);
+    }
+
     @Override
     public void prepare() {
         // Reprepare all discs items
@@ -73,9 +92,10 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
             // Music adding item
             this.musicAddItem = new ItemStack(Material.DIAMOND);
             ItemMeta musicsMeta = this.musicAddItem.getItemMeta();
+            boolean globalMusics = this.jukebox.getSettings().getUseGlobalMusics().getValue();
 
             musicsMeta.setDisplayName(ChatColor.GOLD + "Adding musics");
-            if (this.jukebox.getSettings().getUseGlobalMusics().getValue()) {
+            if (globalMusics) {
                 musicsMeta.setLore(Arrays.asList(
                         "§cYou can't add music to this jukebox", "§cbecause §lthey are managed globally§c.",
                         "§dYou can allow custom musics by changing the", "§doption in the settings menu of this jukbox."
@@ -95,7 +115,7 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
             ItemMeta musicEditingMeta = musicEditingModeItem.getItemMeta();
 
             musicEditingMeta.setDisplayName(ChatColor.GOLD + "Menu editing mode");
-            if (this.jukebox.getSettings().getUseGlobalMusics().getValue()) {
+            if (globalMusics) {
                 musicEditingMeta.setLore(Arrays.asList(
                         "§cYou can't edit musics of this jukebox", "§cbecause §lthey are managed globally§c.",
                         "§dYou can allow custom musics by changing the", "§doption in the settings menu of this jukbox."
@@ -115,7 +135,7 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
             ItemMeta musicStopMeta = this.musicStopItem.getItemMeta();
 
             musicStopMeta.setDisplayName(ChatColor.GOLD + "Stop music");
-            if (this.jukebox.player.isTaskRunned()) {
+            if (this.jukebox.getPlayer().isTaskRunned()) {
                 musicStopMeta.setLore(Arrays.asList("§cPress this iten to", "§cstop the music you're playing§c."));
             } else {
                 musicStopMeta.setLore(Arrays.asList("§7You can't stop music", "§7that's not playing!"));
@@ -148,7 +168,8 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
         }
 
         // Music add menu item
-        if (this.musicAddItem != null && event.getCurrentItem().equals(this.musicAddItem) && !this.jukebox.getSettings().getUseGlobalMusics().getValue()) {
+        boolean globalMusics = this.jukebox.getSettings().getUseGlobalMusics().getValue();
+        if (this.musicAddItem != null && this.musicAddItem.equals(event.getCurrentItem()) && !globalMusics) {
             // Open the menu in another Thread
             JUtil.runSync(() -> {
                 if (this.musicAddMenu == null) {
@@ -159,8 +180,8 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
                 this.musicAddMenu.open(this.player);
             });
         }
-        if (this.musicStopItem != null && event.getCurrentItem().equals(this.musicStopItem)) {
-            this.jukebox.player.pause();
+        if (this.musicStopItem != null && this.musicStopItem.equals(event.getCurrentItem())) {
+            this.jukebox.getPlayer().pause();
 
             this.clear();
             this.prepare();
@@ -180,26 +201,7 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
 
     @Override
     public void onClose(Player player) {
-
-    }
-
-    private static void updateEditingModeItem(ItemMeta meta, JukeboxMenuEditingMode currentEditingMode) {
-        List<String> lore = new ArrayList<>(Arrays.asList(
-                "",
-                ChatColor.GRAY + "Click to choose the editing mode",
-                ChatColor.GRAY + "you want for this menu!",
-                ""
-        ));
-
-        for (JukeboxMenuEditingMode editingMode : JukeboxMenuEditingMode.values()) {
-            if (editingMode == currentEditingMode) {
-                lore.add(ChatColor.GREEN + " - " + editingMode.getTitle() + " ✔");
-            } else {
-                lore.add(ChatColor.DARK_RED + " - " + editingMode.getTitle());
-            }
-        }
-
-        meta.setLore(lore);
+        // Not implemented
     }
 
 }

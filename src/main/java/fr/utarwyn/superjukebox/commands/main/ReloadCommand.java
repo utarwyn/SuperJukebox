@@ -1,11 +1,10 @@
 package fr.utarwyn.superjukebox.commands.main;
 
-import fr.utarwyn.superjukebox.Config;
 import fr.utarwyn.superjukebox.Managers;
 import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.commands.AbstractCommand;
+import fr.utarwyn.superjukebox.configuration.Files;
 import fr.utarwyn.superjukebox.util.JUtil;
-import fr.utarwyn.superjukebox.util.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -20,38 +19,38 @@ import org.bukkit.entity.Player;
  */
 public class ReloadCommand extends AbstractCommand {
 
-	public ReloadCommand() {
-		super("reload", "rl");
-	}
+    public ReloadCommand() {
+        super("reload", "rl");
+    }
 
-	@Override
-	public void perform(CommandSender sender) {
-		if (!JUtil.senderHasPerm(sender, "reload")) {
-			sender.sendMessage(Messages.PREFIX + ChatColor.RED + "You don't have permission to do that!");
-			return;
-		}
+    @Override
+    public void perform(CommandSender sender) {
+        if (!JUtil.senderHasPerm(sender, "reload")) {
+            JUtil.sendMessage(sender, ChatColor.RED + "You don't have permission to do that!");
+            return;
+        }
 
-		if (!Config.get().reload()) {
-			sender.sendMessage(Messages.PREFIX + "§cError when reloading config! See the console for more info!");
-			sender.sendMessage(Messages.PREFIX + "§8Plugin now disabled.");
+        if (!Files.getConfiguration().reload()) {
+            JUtil.sendMessage(sender, ChatColor.RED + "Error when reloading config! See the console for more info!");
+            JUtil.sendMessage(sender, ChatColor.DARK_GRAY + "Plugin now disabled.");
 
-			Bukkit.getPluginManager().disablePlugin(SuperJukebox.getInstance());
-			return;
-		}
+            Bukkit.getPluginManager().disablePlugin(SuperJukebox.getInstance());
+            return;
+        }
 
-		Managers.reloadAll();
+        Managers.reloadAll();
 
-		sender.sendMessage(Messages.PREFIX + "§aConfiguration reloaded!");
-	}
+        JUtil.sendMessage(sender, ChatColor.GREEN + "Configuration reloaded!");
+    }
 
-	@Override
-	public void performPlayer(Player player) {
+    @Override
+    public void performPlayer(Player player) {
+        // Not implemented
+    }
 
-	}
-
-	@Override
-	public void performConsole(CommandSender sender) {
-
-	}
+    @Override
+    public void performConsole(CommandSender sender) {
+        // Not implemented
+    }
 
 }

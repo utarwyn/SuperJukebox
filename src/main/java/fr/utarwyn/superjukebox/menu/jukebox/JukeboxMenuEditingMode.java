@@ -8,18 +8,18 @@ package fr.utarwyn.superjukebox.menu.jukebox;
  */
 public enum JukeboxMenuEditingMode {
 
-	DISABLE("No edition"),
-	SWAP("swap two musics"),
-	REMOVE("remove music");
+    DISABLE("No edition"),
+    SWAP("swap two musics"),
+    REMOVE("remove music");
 
-	private String title;
+    private String title;
 
-	JukeboxMenuEditingMode(String title) {
-		this.title = title;
-	}
+    JukeboxMenuEditingMode(String title) {
+        this.title = title;
+    }
 
-	public String getTitle() {
-		return this.title;
-	}
+    public String getTitle() {
+        return this.title;
+    }
 
 }

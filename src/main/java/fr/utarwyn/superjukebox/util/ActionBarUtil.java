@@ -47,43 +47,43 @@ public class ActionBarUtil {
         }
     }
 
-	public static void sendActionTitle(Player player, String message, int duration) {
-		sendActionTitle(player, message);
+    public static void sendActionTitle(Player player, String message, int duration) {
+        sendActionTitle(player, message);
 
-		if (duration >= 0) {
-			// Sends empty message at the end of the duration. Allows messages shorter than 3 seconds, ensures precision.
-			new BukkitRunnable() {
-				@Override
-				public void run() {
-					sendActionTitle(player, "");
-				}
-			}.runTaskLater(SuperJukebox.getInstance(), duration + 1L);
-		}
+        if (duration >= 0) {
+            // Sends empty message at the end of the duration. Allows messages shorter than 3 seconds, ensures precision.
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    sendActionTitle(player, "");
+                }
+            }.runTaskLater(SuperJukebox.getInstance(), duration + 1L);
+        }
 
-		// Re-sends the messages every 3 seconds so it doesn't go away from the player's screen.
-		while (duration > 40) {
-			duration -= 40;
-			new BukkitRunnable() {
-				@Override
-				public void run() {
-					sendActionTitle(player, message);
-				}
-			}.runTaskLater(SuperJukebox.getInstance(), (long) duration);
-		}
-	}
+        // Re-sends the messages every 3 seconds so it doesn't go away from the player's screen.
+        while (duration > 40) {
+            duration -= 40;
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    sendActionTitle(player, message);
+                }
+            }.runTaskLater(SuperJukebox.getInstance(), duration);
+        }
+    }
 
-	public static void sendActionTitleToAllPlayers(String message) {
-		sendActionTitleToAllPlayers(message, -1);
-	}
+    public static void sendActionTitleToAllPlayers(String message) {
+        sendActionTitleToAllPlayers(message, -1);
+    }
 
-	public static void sendActionTitleToAllPlayers(String message, int duration) {
-		for (Player p : Bukkit.getOnlinePlayers()) {
-			sendActionTitle(p, message, duration);
-		}
-	}
+    public static void sendActionTitleToAllPlayers(String message, int duration) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            sendActionTitle(p, message, duration);
+        }
+    }
 
-	private static void sendActionTitlePre12(Player player, String message) {
-		try {
+    private static void sendActionTitlePre12(Player player, String message) {
+        try {
             Class<?> craftPlayerClass = Class.forName("org.bukkit.craftbukkit." + serverVersion + ".entity.CraftPlayer");
             Object craftPlayer = craftPlayerClass.cast(player);
             Object ppoc;
@@ -95,12 +95,12 @@ public class ActionBarUtil {
                 Class<?> c3 = Class.forName(NMS_PACKAGE + serverVersion + ".IChatBaseComponent");
                 Method m3 = c2.getDeclaredMethod("a", String.class);
                 Object cbc = c3.cast(m3.invoke(c2, "{\"text\": \"" + message + "\"}"));
-                ppoc = c4.getConstructor(new Class<?>[]{c3, byte.class}).newInstance(cbc, (byte) 2);
+                ppoc = c4.getConstructor(c3, byte.class).newInstance(cbc, (byte) 2);
             } else {
                 Class<?> c2 = Class.forName(NMS_PACKAGE + serverVersion + ".ChatComponentText");
                 Class<?> c3 = Class.forName(NMS_PACKAGE + serverVersion + ".IChatBaseComponent");
-                Object o = c2.getConstructor(new Class<?>[]{String.class}).newInstance(message);
-                ppoc = c4.getConstructor(new Class<?>[]{c3, byte.class}).newInstance(o, (byte) 2);
+                Object o = c2.getConstructor(String.class).newInstance(message);
+                ppoc = c4.getConstructor(c3, byte.class).newInstance(o, (byte) 2);
             }
 
             Method m1 = craftPlayerClass.getDeclaredMethod("getHandle");
@@ -110,11 +110,11 @@ public class ActionBarUtil {
             Method m5 = pc.getClass().getDeclaredMethod("sendPacket", c5);
             m5.invoke(pc, ppoc);
         } catch (Exception ex) {
-			Log.log(Level.WARNING, "Cannot send action title packet (<1.12) for " + player.getName() + "!", ex);
-		}
-	}
+            Log.log(Level.WARNING, "Cannot send action title packet (<1.12) for " + player.getName() + "!", ex);
+        }
+    }
 
-	private static void sendActionTitlePost12(Player player, String message) {
+    private static void sendActionTitlePost12(Player player, String message) {
         try {
             Class<?> craftPlayerClass = Class.forName("org.bukkit.craftbukkit." + serverVersion + ".entity.CraftPlayer");
             Object craftPlayer = craftPlayerClass.cast(player);
@@ -142,6 +142,6 @@ public class ActionBarUtil {
         } catch (Exception ex) {
             Log.log(Level.WARNING, "Cannot send action title packet (>=1.12) for " + player.getName() + "!", ex);
         }
-	}
+    }
 
 }

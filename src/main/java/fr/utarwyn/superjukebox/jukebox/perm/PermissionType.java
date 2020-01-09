@@ -10,45 +10,45 @@ import fr.utarwyn.superjukebox.util.Log;
  */
 public enum PermissionType {
 
-	OP,
-	WITH_PERM,
-	EVERYONE;
+    OP,
+    WITH_PERM,
+    EVERYONE;
 
-	public static PermissionType getByName(String permissionTypeName) {
-		try {
-			return PermissionType.valueOf(permissionTypeName);
-		} catch (Exception ex) {
-			Log.error("Impossible to resolve permission " + permissionTypeName + "! Back to default one.");
-			return getDefault();
-		}
-	}
+    public static PermissionType getByName(String permissionTypeName) {
+        try {
+            return PermissionType.valueOf(permissionTypeName);
+        } catch (Exception ex) {
+            Log.error("Impossible to resolve permission " + permissionTypeName + "! Back to default one.");
+            return getDefault();
+        }
+    }
 
-	/**
-	 * Returns the default permission for all features of a jukebox.
-	 *
-	 * @return The default permission, that's all!
-	 */
-	public static PermissionType getDefault() {
-		return WITH_PERM;
-	}
+    /**
+     * Returns the default permission for all features of a jukebox.
+     *
+     * @return The default permission, that's all!
+     */
+    public static PermissionType getDefault() {
+        return WITH_PERM;
+    }
 
-	/**
-	 * Returns the next permission type in the list
-	 *
-	 * @return Next permission type
-	 */
-	public PermissionType next() {
-		boolean next = false;
+    /**
+     * Returns the next permission type in the list
+     *
+     * @return Next permission type
+     */
+    public PermissionType next() {
+        boolean next = false;
 
-		for (PermissionType value : values()) {
-			if (value == this) {
-				next = true;
-			} else if (next) {
-				return value;
-			}
-		}
+        for (PermissionType value : values()) {
+            if (value == this) {
+                next = true;
+            } else if (next) {
+                return value;
+            }
+        }
 
-		return values()[0];
-	}
+        return values()[0];
+    }
 
 }

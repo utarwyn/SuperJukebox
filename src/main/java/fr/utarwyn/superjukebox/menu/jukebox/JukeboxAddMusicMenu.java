@@ -21,49 +21,43 @@ import java.util.List;
  */
 public class JukeboxAddMusicMenu extends MusicDiscsMenu {
 
-	private MusicManager musicManager;
+    private MusicManager musicManager;
 
-	private JukeboxesManager jukeboxesManager;
+    private JukeboxesManager jukeboxesManager;
 
-	private Jukebox jukebox;
+    private Jukebox jukebox;
 
-	JukeboxAddMusicMenu(Jukebox jukebox, Player player, AbstractMenu parentMenu) {
-		super("SuperJukebox musics menu", player);
+    JukeboxAddMusicMenu(Jukebox jukebox, Player player, AbstractMenu parentMenu) {
+        super("SuperJukebox musics menu", player);
 
-		this.musicManager = SuperJukebox.getInstance().getInstance(MusicManager.class);
-		this.jukeboxesManager = SuperJukebox.getInstance().getInstance(JukeboxesManager.class);
+        this.musicManager = SuperJukebox.getInstance().getInstance(MusicManager.class);
+        this.jukeboxesManager = SuperJukebox.getInstance().getInstance(JukeboxesManager.class);
 
-		this.jukebox = jukebox;
-		this.setParentMenu(parentMenu);
-	}
+        this.jukebox = jukebox;
+        this.setParentMenu(parentMenu);
+    }
 
-	@Override
-	public void onClick(InventoryClickEvent event) {
-		super.onClick(event);
-		// Nothing here, we can only interact with discs!
-	}
+    @Override
+    public void onDiscClick(InventoryClickEvent event, Music music) {
+        // Add the selected music to the jukebox ...
+        this.jukebox.addCustomMusic(music);
+        this.jukeboxesManager.saveJukeboxMusicsOnDisk(this.jukebox);
 
-	@Override
-	public void onDiscClick(InventoryClickEvent event, Music music) {
-		// Add the selected music to the jukebox ...
-		this.jukebox.addCustomMusic(music);
-		this.jukeboxesManager.saveJukeboxMusicsOnDisk(this.jukebox);
+        // ... and go back to the main menu ;-)
+        this.goToParentMenu(this.player);
+    }
 
-		// ... and go back to the main menu ;-)
-		this.goToParentMenu(this.player);
-	}
+    @Override
+    public List<Music> getMusicList() {
+        List<Music> musicList = new ArrayList<>(this.musicManager.getMusics());
+        musicList.removeAll(this.jukebox.getMusics());
 
-	@Override
-	public List<Music> getMusicList() {
-		List<Music> musicList = new ArrayList<>(this.musicManager.getMusics());
-		musicList.removeAll(this.jukebox.getMusics());
+        return musicList;
+    }
 
-		return musicList;
-	}
-
-	@Override
-	public void onClose(Player player) {
-
-	}
+    @Override
+    public void onClose(Player player) {
+        // Not implemented
+    }
 
 }
