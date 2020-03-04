@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
  * Represents a command parameter.
  *
  * @author Utarwyn
- * @since 1.2.0
+ * @since 0.2.0
  */
 public class Parameter<T> {
 

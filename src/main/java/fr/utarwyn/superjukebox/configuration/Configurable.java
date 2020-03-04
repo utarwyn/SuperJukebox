@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  * Used to fill attributes in {@link Configuration Config class}.
  *
  * @author Utarwyn
- * @since 1.0.0
+ * @since 0.1.0
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

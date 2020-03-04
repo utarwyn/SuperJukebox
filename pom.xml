@@ -6,7 +6,7 @@
 
     <groupId>fr.utarwyn</groupId>
     <artifactId>SuperJukebox</artifactId>
-    <version>1.1.0</version>
+    <version>0.2.0</version>
     <packaging>jar</packaging>
 
     <name>SuperJukebox</name>
@@ -23,7 +23,7 @@
     </licenses>
 
     <properties>
-        <bukkit.version>1.15.1-R0.1-SNAPSHOT</bukkit.version>
+        <bukkit.version>1.15.2-R0.1-SNAPSHOT</bukkit.version>
         <fastparticles.version>1.2.3</fastparticles.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

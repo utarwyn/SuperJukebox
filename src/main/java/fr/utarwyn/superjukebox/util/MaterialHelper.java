@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentMap;
  * multiple versions of Minecraft.
  *
  * @author Utarwyn
- * @since 1.2.0
+ * @since 0.2.0
  */
 public class MaterialHelper {
 

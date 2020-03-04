@@ -17,7 +17,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
  * Contains all events for interactions with super-jukeboxes!
  *
  * @author Utarwyn
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class JukeboxListener implements Listener {
 

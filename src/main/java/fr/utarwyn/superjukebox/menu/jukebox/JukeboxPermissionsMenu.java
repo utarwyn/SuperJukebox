@@ -24,7 +24,7 @@ import java.util.Map;
  * The permissions menu of a SuperJukebox!
  *
  * @author Utarwyn
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class JukeboxPermissionsMenu extends AbstractMenu {
 

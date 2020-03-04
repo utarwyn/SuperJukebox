@@ -12,7 +12,7 @@ import java.util.logging.Level;
  *
  * @author Utarwyn
  * @link https://en.wikipedia.org/wiki/YAML
- * @since 1.2.0
+ * @since 0.2.0
  */
 public abstract class YamlFile {
 

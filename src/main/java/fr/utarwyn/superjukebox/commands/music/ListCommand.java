@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ListCommand extends AbstractCommand {
 
-    private static final int MUSICS_PER_PAGE = 2;
+    private static final int MUSICS_PER_PAGE = 8;
 
     private MusicManager manager;
 

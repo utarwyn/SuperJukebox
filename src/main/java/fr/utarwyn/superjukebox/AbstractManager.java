@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  * Abtsract base class for creating a SuperJukeboox manager
  *
  * @author Utarwyn
- * @since 1.0.0
+ * @since 0.1.0
  */
 public abstract class AbstractManager implements Listener {
 

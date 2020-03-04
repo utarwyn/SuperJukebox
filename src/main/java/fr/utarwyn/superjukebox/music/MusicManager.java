@@ -28,7 +28,7 @@ import java.util.stream.Stream;
  * Manages all musics registered for the plugin.
  *
  * @author Utarwyn
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class MusicManager extends AbstractManager {
 
@@ -198,7 +198,7 @@ public class MusicManager extends AbstractManager {
         File file = new File(this.musicsFolder, filename);
 
         if (!file.exists()) {
-            this.logger.log(Level.WARNING, "Music #{} ({}) doesn't exist anymore! Deleting from configuration.", new Object[]{id, filename});
+            this.logger.log(Level.WARNING, "Music #{0} ({1}) does not exist anymore! Deleting from configuration.", new Object[]{id, filename});
             section.getRoot().set(section.getName(), null);
             return false;
         }
@@ -212,7 +212,7 @@ public class MusicManager extends AbstractManager {
             this.musics.put(id, music);
             return true;
         } catch (NBSDecodeException ex) {
-            Log.log(Level.WARNING, "Music #" + id + " (" + filename + ") cannot be loaded! Details below.", ex);
+            this.logger.log(Level.WARNING, "Music #" + id + " (" + filename + ") cannot be loaded! Details below.", ex);
             return false;
         }
     }

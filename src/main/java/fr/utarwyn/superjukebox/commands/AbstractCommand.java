@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * Represents a SuperJukebox's command, that's all!
  *
  * @author Utarwyn
- * @since 1.0.0
+ * @since 0.1.0
  */
 public abstract class AbstractCommand extends Command implements TabCompleter, CommandExecutor, Listener {
 

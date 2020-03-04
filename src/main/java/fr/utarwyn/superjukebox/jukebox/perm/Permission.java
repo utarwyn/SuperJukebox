@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
  * These permissions are editable in the jukebox's settings.
  *
  * @author Utarwyn
- * @version 1.0.0
+ * @version 0.1.0
  */
 public class Permission {
 

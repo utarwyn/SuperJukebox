@@ -11,7 +11,7 @@ import java.util.logging.Level;
  * Manages a flat file stored on the disk.
  *
  * @author Utarwyn
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class FlatFile {
 

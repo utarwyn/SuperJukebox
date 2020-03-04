@@ -9,7 +9,7 @@ import java.io.File;
  * Configuration class. Reflets the config.yml
  *
  * @author Utarwyn
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Configuration extends YamlFile {
 

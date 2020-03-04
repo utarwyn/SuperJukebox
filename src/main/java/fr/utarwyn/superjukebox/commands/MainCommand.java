@@ -3,16 +3,26 @@ package fr.utarwyn.superjukebox.commands;
 import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.commands.main.*;
 import fr.utarwyn.superjukebox.util.JUtil;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginDescriptionFile;
+
+import java.util.List;
 
 /**
  * Main command of the plugin.
  *
  * @author Utarwyn
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class MainCommand extends AbstractCommand {
+
+    private String pluginVersion;
+
+    private String pluginAuthor;
+
+    private String pluginContributors;
 
     public MainCommand() {
         super("superjukebox", "sj");
@@ -22,11 +32,25 @@ public class MainCommand extends AbstractCommand {
         this.addSubCommand(new HelpCommand());
         this.addSubCommand(new ReloadCommand());
         this.addSubCommand(new SupportCommand());
+
+        // Save some plugin values in memory
+        PluginDescriptionFile description = SuperJukebox.getInstance().getDescription();
+        List<String> authors = description.getAuthors();
+
+        this.pluginVersion = description.getVersion();
+        this.pluginAuthor = authors.get(0);
+        if (authors.size() > 1) {
+            this.pluginContributors = StringUtils.join(authors.subList(1, authors.size()), ", ");
+        }
     }
 
     @Override
     public void perform(CommandSender sender) {
-        JUtil.sendMessage(sender, "Created by §3Utarwyn§7 edited by §3TCOOfficiall.§7 Version §e" + SuperJukebox.getInstance().getDescription().getVersion() + "§7.");
+        JUtil.sendMessage(sender, String.format("Created by §3%s.§7 Version §e%s§7.", this.pluginAuthor, this.pluginVersion));
+        if (this.pluginContributors != null) {
+            JUtil.sendMessage(sender, String.format("Contributors: §3%s§7.", this.pluginContributors));
+        }
+
         JUtil.sendMessage(sender, "To show plugin's help: §d/sj help§7.");
     }
 

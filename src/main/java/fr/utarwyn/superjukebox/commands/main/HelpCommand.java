@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
  * Waooowww, the help command! You need help?
  *
  * @author Utarwyn
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class HelpCommand extends AbstractCommand {
 

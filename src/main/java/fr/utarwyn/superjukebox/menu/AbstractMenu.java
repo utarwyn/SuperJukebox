@@ -24,7 +24,7 @@ import java.util.Map;
  * Events onClick and onClose are supported.
  *
  * @author Utarwyn
- * @since 1.0.0
+ * @since 0.1.0
  */
 public abstract class AbstractMenu implements InventoryHolder {
 

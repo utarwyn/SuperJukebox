@@ -6,7 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * A file handler which create and contains a single instance of all config files.
  *
  * @author Utarwyn <maxime.malgorn@laposte.net>
- * @since 1.2.0
+ * @since 0.2.0
  */
 public class Files {
 

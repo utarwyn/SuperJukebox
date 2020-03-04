@@ -6,7 +6,7 @@ import fr.utarwyn.superjukebox.util.Log;
  * Type that a permission can have.
  *
  * @author Utarwyn
- * @version 1.0.0
+ * @version 0.1.0
  */
 public enum PermissionType {
 

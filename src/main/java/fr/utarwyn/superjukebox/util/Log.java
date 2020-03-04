@@ -10,7 +10,7 @@ import java.util.logging.Logger;
  * Class used to log messages in the console
  *
  * @author Utarwyn
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Log {
 

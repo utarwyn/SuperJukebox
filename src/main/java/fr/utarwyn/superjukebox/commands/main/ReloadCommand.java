@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  * directly in game, that's not incredible.
  *
  * @author Utarwyn
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class ReloadCommand extends AbstractCommand {
 

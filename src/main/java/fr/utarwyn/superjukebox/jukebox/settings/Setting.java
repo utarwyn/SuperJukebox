@@ -7,7 +7,7 @@ import java.util.function.Predicate;
  * (a java type must be provided to deals with the setting)
  *
  * @author Utarwyn
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Setting<T> {
 
