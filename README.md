@@ -3,7 +3,7 @@
 <h4 align="center">
 Play custom musics from jukeboxes. We all love music, right?
 <br>
-Works with Bukkit/Spigot 1.8 to 1.15! (under development)
+Works with Bukkit/Spigot 1.8 to 1.15!
 </h4>
 
 <p align="center">
@@ -36,7 +36,7 @@ Works with Bukkit/Spigot 1.8 to 1.15! (under development)
 
 ## Key Features
 
- - Play any kind of music for all players
+ - Play music from all formats of NBS files
  - Jukeboxes **fully configurable with GUIs**!
  - Can display particles/holograms
  - Permissions **for each jukebox**!
