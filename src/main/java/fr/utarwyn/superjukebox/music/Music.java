@@ -42,33 +42,15 @@ public class Music {
 
     private ItemStack icon;
 
-    public Music(String filename, short length, short height, String name, String author, String originalAuthor, String desc, float tempo) {
+    public Music(String filename) {
         this.filename = filename;
-        this.length = length;
-        this.height = height;
-        this.name = name;
-        this.author = author;
-        this.originalAuthor = originalAuthor;
-        this.description = desc;
-        this.tempo = tempo;
-        this.delay = 20 / this.tempo;
-
+        this.name = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No name";
+        this.author = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No author";
+        this.originalAuthor = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No original author";
+        this.description = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No description";
         this.layers = new ArrayList<>();
-        this.setIconWithMaterial(MaterialHelper.findMaterial("RECORD_10", "MUSIC_DISC_13"));
 
-        // Initialize fields that can be empty
-        if (this.name.isEmpty()) {
-            this.name = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No name";
-        }
-        if (this.author.isEmpty()) {
-            this.author = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No author";
-        }
-        if (this.originalAuthor.isEmpty()) {
-            this.originalAuthor = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No original author";
-        }
-        if (this.description.isEmpty()) {
-            this.description = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No description";
-        }
+        this.setIconWithMaterial(MaterialHelper.findMaterial("RECORD_10", "MUSIC_DISC_13"));
     }
 
     public List<Layer> getLayers() {
@@ -112,9 +94,11 @@ public class Music {
     }
 
     public Layer getLayerOrDefault(int key) {
-        for (Layer l : this.layers)
-            if (l.getKey() == key)
+        for (Layer l : this.layers) {
+            if (l.getKey() == key) {
                 return l;
+            }
+        }
 
         Layer layer = new Layer(key);
         this.layers.add(layer);
@@ -123,6 +107,46 @@ public class Music {
 
     public ItemStack getIcon() {
         return this.icon;
+    }
+
+    public void setLength(short length) {
+        this.length = length;
+    }
+
+    public void setHeight(short height) {
+        this.height = height;
+    }
+
+    public void setName(String name) {
+    	if (!name.isEmpty()) {
+			this.name = name;
+		}
+    }
+
+    public void setAuthor(String author) {
+    	if (!author.isEmpty()) {
+			this.author = author;
+		}
+    }
+
+    public void setOriginalAuthor(String originalAuthor) {
+    	if (!originalAuthor.isEmpty()) {
+			this.originalAuthor = originalAuthor;
+		}
+    }
+
+    public void setDescription(String description) {
+    	if (!description.isEmpty()) {
+			this.description = description;
+		}
+    }
+
+    public void setTempo(float tempo) {
+        this.tempo = tempo;
+    }
+
+    public void setDelay(float delay) {
+        this.delay = delay;
     }
 
     void setIconWithMaterial(Material material) {

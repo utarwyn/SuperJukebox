@@ -4,8 +4,8 @@ import fr.utarwyn.superjukebox.AbstractManager;
 import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.jukebox.Jukebox;
 import fr.utarwyn.superjukebox.jukebox.JukeboxesManager;
-import fr.utarwyn.superjukebox.music.nbs.NBSDecodeException;
-import fr.utarwyn.superjukebox.music.nbs.NBSDecoder;
+import fr.utarwyn.superjukebox.nbs.NBSDecodeException;
+import fr.utarwyn.superjukebox.nbs.NBSFileReader;
 import fr.utarwyn.superjukebox.util.FlatFile;
 import fr.utarwyn.superjukebox.util.JUtil;
 import fr.utarwyn.superjukebox.util.Log;
@@ -43,6 +43,8 @@ public class MusicManager extends AbstractManager {
     private static final String MUSICS_FOLDER = "musics";
 
     private FlatFile database;
+    
+    private NBSFileReader fileReader;
 
     private File musicsFolder;
 
@@ -55,6 +57,7 @@ public class MusicManager extends AbstractManager {
     @Override
     public void initialize() {
         this.musics = new HashMap<>();
+        this.fileReader = new NBSFileReader();
 
         if (this.database == null) {
             this.database = new FlatFile("musics.yml");
@@ -204,7 +207,7 @@ public class MusicManager extends AbstractManager {
         }
 
         try {
-            Music music = NBSDecoder.decode(file);
+            Music music = this.fileReader.read(file);
 
             // Update the icon of the music
             music.setIconWithMaterial(Material.valueOf(section.getString("icon")));

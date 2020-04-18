@@ -180,6 +180,7 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
                 this.musicAddMenu.open(this.player);
             });
         }
+        
         if (this.musicStopItem != null && this.musicStopItem.equals(event.getCurrentItem())) {
             this.jukebox.getPlayer().pause();
 
