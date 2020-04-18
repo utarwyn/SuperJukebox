@@ -6,6 +6,7 @@ import fr.utarwyn.superjukebox.jukebox.JukeboxesManager;
 import fr.utarwyn.superjukebox.jukebox.perm.Permission;
 import fr.utarwyn.superjukebox.jukebox.perm.PermissionType;
 import fr.utarwyn.superjukebox.menu.AbstractMenu;
+import fr.utarwyn.superjukebox.util.MaterialHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -23,120 +24,123 @@ import java.util.Map;
  * The permissions menu of a SuperJukebox!
  *
  * @author Utarwyn
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class JukeboxPermissionsMenu extends AbstractMenu {
 
-	private Jukebox jukebox;
+    private Jukebox jukebox;
 
-	private Map<Permission, ItemStack> permissionItems;
+    private Map<Permission, ItemStack> permissionItems;
 
-	JukeboxPermissionsMenu(AbstractMenu parentMenu, Jukebox jukebox) {
-		super(3, "Superjukebox permissions menu");
+    JukeboxPermissionsMenu(AbstractMenu parentMenu, Jukebox jukebox) {
+        super(3, "Superjukebox permissions menu");
 
-		this.jukebox = jukebox;
-		this.permissionItems = new HashMap<>();
+        this.jukebox = jukebox;
+        this.permissionItems = new HashMap<>();
 
-		this.setParentMenu(parentMenu);
-	}
+        this.setParentMenu(parentMenu);
+    }
 
-	@Override
-	public void prepare() {
-		// Clear any previous data
-		this.clear();
-		this.permissionItems.clear();
+    @Override
+    public void prepare() {
+        // Clear any previous data
+        this.clear();
+        this.permissionItems.clear();
 
-		// Create permission items
-		this.createPermissionItem(10, Material.JUKEBOX, this.jukebox.getSettings().getInteractPerm());
-		this.createPermissionItem(11, Material.RECORD_3, this.jukebox.getSettings().getEditMusicsPerm());
-		this.createPermissionItem(12, Material.COMMAND, this.jukebox.getSettings().getEditSettingsPerm());
+        Material musicDisc = MaterialHelper.findMaterial("RECORD_3", "MUSIC_DISC_13");
+        Material commandBlock = MaterialHelper.findMaterial("COMMAND", "COMMAND_BLOCK");
 
-		// Separators
-		for (int i = 0; i < 10; i++) {
-			this.setItem(i, SEPARATOR);
-		}
-		for (int i = 17; i < 27; i++) {
-			if (i == 18) continue;
-			this.setItem(i, SEPARATOR);
-		}
+        // Create permission items
+        this.createPermissionItem(10, Material.JUKEBOX, this.jukebox.getSettings().getInteractPerm());
+        this.createPermissionItem(11, musicDisc, this.jukebox.getSettings().getEditMusicsPerm());
+        this.createPermissionItem(12, commandBlock, this.jukebox.getSettings().getEditSettingsPerm());
 
-		// Back item
-		this.setItem(18, BACK_ITEM);
-	}
+        // Separators
+        for (int i = 0; i < 10; i++) {
+            this.setItem(i, SEPARATOR);
+        }
+        for (int i = 17; i < 27; i++) {
+            if (i == 18) continue;
+            this.setItem(i, SEPARATOR);
+        }
 
-	@Override
-	public void onClick(InventoryClickEvent event) {
-		for (Map.Entry<Permission, ItemStack> entry : this.permissionItems.entrySet()) {
-			if (entry.getValue().equals(event.getCurrentItem())) {
-				Permission permission = entry.getKey();
+        // Back item
+        this.setItem(18, BACK_ITEM);
+    }
 
-				// Redefine the type of the permission ...
-				permission.setType(permission.getType().next());
+    @Override
+    public void onClick(InventoryClickEvent event) {
+        for (Map.Entry<Permission, ItemStack> entry : this.permissionItems.entrySet()) {
+            if (entry.getValue().equals(event.getCurrentItem())) {
+                Permission permission = entry.getKey();
 
-				// ... and only the display name/lore of the current item!
-				this.updateItemMeta(this.getItemAt(event.getSlot()), permission);
-				this.updateInventory();
-				break;
-			}
-		}
+                // Redefine the type of the permission ...
+                permission.setType(permission.getType().next());
 
-		event.setCancelled(true);
-	}
+                // ... and only the display name/lore of the current item!
+                this.updateItemMeta(this.getItemAt(event.getSlot()), permission);
+                this.updateInventory();
+                break;
+            }
+        }
 
-	@Override
-	public void onClose(Player player) {
-		// Save all permissions on the disk
-		SuperJukebox.getInstance().getInstance(JukeboxesManager.class).saveJukeboxPermissionsOnDisk(this.jukebox);
-	}
+        event.setCancelled(true);
+    }
 
-	/**
-	 * Creates an itemstack for a particular SuperJukebox permission.
-	 * This stores also the itemstack in a hasmap for the onclick Bukkit event.
-	 *
-	 * @param slot       Slot where the item have to be added
-	 * @param material   Material used for the itemstack
-	 * @param permission Permission on which the item is based
-	 */
-	private void createPermissionItem(int slot, Material material, Permission permission) {
-		ItemStack item = new ItemStack(material);
+    @Override
+    public void onClose(Player player) {
+        // Save all permissions on the disk
+        SuperJukebox.getInstance().getInstance(JukeboxesManager.class).saveJukeboxPermissionsOnDisk(this.jukebox);
+    }
 
-		// Update the item just created with all needed information
-		this.updateItemMeta(item, permission);
+    /**
+     * Creates an itemstack for a particular SuperJukebox permission.
+     * This stores also the itemstack in a hasmap for the onclick Bukkit event.
+     *
+     * @param slot       Slot where the item have to be added
+     * @param material   Material used for the itemstack
+     * @param permission Permission on which the item is based
+     */
+    private void createPermissionItem(int slot, Material material, Permission permission) {
+        ItemStack item = new ItemStack(material);
 
-		// Add the item to the inventory and to memory
-		this.setItem(slot, item);
-		this.permissionItems.put(permission, item);
-	}
+        // Update the item just created with all needed information
+        this.updateItemMeta(item, permission);
 
-	/**
-	 * Update an itemstack with informations about a permission
-	 *
-	 * @param itemStack  The itemstack which have to be updated
-	 * @param permission The permission used to do the update
-	 */
-	private void updateItemMeta(ItemStack itemStack, Permission permission) {
-		ItemMeta itemMeta = itemStack.getItemMeta();
+        // Add the item to the inventory and to memory
+        this.setItem(slot, item);
+        this.permissionItems.put(permission, item);
+    }
 
-		itemMeta.setDisplayName(ChatColor.YELLOW + ChatColor.BOLD.toString() + "Permission " + ChatColor.GOLD + ChatColor.UNDERLINE + permission.getBukkitPermission().toUpperCase());
+    /**
+     * Update an itemstack with informations about a permission
+     *
+     * @param itemStack  The itemstack which have to be updated
+     * @param permission The permission used to do the update
+     */
+    private void updateItemMeta(ItemStack itemStack, Permission permission) {
+        ItemMeta itemMeta = itemStack.getItemMeta();
 
-		List<String> lore = new ArrayList<>();
-		lore.add("");
+        itemMeta.setDisplayName(ChatColor.YELLOW + ChatColor.BOLD.toString() + "Permission " + ChatColor.GOLD + ChatColor.UNDERLINE + permission.getBukkitPermission().toUpperCase());
 
-		lore.add(ChatColor.GRAY + "Current state:");
-		for (PermissionType permissionType : PermissionType.values()) {
-			if (permissionType.equals(permission.getType())) {
-				lore.add(ChatColor.GREEN + " - " + permissionType.name() + " ✔");
-			} else {
-				lore.add(ChatColor.DARK_GRAY + " - " + permissionType.name());
-			}
-		}
+        List<String> lore = new ArrayList<>();
+        lore.add("");
 
-		lore.add("");
-		lore.add(ChatColor.LIGHT_PURPLE + "Click to switch the state!");
+        lore.add(ChatColor.GRAY + "Current state:");
+        for (PermissionType permissionType : PermissionType.values()) {
+            if (permissionType.equals(permission.getType())) {
+                lore.add(ChatColor.GREEN + " - " + permissionType.name() + " ✔");
+            } else {
+                lore.add(ChatColor.DARK_GRAY + " - " + permissionType.name());
+            }
+        }
 
-		itemMeta.setLore(lore);
-		itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_POTION_EFFECTS);
-		itemStack.setItemMeta(itemMeta);
-	}
+        lore.add("");
+        lore.add(ChatColor.LIGHT_PURPLE + "Click to switch the state!");
+
+        itemMeta.setLore(lore);
+        itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_POTION_EFFECTS);
+        itemStack.setItemMeta(itemMeta);
+    }
 
 }

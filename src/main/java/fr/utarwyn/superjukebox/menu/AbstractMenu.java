@@ -1,5 +1,7 @@
 package fr.utarwyn.superjukebox.menu;
 
+import fr.utarwyn.superjukebox.util.MaterialHelper;
+import fr.utarwyn.superjukebox.util.ServerVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -22,285 +24,287 @@ import java.util.Map;
  * Events onClick and onClose are supported.
  *
  * @author Utarwyn
- * @since 1.0.0
+ * @since 0.1.0
  */
 public abstract class AbstractMenu implements InventoryHolder {
 
-	/**
-	 * The separator item used for many menus
-	 */
-	public static final ItemStack SEPARATOR = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 1, (byte) 15);
+    /**
+     * The separator item used for many menus
+     */
+    public static final ItemStack SEPARATOR;
 
-	/**
-	 * The item used to create a way to go to a parent menu
-	 */
-	public static final ItemStack BACK_ITEM = new ItemStack(Material.ARROW);
+    /**
+     * The item used to create a way to go to a parent menu
+     */
+    public static final ItemStack BACK_ITEM = new ItemStack(Material.ARROW);
 
-	/**
-	 * The number of rows of the menu
-	 */
-	private int rows;
+    static {
+        if (ServerVersion.isNewerThan(ServerVersion.V1_12)) {
+            SEPARATOR = new ItemStack(MaterialHelper.findMaterial("BLACK_STAINED_GLASS_PANE"));
+        } else {
+            SEPARATOR = new ItemStack(MaterialHelper.findMaterial("STAINED_GLASS_PANE"), 1, (byte) 15);
+        }
 
-	/**
-	 * The title of the menu
-	 */
-	private String title;
+        // Prepare the separator item
+        ItemMeta separatorMeta = SEPARATOR.getItemMeta();
+        separatorMeta.setDisplayName(ChatColor.BLACK + "");
+        SEPARATOR.setItemMeta(separatorMeta);
 
-	/**
-	 * All items in the menu
-	 */
-	Map<Integer, ItemStack> items;
+        // Prepare the back item
+        ItemMeta backMeta = BACK_ITEM.getItemMeta();
+        backMeta.setDisplayName(ChatColor.RED + "≪ Back");
+        BACK_ITEM.setItemMeta(backMeta);
+    }
 
-	/**
-	 * The generated inventory
-	 */
-	private Inventory inventory;
+    /**
+     * All items in the menu
+     */
+    Map<Integer, ItemStack> items;
+    /**
+     * The number of rows of the menu
+     */
+    private int rows;
+    /**
+     * The title of the menu
+     */
+    private String title;
+    /**
+     * The generated inventory
+     */
+    private Inventory inventory;
+    /**
+     * True if the size has to be dynamically calculated before the creation of the menu
+     */
+    private boolean dynamicSize;
+    /**
+     * Stores the parent menu of the menu
+     */
+    private AbstractMenu parentMenu;
 
-	/**
-	 * True if the size has to be dynamically calculated before the creation of the menu
-	 */
-	private boolean dynamicSize;
+    /**
+     * Construct a menu with a number of rows and a title
+     *
+     * @param rows  Number of rows of the container
+     * @param title Title of the container
+     */
+    public AbstractMenu(int rows, String title) {
+        this.rows = rows;
+        this.title = title;
+        this.items = new HashMap<>();
 
-	/**
-	 * Stores the parent menu of the menu
-	 */
-	private AbstractMenu parentMenu;
+        if (this.title.length() > 32)
+            this.title = this.title.substring(0, 32);
 
-	/**
-	 * Construct a menu with a number of rows and a title
-	 *
-	 * @param rows  Number of rows of the container
-	 * @param title Title of the container
-	 */
-	public AbstractMenu(int rows, String title) {
-		this.rows = rows;
-		this.title = title;
-		this.items = new HashMap<>();
+        Menus.registerMenu(this);
+    }
 
-		if (this.title.length() > 32)
-			this.title = this.title.substring(0, 32);
+    /**
+     * Construct a menu with a title
+     *
+     * @param title Title of the container
+     */
+    public AbstractMenu(String title) {
+        this(-1, title);
+        this.dynamicSize = true;
+    }
 
-		Menus.registerMenu(this);
-	}
+    /**
+     * Returns the number of filled slots in the container
+     *
+     * @return Number of fileld slots
+     */
+    public int getFilledSlotsNb() {
+        Map<Integer, ItemStack> copy = new HashMap<>(this.items);
 
-	/**
-	 * Construct a menu with a title
-	 *
-	 * @param title Title of the container
-	 */
-	public AbstractMenu(String title) {
-		this(-1, title);
-		this.dynamicSize = true;
-	}
+        copy.entrySet().removeIf(entry -> entry.getValue() == null);
+        return copy.size();
+    }
 
-	static {
-		// Prepare the separator item
-		ItemMeta separatorMeta = SEPARATOR.getItemMeta();
-		separatorMeta.setDisplayName(ChatColor.BLACK + "");
-		SEPARATOR.setItemMeta(separatorMeta);
+    /**
+     * Gets the parent menu of this one
+     *
+     * @return The parent menu
+     */
+    AbstractMenu getParentMenu() {
+        return this.parentMenu;
+    }
 
-		// Prepare the back item
-		ItemMeta backMeta = BACK_ITEM.getItemMeta();
-		backMeta.setDisplayName(ChatColor.RED + "≪ Back");
-		BACK_ITEM.setItemMeta(backMeta);
-	}
+    /**
+     * Set a parent menu of this one
+     *
+     * @param parentMenu The parent menu
+     */
+    protected void setParentMenu(AbstractMenu parentMenu) {
+        this.parentMenu = parentMenu;
+    }
 
-	/**
-	 * Returns the number of filled slots in the container
-	 *
-	 * @return Number of fileld slots
-	 */
-	public int getFilledSlotsNb() {
-		Map<Integer, ItemStack> copy = new HashMap<>(this.items);
+    /**
+     * Open the container to a specific player
+     *
+     * @param player Player that will receive the container
+     */
+    public void open(Player player) {
+        player.openInventory(this.getInventory());
+    }
 
-		copy.entrySet().removeIf((entry) -> entry.getValue() == null);
-		return copy.size();
-	}
+    /**
+     * Set an item in a specific position in the container
+     *
+     * @param position The position where the item will be setted
+     * @param item     The item to set
+     */
+    protected void setItem(int position, ItemStack item) {
+        if (!this.items.containsKey(position))
+            this.items.put(position, item);
+    }
 
-	/**
-	 * Gets the parent menu of this one
-	 *
-	 * @return The parent menu
-	 */
-	AbstractMenu getParentMenu() {
-		return this.parentMenu;
-	}
+    /**
+     * Set the number of rows of the container
+     *
+     * @param rows Number of rows
+     */
+    protected void setRows(int rows) {
+        this.rows = rows;
 
-	/**
-	 * Open the container to a specific player
-	 *
-	 * @param player Player that will receive the container
-	 */
-	public void open(Player player) {
-		player.openInventory(this.getInventory());
-	}
+        if (this.inventory != null && this.inventory.getViewers().isEmpty())
+            this.inventory = null;
+    }
 
-	/**
-	 * Set an item in a specific position in the container
-	 *
-	 * @param position The position where the item will be setted
-	 * @param item     The item to set
-	 */
-	protected void setItem(int position, ItemStack item) {
-		if (!this.items.containsKey(position))
-			this.items.put(position, item);
-	}
+    /**
+     * Returns an item at a given position in the container
+     *
+     * @param position Position where to search for an item
+     * @return The item found at the position
+     */
+    protected ItemStack getItemAt(int position) {
+        return this.items.get(position);
+    }
 
-	/**
-	 * Set a parent menu of this one
-	 *
-	 * @param parentMenu The parent menu
-	 */
-	protected void setParentMenu(AbstractMenu parentMenu) {
-		this.parentMenu = parentMenu;
-	}
+    /**
+     * Remove an item at a given position
+     *
+     * @param position The position where to remove the item
+     */
+    protected void removeItemAt(int position) {
+        this.items.remove(position);
+    }
 
-	/**
-	 * Set the number of rows of the container
-	 *
-	 * @param rows Number of rows
-	 */
-	protected void setRows(int rows) {
-		this.rows = rows;
+    /**
+     * Clear all items of the menu
+     */
+    protected void clear() {
+        this.items.clear();
+    }
 
-		if (this.inventory != null && this.inventory.getViewers().size() == 0)
-			this.inventory = null;
-	}
+    /**
+     * Displays the parent menu to a player
+     *
+     * @param player Player who wants to see the parent menu
+     */
+    protected void goToParentMenu(Player player) {
+        if (this.parentMenu != null) {
+            this.parentMenu.prepare();
+            this.parentMenu.open(player);
+        }
+    }
 
-	/**
-	 * Returns an item at a given position in the container
-	 *
-	 * @param position Position where to search for an item
-	 * @return The item found at the position
-	 */
-	protected ItemStack getItemAt(int position) {
-		return this.items.get(position);
-	}
+    /**
+     * Returns all the viewers of the container. Uses the method {@link Inventory#getViewers()}.
+     *
+     * @return The list of viewers of the container
+     */
+    public List<HumanEntity> getViewers() {
+        return this.inventory == null ? new ArrayList<>() : this.inventory.getViewers();
+    }
 
-	/**
-	 * Remove an item at a given position
-	 *
-	 * @param position The position where to remove the item
-	 */
-	protected void removeItemAt(int position) {
-		this.items.remove(position);
-	}
+    /**
+     * Update all items in the container with items stored in the menu.
+     * (Not the same object, so the container has to be updated sometimes and vice versa)
+     */
+    void updateItems() {
+        // Update item list with items in the inventory
+        for (int i = 0; i < this.inventory.getSize(); i++) {
+            ItemStack itemStack = this.inventory.getItem(i);
 
-	/**
-	 * Clear all items of the menu
-	 */
-	protected void clear() {
-		this.items.clear();
-	}
+            if (itemStack != null)
+                this.items.put(i, itemStack);
+            else
+                this.items.remove(i);
+        }
+    }
 
-	/**
-	 * Displays the parent menu to a player
-	 * @param player Player who wants to see the parent menu
-	 */
-	protected void goToParentMenu(Player player) {
-		if (this.parentMenu != null) {
-			this.parentMenu.prepare();
-			this.parentMenu.open(player);
-		}
-	}
+    /**
+     * Update all items in the inventory with items in memory.
+     */
+    protected void updateInventory() {
+        if (this.inventory == null) return;
 
-	/**
-	 * Returns all the viewers of the container. Uses the method {@link Inventory#getViewers()}.
-	 *
-	 * @return The list of viewers of the container
-	 */
-	public List<HumanEntity> getViewers() {
-		return this.inventory == null ? new ArrayList<>() : this.inventory.getViewers();
-	}
+        for (int i = 0; i < this.inventory.getSize(); i++) {
+            ItemStack itemStack = this.items.getOrDefault(i, null);
+            this.inventory.setItem(i, itemStack);
+        }
+    }
 
-	/**
-	 * Update all items in the container with items stored in the menu.
-	 * (Not the same object, so the container has to be updated sometimes and vice versa)
-	 */
-	void updateItems() {
-		// Update item list with items in the inventory
-		for (int i = 0; i < this.inventory.getSize(); i++) {
-			ItemStack itemStack = this.inventory.getItem(i);
+    /**
+     * Returns the generated inventory with items stored before
+     *
+     * @return The generated inventory
+     */
+    @Override
+    public Inventory getInventory() {
+        if (this.inventory == null) {
+            int size = this.getSize();
 
-			if (itemStack != null)
-				this.items.put(i, itemStack);
-			else
-				this.items.remove(i);
-		}
-	}
+            if (this.dynamicSize) {
+                int maxPos = 0;
 
-	/**
-	 * Update all items in the inventory with items in memory.
-	 */
-	protected void updateInventory() {
-		if (this.inventory == null) return;
+                for (Integer n : this.items.keySet())
+                    if (n > maxPos)
+                        maxPos = n;
 
-		for (int i = 0; i < this.inventory.getSize(); i++) {
-			ItemStack itemStack = this.items.getOrDefault(i, null);
-			this.inventory.setItem(i, itemStack);
-		}
-	}
+                size = ((int) Math.ceil((maxPos + 1) / 9.0D)) * 9;
 
-	/**
-	 * Returns the generated inventory with items stored before
-	 *
-	 * @return The generated inventory
-	 */
-	@Override
-	public Inventory getInventory() {
-		if (this.inventory == null) {
-			int size = this.getSize();
+                if (size < 1) size = 1;
+                if (size > 54) size = 54;
+            }
 
-			if (this.dynamicSize) {
-				int maxPos = 0;
+            this.inventory = Bukkit.createInventory(this, size, this.title);
+        }
 
-				for (Integer n : this.items.keySet())
-					if (n > maxPos)
-						maxPos = n;
+        // Update the inventory each time a player would like to display it
+        // (with items stored in the memory)
+        this.updateInventory();
+        return this.inventory;
+    }
 
-				size = ((int) Math.ceil((maxPos + 1) / 9.0D)) * 9;
+    /**
+     * Returns the size of the container (mesured in slots)
+     *
+     * @return Size of the chest's container
+     */
+    private int getSize() {
+        return this.rows * 9;
+    }
 
-				if (size < 1) size = 1;
-				if (size > 54) size = 54;
-			}
+    /**
+     * Called after the initialization of the menu
+     * and before the creation of the inventory.
+     * (This method is mainly used to set all items in the container)
+     */
+    public abstract void prepare();
 
-			this.inventory = Bukkit.createInventory(this, size, this.title);
-		}
+    /**
+     * Called when a player click on an item in the menu
+     *
+     * @param event Event object used to retreive all needed information about the click
+     */
+    public abstract void onClick(InventoryClickEvent event);
 
-		// Update the inventory each time a player would like to display it
-		// (with items stored in the memory)
-		this.updateInventory();
-		return this.inventory;
-	}
-
-	/**
-	 * Returns the size of the container (mesured in slots)
-	 *
-	 * @return Size of the chest's container
-	 */
-	private int getSize() {
-		return this.rows * 9;
-	}
-
-	/**
-	 * Called after the initialization of the menu
-	 * and before the creation of the inventory.
-	 * (This method is mainly used to set all items in the container)
-	 */
-	public abstract void prepare();
-
-	/**
-	 * Called when a player click on an item in the menu
-	 *
-	 * @param event Event object used to retreive all needed information about the click
-	 */
-	public abstract void onClick(InventoryClickEvent event);
-
-	/**
-	 * Called when a player closes the menu
-	 *
-	 * @param player The player who closes the menu
-	 */
-	public abstract void onClose(Player player);
+    /**
+     * Called when a player closes the menu
+     *
+     * @param player The player who closes the menu
+     */
+    public abstract void onClose(Player player);
 
 }

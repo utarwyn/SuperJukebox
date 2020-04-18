@@ -12,58 +12,60 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.logging.Level;
 
 public class Updater extends AbstractManager {
 
-	private static final int PROJECT_ID = 62293;
+    private static final int PROJECT_ID = 62293;
 
-	private static final String PROJECT_URL = "https://www.spigotmc.org/resources/" + PROJECT_ID;
+    private static final String PROJECT_URL = "https://www.spigotmc.org/resources/" + PROJECT_ID;
 
-	private URL checkURL;
-	private String currentVersion;
+    private URL checkURL;
 
-	public Updater() {
-		super(SuperJukebox.getInstance());
-	}
+    private String currentVersion;
 
-	@Override
-	public void initialize() {
-		this.currentVersion = this.plugin.getDescription().getVersion();
+    public Updater() {
+        super(SuperJukebox.getInstance());
+    }
 
-		try {
-			this.checkURL = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + PROJECT_ID);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void initialize() {
+        this.currentVersion = this.plugin.getDescription().getVersion();
 
-	@Override
-	protected void unload() {
-		// Updater do nothing at the disabling of the plugin
-	}
+        try {
+            this.checkURL = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + PROJECT_ID);
+        } catch (MalformedURLException e) {
+            Log.log(Level.SEVERE, "Cannot generate the url to check for updates", e);
+        }
+    }
 
-	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent event) {
-		Player player = event.getPlayer();
+    @Override
+    protected void unload() {
+        // Updater do nothing at the disabling of the plugin
+    }
 
-		if (JUtil.playerHasPerm(player, "update")) {
-			JUtil.runSync(() -> {
-				try {
-					if (this.isNotUpToDate()) {
-						player.sendMessage(Messages.PREFIX + "It looks like you don't have the latest version of the plugin. §8(§a"+ currentVersion +"§8)");
-						player.sendMessage(Messages.PREFIX + "Please download it at: §6" + PROJECT_URL);
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			});
-		}
-	}
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
 
-	private boolean isNotUpToDate() throws IOException {
-		URLConnection con = checkURL.openConnection();
-		this.currentVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
-		return !plugin.getDescription().getVersion().equals(currentVersion);
-	}
+        if (JUtil.playerHasPerm(player, "update")) {
+            JUtil.runSync(() -> {
+                try {
+                    if (this.isNotUpToDate()) {
+                        JUtil.sendMessage(player, "It looks like you don't have the latest version of the plugin. §8(§a" + currentVersion + "§8)");
+                        JUtil.sendMessage(player, "Please download it at: §6" + PROJECT_URL);
+                    }
+                } catch (IOException e) {
+                    Log.log(Level.WARNING, "Cannot search for updates", e);
+                }
+            });
+        }
+    }
+
+    private boolean isNotUpToDate() throws IOException {
+        URLConnection con = checkURL.openConnection();
+        this.currentVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
+        return !plugin.getDescription().getVersion().equals(currentVersion);
+    }
 
 }

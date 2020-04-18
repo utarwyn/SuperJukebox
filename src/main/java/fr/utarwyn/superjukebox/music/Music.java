@@ -1,6 +1,7 @@
 package fr.utarwyn.superjukebox.music;
 
 import fr.utarwyn.superjukebox.music.model.Layer;
+import fr.utarwyn.superjukebox.util.MaterialHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
@@ -15,7 +16,7 @@ import java.util.List;
  * Represents a music which can be played by a MusicPlayer object.
  *
  * @author Utarwyn
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Music {
 
@@ -50,6 +51,20 @@ public class Music {
         this.layers = new ArrayList<>();
 
         this.setIconWithMaterialId("RECORD_10");
+
+        // Initialize fields that can be empty
+        if (this.name.isEmpty()) {
+            this.name = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No name";
+        }
+        if (this.author.isEmpty()) {
+            this.author = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No author";
+        }
+        if (this.originalAuthor.isEmpty()) {
+            this.originalAuthor = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No original author";
+        }
+        if (this.description.isEmpty()) {
+            this.description = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No description";
+        }
     }
 
     public List<Layer> getLayers() {

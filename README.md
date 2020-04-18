@@ -3,12 +3,12 @@
 <h4 align="center">
 Play custom musics from jukeboxes. We all love music, right?
 <br>
-Works with Bukkit/Spigot 1.8 to 1.12! (under development)
+Works with Bukkit/Spigot 1.8 to 1.15! (under development)
 </h4>
 
 <p align="center">
-    <a href="https://travis-ci.org/utarwyn/SuperJukebox">
-        <img src="https://img.shields.io/travis/utarwyn/SuperJukebox.svg" alt="Travis">
+    <a href="https://travis-ci.com/utarwyn/SuperJukebox">
+        <img src="https://img.shields.io/travis/com/utarwyn/SuperJukebox.svg" alt="Travis">
     </a>
     <a href="https://sonarcloud.io/dashboard?id=fr.utarwyn%3ASuperJukebox">
         <img src="https://sonarcloud.io/api/project_badges/measure?project=fr.utarwyn%3ASuperJukebox&metric=alert_status" alt="SonarQube Quality gate">
@@ -41,7 +41,7 @@ Works with Bukkit/Spigot 1.8 to 1.12! (under development)
  - Can display particles/holograms
  - Permissions **for each jukebox**!
  - Configure **jukebox's sound distance**!
- - Support for **1.12+** sounds!
+ - Support for **1.14+** sounds!
  - Console commands support
  - Full titles, messages, GUI texts customization
  - Very fun for all type of servers!
@@ -69,7 +69,7 @@ Works with Bukkit/Spigot 1.8 to 1.12! (under development)
 
 ## Support
  
- <a href="https://www.buymeacoff.ee/utarwyn" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/purple_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a> \
+ <a href="https://www.paypal.me/utarwyn" target="_blank"><img src="https://i.imgur.com/ADDI2kk.png" height="50" alt="Paypal button"/></a> \
 **Thank you for your support!** :heart_eyes:
 
 ## License

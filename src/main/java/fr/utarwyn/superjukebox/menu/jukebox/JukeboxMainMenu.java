@@ -5,6 +5,7 @@ import fr.utarwyn.superjukebox.menu.AbstractMenu;
 import fr.utarwyn.superjukebox.menu.MusicDiscsMenu;
 import fr.utarwyn.superjukebox.music.Music;
 import fr.utarwyn.superjukebox.util.JUtil;
+import fr.utarwyn.superjukebox.util.MaterialHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -22,7 +23,7 @@ import java.util.List;
  * The main menu of a SuperJukebox!
  *
  * @author Utarwyn
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class JukeboxMainMenu extends MusicDiscsMenu {
 
@@ -49,6 +50,25 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
         this.prepare();
     }
 
+    private static void updateEditingModeItem(ItemMeta meta, JukeboxMenuEditingMode currentEditingMode) {
+        List<String> lore = new ArrayList<>(Arrays.asList(
+                "",
+                ChatColor.GRAY + "Click to choose the editing mode",
+                ChatColor.GRAY + "you want for this menu!",
+                ""
+        ));
+
+        for (JukeboxMenuEditingMode editingMode : JukeboxMenuEditingMode.values()) {
+            if (editingMode == currentEditingMode) {
+                lore.add(ChatColor.GREEN + " - " + editingMode.getTitle() + " ✔");
+            } else {
+                lore.add(ChatColor.DARK_RED + " - " + editingMode.getTitle());
+            }
+        }
+
+        meta.setLore(lore);
+    }
+
     @Override
     public void prepare() {
         // Reprepare all discs items
@@ -56,7 +76,7 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
 
         // Settings items
         if (this.jukebox.getSettings().getEditSettingsPerm().has(this.player)) {
-            this.settingItem = new ItemStack(Material.COMMAND);
+            this.settingItem = new ItemStack(MaterialHelper.findMaterial("COMMAND", "COMMAND_BLOCK"));
             ItemMeta settingMeta = this.settingItem.getItemMeta();
 
             settingMeta.setDisplayName(ChatColor.YELLOW + "Jukebox's settings");
@@ -72,9 +92,10 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
             // Music adding item
             this.musicAddItem = new ItemStack(Material.DIAMOND);
             ItemMeta musicsMeta = this.musicAddItem.getItemMeta();
+            boolean globalMusics = this.jukebox.getSettings().getUseGlobalMusics().getValue();
 
             musicsMeta.setDisplayName(ChatColor.GOLD + "Adding musics");
-            if (this.jukebox.getSettings().getUseGlobalMusics().getValue()) {
+            if (globalMusics) {
                 musicsMeta.setLore(Arrays.asList(
                         "§cYou can't add music to this jukebox", "§cbecause §lthey are managed globally§c.",
                         "§dYou can allow custom musics by changing the", "§doption in the settings menu of this jukbox."
@@ -94,7 +115,7 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
             ItemMeta musicEditingMeta = musicEditingModeItem.getItemMeta();
 
             musicEditingMeta.setDisplayName(ChatColor.GOLD + "Menu editing mode");
-            if (this.jukebox.getSettings().getUseGlobalMusics().getValue()) {
+            if (globalMusics) {
                 musicEditingMeta.setLore(Arrays.asList(
                         "§cYou can't edit musics of this jukebox", "§cbecause §lthey are managed globally§c.",
                         "§dYou can allow custom musics by changing the", "§doption in the settings menu of this jukbox."
@@ -147,7 +168,8 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
         }
 
         // Music add menu item
-        if (this.musicAddItem != null && event.getCurrentItem().equals(this.musicAddItem) && !this.jukebox.getSettings().getUseGlobalMusics().getValue()) {
+        boolean globalMusics = this.jukebox.getSettings().getUseGlobalMusics().getValue();
+        if (this.musicAddItem != null && this.musicAddItem.equals(event.getCurrentItem()) && !globalMusics) {
             // Open the menu in another Thread
             JUtil.runSync(() -> {
                 if (this.musicAddMenu == null) {
@@ -158,7 +180,8 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
                 this.musicAddMenu.open(this.player);
             });
         }
-        if (this.musicStopItem != null && event.getCurrentItem().equals(this.musicStopItem)) {
+        
+        if (this.musicStopItem != null && this.musicStopItem.equals(event.getCurrentItem())) {
             this.jukebox.getPlayer().pause();
 
             this.clear();
@@ -180,25 +203,6 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
     @Override
     public void onClose(Player player) {
         // Not implemented
-    }
-
-    private static void updateEditingModeItem(ItemMeta meta, JukeboxMenuEditingMode currentEditingMode) {
-        List<String> lore = new ArrayList<>(Arrays.asList(
-                "",
-                ChatColor.GRAY + "Click to choose the editing mode",
-                ChatColor.GRAY + "you want for this menu!",
-                ""
-        ));
-
-        for (JukeboxMenuEditingMode editingMode : JukeboxMenuEditingMode.values()) {
-            if (editingMode == currentEditingMode) {
-                lore.add(ChatColor.GREEN + " - " + editingMode.getTitle() + " ✔");
-            } else {
-                lore.add(ChatColor.DARK_RED + " - " + editingMode.getTitle());
-            }
-        }
-
-        meta.setLore(lore);
     }
 
 }
