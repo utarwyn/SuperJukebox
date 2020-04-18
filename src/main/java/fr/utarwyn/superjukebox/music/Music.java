@@ -50,21 +50,7 @@ public class Music {
         this.description = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No description";
         this.layers = new ArrayList<>();
 
-        this.setIconWithMaterialId("RECORD_10");
-
-        // Initialize fields that can be empty
-        if (this.name.isEmpty()) {
-            this.name = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No name";
-        }
-        if (this.author.isEmpty()) {
-            this.author = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No author";
-        }
-        if (this.originalAuthor.isEmpty()) {
-            this.originalAuthor = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No original author";
-        }
-        if (this.description.isEmpty()) {
-            this.description = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No description";
-        }
+        this.setIconWithMaterial(MaterialHelper.findMaterial("RECORD_10", "MUSIC_DISC_13"));
     }
 
     public List<Layer> getLayers() {
@@ -163,8 +149,8 @@ public class Music {
         this.delay = delay;
     }
 
-    void setIconWithMaterialId(String material) {
-        this.icon = new ItemStack(Material.valueOf(material));
+    void setIconWithMaterial(Material material) {
+        this.icon = new ItemStack(material);
         this.updateIconMetadatas();
     }
 
