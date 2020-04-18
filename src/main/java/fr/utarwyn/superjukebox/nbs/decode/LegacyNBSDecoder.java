@@ -11,13 +11,17 @@ import static fr.utarwyn.superjukebox.nbs.InputStreamUtil.*;
 
 /**
  * Decode NBS files with the legacy format.
- * All explanations about the format here: https://www.stuffbydavid.com/mcnbs/format
+ * All explanations about the format here:
+ * https://www.stuffbydavid.com/mcnbs/format
  *
- * @author Utarwyn
+ * @author Utarwyn <maxime.malgorn@laposte.net>
  * @since 1.2.0
  */
 public class LegacyNBSDecoder implements NBSDecoder {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void decodeHeader(Music music, DataInputStream dis) throws NBSDecodeException {
         try {
@@ -41,10 +45,13 @@ public class LegacyNBSDecoder implements NBSDecoder {
             readString(dis); // midi/schematic file name
         } catch (IOException e) {
             // Argh! An error in the format of the file maybe?
-            throw new NBSDecodeException(music.getFilename(), "Cannot read NBS description!", e);
+            throw new NBSDecodeException(music.getFilename(), "Cannot read NBS headers", e);
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void decodeNoteblocks(Music music, DataInputStream dis) throws NBSDecodeException {
         short tick = -1;
@@ -52,29 +59,38 @@ public class LegacyNBSDecoder implements NBSDecoder {
         try {
             while (true) {
                 // Read all layers of the song
-                short jumpsT = readShort(dis);
-                if (jumpsT == 0) break;
+                short jumpsNextTick = readShort(dis);
+                if (jumpsNextTick == 0) break;
 
-                tick += jumpsT;
+                tick += jumpsNextTick;
 
                 short layer = -1;
                 while (true) {
-                    // Read all notes for this layer
-                    short jumpsL = readShort(dis);
-                    if (jumpsL == 0) break;
-                    layer += jumpsL;
+                    // Read the number of jumps to the next layer
+                    short jumpsNextLayer = readShort(dis);
+                    if (jumpsNextLayer == 0) break;
+                    layer += jumpsNextLayer;
 
-                    // Read the instrument and the note pitch!
-                    byte instrument = dis.readByte();
-                    byte note = dis.readByte();
-
-                    music.getLayerOrDefault(layer).addNote(tick, new Note(instrument, note));
+                    // Read the current note
+                    Note note = this.decodeNote(dis);
+                    music.getLayerOrDefault(layer).addNote(tick, note);
                 }
             }
         } catch (IOException e) {
             // Argh! Cannot read layers and notes... Failure.
             throw new NBSDecodeException(music.getFilename(), "Cannot read NBS music notes!", e);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Note decodeNote(DataInputStream dis) throws IOException {
+        byte instrument = dis.readByte();
+        byte note = dis.readByte();
+
+        return new Note(instrument, note);
     }
 
 }

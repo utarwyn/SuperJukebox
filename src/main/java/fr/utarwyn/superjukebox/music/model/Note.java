@@ -14,7 +14,7 @@ public class Note {
 
 	public Note(byte instrumentKey, byte pitch) {
 		this.instrument = Instrument.get(instrumentKey);
-		this.pitch = NotePitch.get(pitch - 33);
+		this.pitch = NotePitch.get(Math.max(0, pitch - 33));
 	}
 
 	public Instrument getInstrument() {

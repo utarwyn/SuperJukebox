@@ -32,8 +32,8 @@ public class NBSFileReader {
      * Create a new reader for NBS files.
      */
     public NBSFileReader() {
-        this.openReader = new OpenNBSDecoder();
         this.legacyReader = new LegacyNBSDecoder();
+        this.openReader = new OpenNBSDecoder(this.legacyReader);
     }
 
     /**
