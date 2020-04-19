@@ -10,11 +10,11 @@ import java.io.*;
 import static fr.utarwyn.superjukebox.nbs.InputStreamUtil.readShort;
 
 /**
- * This object reads a given NBS file and
+ * Reads a given NBS file and
  * choose the right object to decode it.
  *
- * @author Utarwyn
- * @since 1.0.0
+ * @author Utarwyn <maxime.malgorn@laposte.net>
+ * @since 0.3.0
  */
 public class NBSFileReader {
 

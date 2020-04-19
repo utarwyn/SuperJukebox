@@ -1,5 +1,5 @@
 name: SuperJukebox
 authors: [Utarwyn, TCOOfficiall]
-version: 0.2.0
+version: 0.3.0
 main: fr.utarwyn.superjukebox.SuperJukebox
 api-version: "1.13"

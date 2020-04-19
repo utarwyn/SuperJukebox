@@ -13,7 +13,7 @@ import java.io.IOException;
  * and info about it (name, length, tempo).
  *
  * @author Utarwyn <maxime.malgorn@laposte.net>
- * @since 1.2.0
+ * @since 0.3.0
  */
 public interface NBSDecoder {
 

@@ -15,7 +15,7 @@ import static fr.utarwyn.superjukebox.nbs.InputStreamUtil.*;
  * https://hielkeminecraft.github.io/OpenNoteBlockStudio/nbs
  *
  * @author Utarwyn <maxime.malgorn@laposte.net>
- * @since 1.2.0
+ * @since 0.3.0
  */
 public class OpenNBSDecoder implements NBSDecoder {
 

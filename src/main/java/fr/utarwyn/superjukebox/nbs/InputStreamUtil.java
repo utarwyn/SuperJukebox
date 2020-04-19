@@ -3,6 +3,13 @@ package fr.utarwyn.superjukebox.nbs;
 import java.io.DataInputStream;
 import java.io.IOException;
 
+/**
+ * Give access to some utility methods
+ * to manage input streams when decoding NBS files.
+ *
+ * @author Utarwyn <maxime.malgorn@laposte.net>
+ * @since 0.3.0
+ */
 public class InputStreamUtil {
 
     private InputStreamUtil() {
