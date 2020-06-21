@@ -2,18 +2,21 @@ package fr.utarwyn.superjukebox.jukebox;
 
 import fr.utarwyn.superjukebox.AbstractManager;
 import fr.utarwyn.superjukebox.SuperJukebox;
+import fr.utarwyn.superjukebox.jukebox.config.ConfigurationLocationAdapter;
+import fr.utarwyn.superjukebox.jukebox.config.JukeboxConfigurationException;
 import fr.utarwyn.superjukebox.menu.Menus;
 import fr.utarwyn.superjukebox.music.Music;
 import fr.utarwyn.superjukebox.music.MusicManager;
 import fr.utarwyn.superjukebox.util.FlatFile;
-import fr.utarwyn.superjukebox.util.JUtil;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 /**
  * Manages all super jukeboxes of the server!
@@ -23,31 +26,40 @@ import java.util.List;
  */
 public class JukeboxesManager extends AbstractManager {
 
-    private FlatFile database;
+    private FlatFile storage;
 
     private List<Jukebox> jukeboxes;
 
     public JukeboxesManager() {
         super(SuperJukebox.getInstance());
-
         this.registerListener(new JukeboxListener(this));
     }
 
     @Override
     public void initialize() {
-        this.jukeboxes = new ArrayList<>();
+        if (this.storage == null) {
+            this.storage = new FlatFile("jukeboxes.yml");
+        }
 
-        if (this.database == null)
-            this.database = new FlatFile("jukeboxes.yml");
-
-        this.reloadDatabase();
+        this.jukeboxes = this.storage.getConfig().getKeys(false).stream()
+                .map(key -> {
+                    try {
+                        return this.createJukebox(this.storage.getConfig().getConfigurationSection(key));
+                    } catch (JukeboxConfigurationException e) {
+                        this.logger.log(Level.WARNING, String.format(
+                                "Error when loading %s", key), e);
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     @Override
     protected void unload() {
-        // Unload all jukeboxes
-        for (Jukebox jukebox : this.jukeboxes)
-            jukebox.unload();
+        // Unload all jukeboxes and clear storage
+        this.jukeboxes.forEach(Jukebox::unload);
+        this.jukeboxes.clear();
 
         // Close all menus
         Menus.closeAll();
@@ -64,7 +76,7 @@ public class JukeboxesManager extends AbstractManager {
         this.jukeboxes.add(jukebox);
 
         // Save all jukebox's settings on disk
-        this.database.getConfiguration().createSection("jukebox" + jukebox.getId());
+        this.storage.getConfig().createSection("jukebox" + jukebox.getId());
 
         this.saveJukeboxLocationOnDisk(jukebox);
         this.saveJukeboxSettingsOnDisk(jukebox);
@@ -80,8 +92,8 @@ public class JukeboxesManager extends AbstractManager {
         this.jukeboxes.remove(jukebox);
 
         // Remove the jukebox from the configuration
-        this.database.getConfiguration().set("jukebox" + jukebox.getId(), null);
-        this.database.save();
+        this.storage.getConfig().set("jukebox" + jukebox.getId(), null);
+        this.storage.save();
     }
 
     public Jukebox getJukeboxAt(Block block) {
@@ -99,8 +111,12 @@ public class JukeboxesManager extends AbstractManager {
             section.createSection("location");
         }
 
-        JUtil.saveLocationIntoConfig(section.getConfigurationSection("location"), jukebox.getBlock().getLocation());
-        this.database.save();
+        // Update jukebox location
+        ConfigurationLocationAdapter locationAdapter =
+                new ConfigurationLocationAdapter(jukebox.getBlock().getLocation());
+        locationAdapter.updateConfigurationSection(section.getConfigurationSection("location"));
+
+        this.storage.save();
     }
 
     public void saveJukeboxMusicsOnDisk(Jukebox jukebox) {
@@ -122,7 +138,7 @@ public class JukeboxesManager extends AbstractManager {
         }
 
         section.set("musics", musicIdList);
-        this.database.save();
+        this.storage.save();
     }
 
     public void saveJukeboxSettingsOnDisk(Jukebox jukebox) {
@@ -133,7 +149,7 @@ public class JukeboxesManager extends AbstractManager {
         }
 
         jukebox.getSettings().applySettingsToConfiguration(section.getConfigurationSection("settings"));
-        this.database.save();
+        this.storage.save();
     }
 
     public void saveJukeboxPermissionsOnDisk(Jukebox jukebox) {
@@ -144,45 +160,51 @@ public class JukeboxesManager extends AbstractManager {
         }
 
         jukebox.getSettings().applyPermissionsToConfiguration(section.getConfigurationSection("permissions"));
-        this.database.save();
+        this.storage.save();
     }
 
-    private void reloadDatabase() {
-        ConfigurationSection section;
-        YamlConfiguration conf = this.database.getConfiguration();
-
-        this.jukeboxes.clear();
-
-        for (String confKey : conf.getKeys(false)) {
-            // Not a good jukebox?
-            if (!confKey.contains("jukebox")) {
-                continue;
-            }
-
-            section = conf.getConfigurationSection(confKey);
-
-            int id = Integer.parseInt(confKey.replace("jukebox", ""));
-            Location loc = JUtil.getLocationFromConfig(section.getConfigurationSection("location"));
-            Jukebox jukebox = new Jukebox(id, loc.getBlock());
-
-            // Import settings into the jukebox settings object
-            jukebox.getSettings().loadFromConfiguration(
-                    section.getConfigurationSection("settings"),
-                    section.getConfigurationSection("permissions")
-            );
-
-            // Import custom musics into the jukebox object
-            if (section.isList("musics")) {
-                jukebox.loadMusicsFromConfiguration(section.getIntegerList("musics"));
-            }
-
-            // And put the jukebox into the memory list!
-            this.jukeboxes.add(jukebox);
+    private Jukebox createJukebox(ConfigurationSection config)
+            throws JukeboxConfigurationException {
+        // Check configuration section
+        if (config == null) {
+            throw new JukeboxConfigurationException("malformatted configuration section");
         }
+
+        // Check jukebox config section key
+        if (!config.getName().startsWith("jukebox")) {
+            throw new JukeboxConfigurationException("config section name must starts with 'jukebox'");
+        }
+
+        // Check jukebox location
+        ConfigurationLocationAdapter locationAdapter = new ConfigurationLocationAdapter(
+                config.getConfigurationSection("location")
+        );
+        Location location = locationAdapter.toLocation();
+
+        if (location == null) {
+            throw new JukeboxConfigurationException("bad location");
+        }
+
+        // Create the jukebox instance
+        int id = Integer.parseInt(config.getName().replace("jukebox", ""));
+        Jukebox jukebox = new Jukebox(id, location.getBlock());
+
+        // Import settings into the jukebox settings object
+        jukebox.getSettings().loadFromConfiguration(
+                config.getConfigurationSection("settings"),
+                config.getConfigurationSection("permissions")
+        );
+
+        // Import custom musics into the jukebox object
+        if (config.isList("musics")) {
+            jukebox.loadMusicsFromConfiguration(config.getIntegerList("musics"));
+        }
+
+        return jukebox;
     }
 
     private ConfigurationSection getJukeboxConfigSection(Jukebox jukebox) {
-        return this.database.getConfiguration().getConfigurationSection("jukebox" + jukebox.getId());
+        return this.storage.getConfig().getConfigurationSection("jukebox" + jukebox.getId());
     }
 
     private int getNewJukeboxId() {

@@ -39,7 +39,7 @@ public class FlatFile {
      *
      * @return Bukkit configuration object
      */
-    public YamlConfiguration getConfiguration() {
+    public YamlConfiguration getConfig() {
         return this.configuration;
     }
 

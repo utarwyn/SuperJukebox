@@ -43,7 +43,7 @@ public class MusicManager extends AbstractManager {
     private static final String MUSICS_FOLDER = "musics";
 
     private FlatFile database;
-    
+
     private NBSFileReader fileReader;
 
     private File musicsFolder;
@@ -179,7 +179,7 @@ public class MusicManager extends AbstractManager {
 
     private synchronized void reloadDatabase() {
         ConfigurationSection section;
-        YamlConfiguration conf = this.database.getConfiguration();
+        YamlConfiguration conf = this.database.getConfig();
 
         this.musics.clear();
 
@@ -226,7 +226,7 @@ public class MusicManager extends AbstractManager {
         String uniqueKey = ts + JUtil.RND.nextInt(1000);
 
         // Create the configuration
-        ConfigurationSection section = this.database.getConfiguration().createSection("music" + uniqueKey);
+        ConfigurationSection section = this.database.getConfig().createSection("music" + uniqueKey);
 
         section.set("id", this.getNewMusicId());
         section.set("file", file.getName());
@@ -245,8 +245,8 @@ public class MusicManager extends AbstractManager {
     }
 
     private synchronized boolean deleteMusicConfigurationSection(int musicId) {
-        for (String sectionName : this.database.getConfiguration().getKeys(false)) {
-            ConfigurationSection section = this.database.getConfiguration().getConfigurationSection(sectionName);
+        for (String sectionName : this.database.getConfig().getKeys(false)) {
+            ConfigurationSection section = this.database.getConfig().getConfigurationSection(sectionName);
 
             if (section.getInt("id") == musicId) {
                 section.getRoot().set(sectionName, null);
