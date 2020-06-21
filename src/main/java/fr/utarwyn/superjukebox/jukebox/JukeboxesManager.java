@@ -37,10 +37,7 @@ public class JukeboxesManager extends AbstractManager {
 
     @Override
     public void initialize() {
-        if (this.storage == null) {
-            this.storage = new FlatFile("jukeboxes.yml");
-        }
-
+        this.storage = new FlatFile("jukeboxes.yml");
         this.jukeboxes = this.storage.getConfig().getKeys(false).stream()
                 .map(key -> {
                     try {

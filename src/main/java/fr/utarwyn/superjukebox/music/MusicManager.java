@@ -42,7 +42,7 @@ public class MusicManager extends AbstractManager {
      */
     private static final String MUSICS_FOLDER = "musics";
 
-    private FlatFile database;
+    private FlatFile storage;
 
     private NBSFileReader fileReader;
 
@@ -58,10 +58,7 @@ public class MusicManager extends AbstractManager {
     public void initialize() {
         this.musics = new HashMap<>();
         this.fileReader = new NBSFileReader();
-
-        if (this.database == null) {
-            this.database = new FlatFile("musics.yml");
-        }
+        this.storage = new FlatFile("musics.yml");
 
         // Initialize the musics folder
         this.musicsFolder = new File(this.plugin.getDataFolder(), MUSICS_FOLDER);
@@ -179,7 +176,7 @@ public class MusicManager extends AbstractManager {
 
     private synchronized void reloadDatabase() {
         ConfigurationSection section;
-        YamlConfiguration conf = this.database.getConfig();
+        YamlConfiguration conf = this.storage.getConfig();
 
         this.musics.clear();
 
@@ -191,7 +188,7 @@ public class MusicManager extends AbstractManager {
         Log.log(this.musics.size() + " musics loaded from config!");
 
         // Save edited configuration! (when music doesn't exist)
-        this.database.save();
+        this.storage.save();
     }
 
     private boolean loadMusicFile(ConfigurationSection section) {
@@ -226,31 +223,31 @@ public class MusicManager extends AbstractManager {
         String uniqueKey = ts + JUtil.RND.nextInt(1000);
 
         // Create the configuration
-        ConfigurationSection section = this.database.getConfig().createSection("music" + uniqueKey);
+        ConfigurationSection section = this.storage.getConfig().createSection("music" + uniqueKey);
 
         section.set("id", this.getNewMusicId());
         section.set("file", file.getName());
         section.set("icon", this.getRandomMusicMaterialName());
 
-        this.database.save();
+        this.storage.save();
 
         // And load the new configuration section into memory!
         if (this.loadMusicFile(section)) {
             return true;
         } else {
             section.getRoot().set(section.getName(), null);
-            this.database.save();
+            this.storage.save();
             return false;
         }
     }
 
     private synchronized boolean deleteMusicConfigurationSection(int musicId) {
-        for (String sectionName : this.database.getConfig().getKeys(false)) {
-            ConfigurationSection section = this.database.getConfig().getConfigurationSection(sectionName);
+        for (String sectionName : this.storage.getConfig().getKeys(false)) {
+            ConfigurationSection section = this.storage.getConfig().getConfigurationSection(sectionName);
 
             if (section.getInt("id") == musicId) {
                 section.getRoot().set(sectionName, null);
-                this.database.save();
+                this.storage.save();
                 return true;
             }
         }

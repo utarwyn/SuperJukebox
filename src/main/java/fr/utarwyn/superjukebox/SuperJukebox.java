@@ -38,7 +38,8 @@ public class SuperJukebox extends JavaPlugin {
 
         // Load configuration file
         if (!Files.initConfiguration(this)) {
-            this.getLogger().log(Level.SEVERE, "Cannot load the plugin's configuration. Please check the above log. Plugin loading failed.");
+            this.getLogger().log(Level.SEVERE, "Cannot load the configuration. " +
+                    "Please check the above log. Plugin loading failed.");
             return;
         }
 
