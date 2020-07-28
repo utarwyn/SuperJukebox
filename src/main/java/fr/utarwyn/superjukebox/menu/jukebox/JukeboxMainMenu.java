@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class JukeboxMainMenu extends MusicDiscsMenu {
 
-    private Jukebox jukebox;
+    private final Jukebox jukebox;
 
     private ItemStack settingItem;
 
@@ -39,7 +39,7 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
 
     private AbstractMenu musicAddMenu;
 
-    private JukeboxMenuEditingMode editingMode;
+    private final JukeboxMenuEditingMode editingMode;
 
     public JukeboxMainMenu(Jukebox jukebox, Player player) {
         super("§6SuperJukebox §7main menu", player);
@@ -180,7 +180,7 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
                 this.musicAddMenu.open(this.player);
             });
         }
-        
+
         if (this.musicStopItem != null && this.musicStopItem.equals(event.getCurrentItem())) {
             this.jukebox.getPlayer().pause();
 

@@ -7,6 +7,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.UUID;
 import java.util.logging.Level;
 
 /**
@@ -132,7 +133,12 @@ public class ActionBarUtil {
                 }
             }
             Object o = c2.getConstructor(String.class).newInstance(message);
-            ppoc = c4.getConstructor(c3, chatMessageTypeClass).newInstance(o, chatMessageType);
+            if (ServerVersion.isOlderThan(ServerVersion.V1_16)) {
+                ppoc = c4.getConstructor(c3, chatMessageTypeClass).newInstance(o, chatMessageType);
+            } else {
+                ppoc = c4.getConstructor(c3, chatMessageTypeClass, UUID.class).newInstance(o, chatMessageType, player.getUniqueId());
+            }
+
             Method m1 = craftPlayerClass.getDeclaredMethod("getHandle");
             Object h = m1.invoke(craftPlayer);
             Field f1 = h.getClass().getDeclaredField("playerConnection");
