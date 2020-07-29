@@ -22,37 +22,37 @@ public class JukeboxSettings {
     /**
      * Max distance where a player can hear the sound of the jukebox
      */
-    private Setting<Integer> distance;
+    private final Setting<Integer> distance;
 
     /**
      * Volume of a jukebox, in percent.
      */
-    private Setting<Integer> volume;
+    private final Setting<Integer> volume;
 
     /**
      * True if the jukebox have to run automatically new music
      */
-    private Setting<Boolean> autoplay;
+    private final Setting<Boolean> autoplay;
 
     /**
      * True if the jukebox uses the global musics stored by the server
      */
-    private Setting<Boolean> useGlobalMusics;
+    private final Setting<Boolean> useGlobalMusics;
 
     /**
      * True if the plugin has to display particles when playing music
      */
-    private Setting<Boolean> particles;
+    private final Setting<Boolean> particles;
 
     /**
      * If this setting is set to true, a redstone signal is needed to play music
      */
-    private Setting<Boolean> playWithRedstone;
+    private final Setting<Boolean> playWithRedstone;
 
     /**
      * Activate music announcements
      */
-    private Setting<Boolean> announcements;
+    private final Setting<Boolean> announcements;
 
     /**
      * Permission to interact with the jukebox and to show its main menu.

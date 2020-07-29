@@ -104,6 +104,21 @@ public class JUtil {
     }
 
     /**
+     * Retrieves to which offset custom instruments can be added in a list.
+     *
+     * @return offset at which custom instruments can be added
+     */
+    public static byte getCustomInstrumentOffset() {
+        if (ServerVersion.isNewerThan(ServerVersion.V1_13)) {
+            return 16;
+        }
+        if (ServerVersion.isNewerThan(ServerVersion.V1_11)) {
+            return 10;
+        }
+        return 5;
+    }
+
+    /**
      * Returns the existance of a sound by its name
      *
      * @param soundName Sound name to check

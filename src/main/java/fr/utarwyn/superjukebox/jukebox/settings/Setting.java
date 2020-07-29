@@ -11,11 +11,11 @@ import java.util.function.Predicate;
  */
 public class Setting<T> {
 
-    private String key;
+    private final String key;
 
     private T value;
 
-    private Predicate<T> predicate;
+    private final Predicate<T> predicate;
 
     Setting(String key, T defaultValue, Predicate<T> predicate) {
         this.key = key;

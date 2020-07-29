@@ -141,8 +141,9 @@ public class MusicManager extends AbstractManager {
 
             // Jump to next music for jukeboxes
             for (Jukebox jukebox : SuperJukebox.getInstance().getInstance(JukeboxesManager.class).getJukeboxes()) {
-                if (jukebox.getCurrentMusic() == music) {
-                    int musicIndex = jukebox.getCurrentMusicIndex();
+                Music current = jukebox.getPlayer().getCurrentMusic();
+                if (current == music) {
+                    int musicIndex = jukebox.getMusics().indexOf(current);
                     List<Music> jukeboxMusics = jukebox.getMusics();
                     Music newMusic = null;
 

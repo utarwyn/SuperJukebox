@@ -8,9 +8,9 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Represents a music which can be played by a MusicPlayer object.
@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class Music {
 
-    private String filename;
+    private final String filename;
 
     private short length;
 
@@ -38,7 +38,13 @@ public class Music {
 
     private float delay;
 
-    private List<Layer> layers;
+    private final Map<Integer, Layer> layers;
+
+    private int version;
+
+    private boolean stereo;
+
+    private int customInstrumentOffset;
 
     private ItemStack icon;
 
@@ -48,13 +54,14 @@ public class Music {
         this.author = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No author";
         this.originalAuthor = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No original author";
         this.description = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No description";
-        this.layers = new ArrayList<>();
+        this.layers = new HashMap<>();
+        this.version = 0;
 
         this.setIconWithMaterial(MaterialHelper.findMaterial("RECORD_10", "MUSIC_DISC_13"));
     }
 
-    public List<Layer> getLayers() {
-        return new ArrayList<>(this.layers);
+    public Map<Integer, Layer> getLayers() {
+        return this.layers;
     }
 
     public String getFilename() {
@@ -93,16 +100,27 @@ public class Music {
         return this.delay;
     }
 
-    public Layer getLayerOrDefault(int key) {
-        for (Layer l : this.layers) {
-            if (l.getKey() == key) {
-                return l;
-            }
-        }
+    public Layer getLayer(int index) {
+        return this.layers.get(index);
+    }
 
-        Layer layer = new Layer(key);
-        this.layers.add(layer);
-        return layer;
+    public Layer getLayerOrCreate(int index) {
+        if (!this.layers.containsKey(index)) {
+            this.layers.put(index, new Layer());
+        }
+        return this.layers.get(index);
+    }
+
+    public int getVersion() {
+        return this.version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    public boolean isStereo() {
+        return this.stereo;
     }
 
     public ItemStack getIcon() {
@@ -117,28 +135,22 @@ public class Music {
         this.height = height;
     }
 
+    public void setStereo(boolean stereo) {
+        this.stereo = stereo;
+    }
+
+    public int getCustomInstrumentOffset() {
+        return this.customInstrumentOffset;
+    }
+
+    public void setCustomInstrumentOffset(int customInstrumentOffset) {
+        this.customInstrumentOffset = customInstrumentOffset;
+    }
+
     public void setName(String name) {
-    	if (!name.isEmpty()) {
-			this.name = name;
-		}
-    }
-
-    public void setAuthor(String author) {
-    	if (!author.isEmpty()) {
-			this.author = author;
-		}
-    }
-
-    public void setOriginalAuthor(String originalAuthor) {
-    	if (!originalAuthor.isEmpty()) {
-			this.originalAuthor = originalAuthor;
-		}
-    }
-
-    public void setDescription(String description) {
-    	if (!description.isEmpty()) {
-			this.description = description;
-		}
+        if (!name.isEmpty()) {
+            this.name = name;
+        }
     }
 
     public void setTempo(float tempo) {
@@ -147,6 +159,24 @@ public class Music {
 
     public void setDelay(float delay) {
         this.delay = delay;
+    }
+
+    public void setAuthor(String author) {
+        if (!author.isEmpty()) {
+            this.author = author;
+        }
+    }
+
+    public void setOriginalAuthor(String originalAuthor) {
+        if (!originalAuthor.isEmpty()) {
+            this.originalAuthor = originalAuthor;
+        }
+    }
+
+    public void setDescription(String description) {
+        if (!description.isEmpty()) {
+            this.description = description;
+        }
     }
 
     void setIconWithMaterial(Material material) {

@@ -8,9 +8,8 @@ import java.io.DataInputStream;
 import java.io.IOException;
 
 /**
- * This interface allows to decode a NBS file.
- * It creates a music object with layers of notes
- * and info about it (name, length, tempo).
+ * Decodes a NBS file by reading a data input stream.
+ * It creates a music object with layers of notes and info about it (name, length, tempo).
  *
  * @author Utarwyn <maxime.malgorn@laposte.net>
  * @since 0.3.0
@@ -18,32 +17,45 @@ import java.io.IOException;
 public interface NBSDecoder {
 
     /**
-     * Decode the header bytes of the music.
+     * Decodes header bytes of the song.
      * It includes the name, author, length, etc.
      *
-     * @param music music object which will be filled with header data
+     * @param music       music object which will be filled with header data
      * @param inputStream file input stream which will be read to get header data
      * @throws NBSDecodeException thrown if the header is misencoded
      */
     void decodeHeader(Music music, DataInputStream inputStream) throws NBSDecodeException;
 
     /**
-     * Decode the noteblocks of the music.
+     * Decodes noteblocks of the song.
      * It includes notes, layers, instruments, etc.
      *
-     * @param music music object which will be filled with noteblocks data
+     * @param music       music object which will be filled with noteblocks data
      * @param inputStream file input stream which will be read to get noteblocks data
+     * @return amount of loaded ticks of noteblocks
      * @throws NBSDecodeException thrown if noteblocks data are misencoded
      */
-    void decodeNoteblocks(Music music, DataInputStream inputStream) throws NBSDecodeException;
+    short decodeNoteblocks(Music music, DataInputStream inputStream) throws NBSDecodeException;
 
     /**
      * Decode a note from an input stream.
      *
-     * @param inputStream file input stream which contains the next note to decode
+     * @param inputStream            file input stream which contains the next note to decode
+     * @param customInstrumentOffset offset at which customs instruments start
+     * @param additionnalData        tell the method to retrieve additionnal data about the note
      * @return the decoded note
      * @throws IOException thrown if the note cannot be decoded from the stream
      */
-    Note decodeNote(DataInputStream inputStream) throws IOException;
+    Note decodeNote(DataInputStream inputStream, int customInstrumentOffset,
+                    boolean additionnalData) throws IOException;
+
+    /**
+     * Decodes layers of the song file.
+     *
+     * @param music       music object which will be filled with layers data
+     * @param inputStream file input stream which contains the next note to decode
+     * @throws NBSDecodeException thrown if layers data are misencoded
+     */
+    void decodeLayers(Music music, DataInputStream inputStream) throws NBSDecodeException;
 
 }

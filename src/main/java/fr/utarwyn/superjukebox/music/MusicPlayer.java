@@ -4,16 +4,14 @@ import fr.mrmicky.fastparticle.FastParticle;
 import fr.mrmicky.fastparticle.ParticleType;
 import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.jukebox.Jukebox;
+import fr.utarwyn.superjukebox.music.converters.InstrumentConverter;
+import fr.utarwyn.superjukebox.music.converters.NotePitchConverter;
 import fr.utarwyn.superjukebox.music.model.Layer;
 import fr.utarwyn.superjukebox.music.model.Note;
 import fr.utarwyn.superjukebox.util.ActionBarUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.scheduler.BukkitTask;
-
-import java.util.logging.Level;
 
 /**
  * Capable of playing musics from SuperJukeboxes!
@@ -23,7 +21,15 @@ import java.util.logging.Level;
  */
 public class MusicPlayer implements Runnable {
 
-    private Jukebox jukebox;
+    /**
+     * Jukebox object which using this player
+     */
+    private final Jukebox jukebox;
+
+    /**
+     * Stores the current music played by the jukebox.
+     */
+    private Music currentMusic;
 
     private boolean playing;
 
@@ -43,6 +49,22 @@ public class MusicPlayer implements Runnable {
 
     public boolean isTaskRunned() {
         return this.task != null;
+    }
+
+    public Music getCurrentMusic() {
+        return this.currentMusic;
+    }
+
+    public synchronized void playMusic(Music music) {
+        this.currentMusic = music;
+    }
+
+    public synchronized void playNextMusic() {
+        int current = this.jukebox.getMusics().indexOf(this.currentMusic);
+        int next = (current + 1) % this.jukebox.getMusics().size();
+
+        this.playMusic(this.jukebox.getMusics().get(next));
+        this.start();
     }
 
     public synchronized void runTask() {
@@ -70,7 +92,8 @@ public class MusicPlayer implements Runnable {
         boolean announcements = this.jukebox.getSettings().getAnnouncements().getValue();
         if (announcements) {
             // TODO: only send to players which can hear the music!
-            ActionBarUtil.sendActionTitleToAllPlayers(ChatColor.GREEN + "♫ " + this.jukebox.getCurrentMusic().getName() + " §e(" + this.jukebox.getCurrentMusic().getOriginalAuthor() + ")");
+            ActionBarUtil.sendActionTitleToAllPlayers(String.format("§a♫ %s §e(%s)",
+                    this.currentMusic.getName(), this.currentMusic.getOriginalAuthor()));
         }
     }
 
@@ -81,25 +104,26 @@ public class MusicPlayer implements Runnable {
 
     public synchronized void destroy() {
         this.destroyed = true;
+        this.currentMusic = null;
         this.task = null;
     }
 
     @Override
     public void run() {
         while (!this.destroyed) {
-            long start = System.currentTimeMillis();
+            long startTime = System.currentTimeMillis();
 
             synchronized (this) {
                 if (this.playing && this.canPlay()) {
                     this.tick++;
 
-                    if (this.tick > this.jukebox.getCurrentMusic().getLength()) {
+                    if (this.tick > this.currentMusic.getLength()) {
                         this.stop();
 
                         // Check for autoplay!
                         boolean autoplay = this.jukebox.getSettings().getAutoplay().getValue();
                         if (autoplay) {
-                            this.jukebox.playNext();
+                            this.playNextMusic();
                         }
 
                         continue;
@@ -111,17 +135,18 @@ public class MusicPlayer implements Runnable {
                 }
             }
 
-            if (this.destroyed) break;
+            if (this.destroyed) {
+                break;
+            }
 
-            long diff = System.currentTimeMillis() - start;
-            float delay = this.jukebox.getCurrentMusic().getDelay() * 50;
+            long duration = System.currentTimeMillis() - startTime;
+            float delay = this.currentMusic.getDelay() * 50;
 
-            if (diff < delay) {
+            if (duration < delay) {
                 try {
-                    Thread.sleep((long) (delay - diff));
-                } catch (InterruptedException ex) {
-                    SuperJukebox.getInstance().getLogger().log(Level.WARNING, "Music player interrupted!", ex);
-                    Thread.currentThread().interrupt();
+                    Thread.sleep((long) (delay - duration));
+                } catch (InterruptedException e) {
+                    // do nothing
                 }
             }
         }
@@ -129,18 +154,25 @@ public class MusicPlayer implements Runnable {
 
     private void playTick() {
         int nbNote = 0;
+        Location location = this.jukebox.getBlock().getLocation();
 
-        for (Layer layer : this.jukebox.getCurrentMusic().getLayers()) {
+        for (Layer layer : this.currentMusic.getLayers().values()) {
             Note note = layer.getNote(this.tick);
             if (note == null) continue;
 
-            this.jukebox.getBlock().getWorld().playSound(
-                    this.jukebox.getBlock().getLocation(),
-                    note.getInstrument().getSound(),
-                    (1 / 16f) * this.jukebox.getSettings().getDistance().getValue() *
-                            (this.jukebox.getSettings().getVolume().getValue() / 100f),
-                    note.getPitch().getPitch()
-            );
+            Bukkit.getOnlinePlayers().forEach(player -> player.playNote(
+                    location, InstrumentConverter.getBukkitInstrument(note.getInstrument()),
+                    new org.bukkit.Note(note.getKey() - 33)
+            ));
+
+            float volume = ((layer.getVolume() * (this.jukebox.getSettings().getVolume().getValue() / 100f)
+                    * (int) note.getVelocity()) / 100_000_000f)
+                    * ((1f / 16f) * this.jukebox.getSettings().getDistance().getValue());
+            float pitch = NotePitchConverter.getPitch(note);
+
+            this.jukebox.getBlock().getWorld().playSound(location,
+                    InstrumentConverter.getInstrument(note.getInstrument()),
+                    volume, pitch);
 
             nbNote++;
         }
@@ -148,14 +180,17 @@ public class MusicPlayer implements Runnable {
         // Play particles at the same time if needed!
         boolean particlesEnabled = this.jukebox.getSettings().getParticles().getValue();
         if (nbNote > 0 && particlesEnabled) {
-            World world = this.jukebox.getBlock().getWorld();
-            Location location = this.jukebox.getBlock().getLocation().clone().add(.5, 1.2, .5);
-            FastParticle.spawnParticle(world, ParticleType.NOTE, location, nbNote, .3f, .3f, .3f);
+            FastParticle.spawnParticle(
+                    this.jukebox.getBlock().getWorld(), ParticleType.NOTE,
+                    location.clone().add(.5, 1.2, .5),
+                    nbNote, .3f, .3f, .3f
+            );
         }
     }
 
     private boolean canPlay() {
-        return !this.jukebox.getSettings().getPlayWithRedstone().getValue() || this.jukebox.getBlock().isBlockIndirectlyPowered();
+        return !this.jukebox.getSettings().getPlayWithRedstone().getValue()
+                || this.jukebox.getBlock().isBlockIndirectlyPowered();
     }
 
 }

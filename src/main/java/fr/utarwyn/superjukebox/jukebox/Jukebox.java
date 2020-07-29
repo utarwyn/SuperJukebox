@@ -21,37 +21,27 @@ public class Jukebox {
     /**
      * The music player which played music of this jukebox!
      */
-    private MusicPlayer player;
+    private final MusicPlayer player;
 
     /**
      * Id of the jukebox
      */
-    private int id;
+    private final int id;
 
     /**
      * Block linked with the jukebox
      */
-    private Block block;
+    private final Block block;
 
     /**
      * Contains all settings of this jukebox
      */
-    private JukeboxSettings settings;
+    private final JukeboxSettings settings;
 
     /**
      * List of all custom musics for this jukebox
      */
-    private List<Music> musics;
-
-    /**
-     * Stores the current music played by the jukebox.
-     */
-    private Music currentMusic;
-
-    /**
-     * Stores the current music id
-     */
-    private int currentMusicIdx;
+    private final List<Music> musics;
 
     /**
      * Construct a super jukebox!
@@ -62,7 +52,6 @@ public class Jukebox {
     Jukebox(int id, Block block) {
         this.id = id;
         this.block = block;
-        this.currentMusicIdx = -1;
         this.musics = new ArrayList<>();
 
         // Register all settings of the jukebox!
@@ -124,24 +113,6 @@ public class Jukebox {
     }
 
     /**
-     * Returns the current music played by this jukebox.
-     *
-     * @return The current musics for this jukebox.
-     */
-    public Music getCurrentMusic() {
-        return this.currentMusic;
-    }
-
-    /**
-     * Returns the current music index played by this jukebox
-     *
-     * @return Current music index
-     */
-    public int getCurrentMusicIndex() {
-        return this.currentMusicIdx;
-    }
-
-    /**
      * Add a custom music to this jukebox
      *
      * @param music Music to add!
@@ -150,25 +121,6 @@ public class Jukebox {
         if (!this.musics.contains(music)) {
             this.musics.add(music);
         }
-    }
-
-    /**
-     * Change to the next music!
-     */
-    public boolean nextMusic() {
-        if (this.getMusics().isEmpty()) return false;
-
-        this.currentMusicIdx = (this.currentMusicIdx + 1) % this.getMusics().size();
-        this.currentMusic = this.getMusics().get(this.currentMusicIdx);
-        return true;
-    }
-
-    /**
-     * Play the next music!
-     */
-    public void playNext() {
-        if (!this.nextMusic()) return;
-        this.player.start();
     }
 
     /**
@@ -183,9 +135,8 @@ public class Jukebox {
             return;
         }
 
-        // Ssetup the current music
-        this.currentMusicIdx = this.getMusics().indexOf(music);
-        this.currentMusic = music;
+        // Start the player with the music object
+        this.player.playMusic(music);
 
         // Start the player at the beginning of the chosen music!
         this.player.start();

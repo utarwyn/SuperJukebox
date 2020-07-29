@@ -1,28 +1,53 @@
 package fr.utarwyn.superjukebox.music.model;
 
 /**
- * A music note
+ * A music note.
  *
  * @author Utarwyn
  * @since 0.1.0
  */
 public class Note {
 
-    private Instrument instrument;
+    private final byte instrument;
 
-    private NotePitch pitch;
+    private final byte key;
 
-    public Note(byte instrumentKey, byte pitch) {
-      this.instrument = Instrument.get(instrumentKey);
-      this.pitch = NotePitch.get(Math.max(0, pitch - 33));
+    private final byte velocity;
+
+    private final int panning;
+
+    private final short pitch;
+
+    public Note(byte instrument, byte key) {
+        this(instrument, key, (byte) 100, (byte) 100, (short) 0);
     }
 
-    public Instrument getInstrument() {
-        return this.instrument;
+    public Note(byte instrument, byte key, byte velocity, int panning, short pitch) {
+        this.instrument = instrument;
+        this.key = key;
+        this.velocity = velocity;
+        this.panning = panning;
+        this.pitch = pitch;
     }
 
-    public NotePitch getPitch() {
-        return this.pitch;
+    public byte getInstrument() {
+        return instrument;
+    }
+
+    public byte getKey() {
+        return key;
+    }
+
+    public short getPitch() {
+        return pitch;
+    }
+
+    public byte getVelocity() {
+        return velocity;
+    }
+
+    public int getPanning() {
+        return panning;
     }
 
 }

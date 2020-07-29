@@ -21,12 +21,12 @@ public class NBSFileReader {
     /**
      * The new NBS reader used for the Open NoteBlockStudio format
      */
-    private NBSDecoder openReader;
+    private final NBSDecoder openReader;
 
     /**
      * The legacy NBS reader used for the depreacated version of NoteBlockStudio
      */
-    private NBSDecoder legacyReader;
+    private final NBSDecoder legacyReader;
 
     /**
      * Create a new reader for NBS files.
@@ -44,10 +44,12 @@ public class NBSFileReader {
      * @throws NBSDecodeException throwed if the nbs cannot be read
      */
     public Music read(File file) throws NBSDecodeException {
+        Music music = new Music(file.getName());
         try (DataInputStream stream = this.fileToStream(file)) {
-            return this.decodeMusic(file.getName(), stream, readShort(stream));
+            this.decodeMusic(music, stream, readShort(stream));
+            return music;
         } catch (IOException e) {
-            throw new NBSDecodeException(file.getName(), "Cannot open the file!", e);
+            throw new NBSDecodeException(music, "Cannot open the file!", e);
         }
     }
 
@@ -66,28 +68,26 @@ public class NBSFileReader {
      * Decode a music stream by choosing the right decoder.
      * It will determinates the good one thanks to the two first bytes of the file.
      *
-     * @param filename name of the music file
+     * @param music       music object which stores all song information
      * @param inputStream stream of the music file
-     * @param firstBytes first two bytes of the file
-     * @return the decoded music with all data
+     * @param firstBytes  first two bytes of the file
      * @throws NBSDecodeException throwed if the nbs cannot be decoded
      */
-    private Music decodeMusic(String filename, DataInputStream inputStream, short firstBytes) throws NBSDecodeException {
-        Music music = new Music(filename);
-
+    private void decodeMusic(Music music, DataInputStream inputStream, short firstBytes)
+            throws NBSDecodeException {
         // Is this file using the new nbs format...
         if (firstBytes == 0) {
             this.openReader.decodeHeader(music, inputStream);
             this.openReader.decodeNoteblocks(music, inputStream);
+            this.openReader.decodeLayers(music, inputStream);
         }
         // ... or the legacy one?
         else {
             music.setLength(firstBytes);
             this.legacyReader.decodeHeader(music, inputStream);
             this.legacyReader.decodeNoteblocks(music, inputStream);
+            this.legacyReader.decodeLayers(music, inputStream);
         }
-
-        return music;
     }
 
 }

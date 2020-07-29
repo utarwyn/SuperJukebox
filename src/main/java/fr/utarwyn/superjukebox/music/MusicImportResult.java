@@ -7,11 +7,9 @@ package fr.utarwyn.superjukebox.music;
  * @since 0.1.0
  */
 public enum MusicImportResult {
-
     GOOD,
     MALFORMATED_URL,
     UNKNOWN_FILE,
     ALREADY_IMPORTED,
     DECODING_ERROR
-
 }

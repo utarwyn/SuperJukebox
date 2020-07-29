@@ -1,13 +1,16 @@
 package fr.utarwyn.superjukebox.nbs.decode;
 
 import fr.utarwyn.superjukebox.music.Music;
+import fr.utarwyn.superjukebox.music.model.Layer;
 import fr.utarwyn.superjukebox.music.model.Note;
 import fr.utarwyn.superjukebox.nbs.NBSDecodeException;
+import fr.utarwyn.superjukebox.util.JUtil;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 
-import static fr.utarwyn.superjukebox.nbs.InputStreamUtil.*;
+import static fr.utarwyn.superjukebox.nbs.InputStreamUtil.readShort;
+import static fr.utarwyn.superjukebox.nbs.InputStreamUtil.readString;
 
 /**
  * Decode NBS files with the new format (used by Open NoteBlockStudio).
@@ -22,7 +25,7 @@ public class OpenNBSDecoder implements NBSDecoder {
     /**
      * Parent NBS decoder for basic processing
      */
-    private NBSDecoder parentNBSDecoder;
+    private final NBSDecoder parentNBSDecoder;
 
     /**
      * Construct this decoder.
@@ -39,21 +42,26 @@ public class OpenNBSDecoder implements NBSDecoder {
     @Override
     public void decodeHeader(Music music, DataInputStream dis) throws NBSDecodeException {
         try {
-            // First headers added in this format
-            dis.readByte(); // version of the file
-            dis.readByte(); // vanilla instrument count
-            music.setLength(readShort(dis)); // music length
+            // version of the file
+            music.setVersion(dis.readByte());
+            // vanilla instrument count
+            music.setCustomInstrumentOffset(JUtil.getCustomInstrumentOffset() - dis.readByte());
+
+            if (music.getVersion() >= 3) {
+                music.setLength(readShort(dis)); // music length
+            }
 
             // Decode other headers with the parent decoder
             this.parentNBSDecoder.decodeHeader(music, dis);
 
             // Decode extra headers in this version
-            dis.readByte(); // loop on/off
-            dis.readByte(); // max loop count
-            readShort(dis); // loop start tick
+            if (music.getVersion() >= 4) {
+                dis.readByte(); // loop on/off
+                dis.readByte(); // max loop count
+                readShort(dis); // loop start tick
+            }
         } catch (IOException e) {
-            // Argh! An error in the format of the file maybe?
-            throw new NBSDecodeException(music.getFilename(), "Cannot read NBS headers", e);
+            throw new NBSDecodeException(music, "cannot decode file headers", e);
         }
     }
 
@@ -61,23 +69,66 @@ public class OpenNBSDecoder implements NBSDecoder {
      * {@inheritDoc}
      */
     @Override
-    public void decodeNoteblocks(Music music, DataInputStream dis) throws NBSDecodeException {
-        this.parentNBSDecoder.decodeNoteblocks(music, dis);
+    public short decodeNoteblocks(Music music, DataInputStream dis) throws NBSDecodeException {
+        short length = this.parentNBSDecoder.decodeNoteblocks(music, dis);
+        if (music.getVersion() < 3) {
+            music.setLength(length);
+        }
+        return length;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Note decodeNote(DataInputStream dis) throws IOException {
+    public Note decodeNote(DataInputStream dis, int customInstrumentOffset,
+                           boolean additionnalData) throws IOException {
         byte instrument = dis.readByte();
-        byte note = dis.readByte();
+        byte key = dis.readByte();
 
-        dis.readByte(); // note velocity
-        dis.readByte(); // note panning
-        dis.readShort(); // note pitch (signed short)
+        if (additionnalData) {
+            byte velocity = dis.readByte();
+            int panning = 200 - dis.readUnsignedByte();
+            short pitch = readShort(dis);
 
-        return new Note(instrument, note);
+            return new Note(instrument, key, velocity, panning, pitch);
+        } else {
+            return new Note(instrument, key);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void decodeLayers(Music music, DataInputStream dis) throws NBSDecodeException {
+        try {
+            for (int i = 0; i < music.getHeight(); i++) {
+                Layer layer = music.getLayer(i);
+
+                readString(dis); // layer name
+                if (music.getVersion() >= 4) {
+                    dis.readByte(); // layer lock
+                }
+
+                byte volume = dis.readByte();
+                int panning = 100;
+                if (music.getVersion() >= 2) {
+                    panning = 200 - dis.readUnsignedByte();
+                }
+
+                if (panning != 100) {
+                    music.setStereo(true);
+                }
+
+                if (layer != null) {
+                    layer.setVolume(volume);
+                    layer.setPanning(panning);
+                }
+            }
+        } catch (IOException e) {
+            throw new NBSDecodeException(music, "cannot decode layers", e);
+        }
     }
 
 }
