@@ -3,7 +3,7 @@
 <h4 align="center">
 Play custom musics from jukeboxes. We all love music, right?
 <br>
-Works with Bukkit/Spigot 1.8 to 1.15!
+Works with Bukkit/Spigot 1.8 to 1.16!
 </h4>
 
 <p align="center">
