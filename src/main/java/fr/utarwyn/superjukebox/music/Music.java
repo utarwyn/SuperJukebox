@@ -44,8 +44,6 @@ public class Music {
 
     private boolean stereo;
 
-    private int customInstrumentOffset;
-
     private ItemStack icon;
 
     public Music(String filename) {
@@ -137,14 +135,6 @@ public class Music {
 
     public void setStereo(boolean stereo) {
         this.stereo = stereo;
-    }
-
-    public int getCustomInstrumentOffset() {
-        return this.customInstrumentOffset;
-    }
-
-    public void setCustomInstrumentOffset(int customInstrumentOffset) {
-        this.customInstrumentOffset = customInstrumentOffset;
     }
 
     public void setName(String name) {

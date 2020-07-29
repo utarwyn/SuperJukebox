@@ -11,6 +11,7 @@ import fr.utarwyn.superjukebox.music.model.Note;
 import fr.utarwyn.superjukebox.util.ActionBarUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.scheduler.BukkitTask;
 
 /**
@@ -47,7 +48,7 @@ public class MusicPlayer implements Runnable {
         this.playing = false;
     }
 
-    public boolean isTaskRunned() {
+    public boolean isTaskRunning() {
         return this.task != null;
     }
 
@@ -81,7 +82,7 @@ public class MusicPlayer implements Runnable {
 
     public synchronized void start() {
         // Before we have to run this task if needed
-        if (!this.isTaskRunned()) {
+        if (!this.isTaskRunning()) {
             this.runTask();
         }
 
@@ -154,14 +155,15 @@ public class MusicPlayer implements Runnable {
 
     private void playTick() {
         int nbNote = 0;
-        Location location = this.jukebox.getBlock().getLocation();
+        Block block = this.jukebox.getBlock();
+        Location loc = block.getLocation().clone().add(0.5, -0.5, 0.5);
 
         for (Layer layer : this.currentMusic.getLayers().values()) {
             Note note = layer.getNote(this.tick);
             if (note == null) continue;
 
             Bukkit.getOnlinePlayers().forEach(player -> player.playNote(
-                    location, InstrumentConverter.getBukkitInstrument(note.getInstrument()),
+                    loc, InstrumentConverter.getBukkitInstrument(note.getInstrument()),
                     new org.bukkit.Note(note.getKey() - 33)
             ));
 
@@ -170,9 +172,10 @@ public class MusicPlayer implements Runnable {
                     * ((1f / 16f) * this.jukebox.getSettings().getDistance().getValue());
             float pitch = NotePitchConverter.getPitch(note);
 
-            this.jukebox.getBlock().getWorld().playSound(location,
-                    InstrumentConverter.getInstrument(note.getInstrument()),
-                    volume, pitch);
+            block.getWorld().playSound(
+                    loc, InstrumentConverter.getInstrument(note.getInstrument()),
+                    volume, pitch
+            );
 
             nbNote++;
         }
@@ -181,8 +184,8 @@ public class MusicPlayer implements Runnable {
         boolean particlesEnabled = this.jukebox.getSettings().getParticles().getValue();
         if (nbNote > 0 && particlesEnabled) {
             FastParticle.spawnParticle(
-                    this.jukebox.getBlock().getWorld(), ParticleType.NOTE,
-                    location.clone().add(.5, 1.2, .5),
+                    block.getWorld(), ParticleType.NOTE,
+                    block.getLocation().clone().add(.5, 1.2, .5),
                     nbNote, .3f, .3f, .3f
             );
         }

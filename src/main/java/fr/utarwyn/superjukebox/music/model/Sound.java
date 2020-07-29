@@ -50,7 +50,7 @@ public enum Sound {
         }
     }
 
-    private org.bukkit.Sound getSound() {
+    public org.bukkit.Sound getSound() {
         if (this.cached != null) {
             return this.cached;
         }

@@ -4,7 +4,6 @@ import fr.utarwyn.superjukebox.music.Music;
 import fr.utarwyn.superjukebox.music.model.Layer;
 import fr.utarwyn.superjukebox.music.model.Note;
 import fr.utarwyn.superjukebox.nbs.NBSDecodeException;
-import fr.utarwyn.superjukebox.util.JUtil;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -34,7 +33,6 @@ public class LegacyNBSDecoder implements NBSDecoder {
             music.setDescription(readString(dis));
             music.setTempo(readShort(dis) / 100f);
             music.setDelay(20 / music.getTempo());
-            music.setCustomInstrumentOffset(JUtil.getCustomInstrumentOffset() - 10);
 
             // Useless data in the header...
             dis.readByte(); // auto-saving
@@ -74,10 +72,7 @@ public class LegacyNBSDecoder implements NBSDecoder {
                     layer += layerGap;
 
                     // Read the current note
-                    Note note = this.decodeNote(
-                            dis, music.getCustomInstrumentOffset(),
-                            music.getVersion() >= 4
-                    );
+                    Note note = this.decodeNote(dis, music.getVersion() >= 4);
 
                     if (note.getPanning() != 100) {
                         music.setStereo(true);
@@ -97,8 +92,7 @@ public class LegacyNBSDecoder implements NBSDecoder {
      * {@inheritDoc}
      */
     @Override
-    public Note decodeNote(DataInputStream dis, int customInstrumentOffset,
-                           boolean additionnalData) throws IOException {
+    public Note decodeNote(DataInputStream dis, boolean additionnalData) throws IOException {
         byte instrument = dis.readByte();
         byte key = dis.readByte();
         return new Note(instrument, key);

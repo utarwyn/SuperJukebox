@@ -40,14 +40,12 @@ public interface NBSDecoder {
     /**
      * Decode a note from an input stream.
      *
-     * @param inputStream            file input stream which contains the next note to decode
-     * @param customInstrumentOffset offset at which customs instruments start
-     * @param additionnalData        tell the method to retrieve additionnal data about the note
+     * @param inputStream     file input stream which contains the next note to decode
+     * @param additionnalData tell the method to retrieve additionnal data about the note
      * @return the decoded note
      * @throws IOException thrown if the note cannot be decoded from the stream
      */
-    Note decodeNote(DataInputStream inputStream, int customInstrumentOffset,
-                    boolean additionnalData) throws IOException;
+    Note decodeNote(DataInputStream inputStream, boolean additionnalData) throws IOException;
 
     /**
      * Decodes layers of the song file.

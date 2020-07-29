@@ -33,7 +33,7 @@ public class NBSFileReader {
      */
     public NBSFileReader() {
         this.legacyReader = new LegacyNBSDecoder();
-        this.openReader = new OpenNBSDecoder(this.legacyReader);
+        this.openReader = new OpenNBSDecoder();
     }
 
     /**

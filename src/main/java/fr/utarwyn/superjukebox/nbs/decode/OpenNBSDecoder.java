@@ -4,7 +4,6 @@ import fr.utarwyn.superjukebox.music.Music;
 import fr.utarwyn.superjukebox.music.model.Layer;
 import fr.utarwyn.superjukebox.music.model.Note;
 import fr.utarwyn.superjukebox.nbs.NBSDecodeException;
-import fr.utarwyn.superjukebox.util.JUtil;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -20,21 +19,7 @@ import static fr.utarwyn.superjukebox.nbs.InputStreamUtil.readString;
  * @author Utarwyn <maxime.malgorn@laposte.net>
  * @since 0.3.0
  */
-public class OpenNBSDecoder implements NBSDecoder {
-
-    /**
-     * Parent NBS decoder for basic processing
-     */
-    private final NBSDecoder parentNBSDecoder;
-
-    /**
-     * Construct this decoder.
-     *
-     * @param parentNBSDecoder parent NBS decoder
-     */
-    public OpenNBSDecoder(NBSDecoder parentNBSDecoder) {
-        this.parentNBSDecoder = parentNBSDecoder;
-    }
+public class OpenNBSDecoder extends LegacyNBSDecoder implements NBSDecoder {
 
     /**
      * {@inheritDoc}
@@ -45,14 +30,14 @@ public class OpenNBSDecoder implements NBSDecoder {
             // version of the file
             music.setVersion(dis.readByte());
             // vanilla instrument count
-            music.setCustomInstrumentOffset(JUtil.getCustomInstrumentOffset() - dis.readByte());
+            dis.readByte();
 
             if (music.getVersion() >= 3) {
                 music.setLength(readShort(dis)); // music length
             }
 
             // Decode other headers with the parent decoder
-            this.parentNBSDecoder.decodeHeader(music, dis);
+            super.decodeHeader(music, dis);
 
             // Decode extra headers in this version
             if (music.getVersion() >= 4) {
@@ -70,7 +55,7 @@ public class OpenNBSDecoder implements NBSDecoder {
      */
     @Override
     public short decodeNoteblocks(Music music, DataInputStream dis) throws NBSDecodeException {
-        short length = this.parentNBSDecoder.decodeNoteblocks(music, dis);
+        short length = super.decodeNoteblocks(music, dis);
         if (music.getVersion() < 3) {
             music.setLength(length);
         }
@@ -81,8 +66,7 @@ public class OpenNBSDecoder implements NBSDecoder {
      * {@inheritDoc}
      */
     @Override
-    public Note decodeNote(DataInputStream dis, int customInstrumentOffset,
-                           boolean additionnalData) throws IOException {
+    public Note decodeNote(DataInputStream dis, boolean additionnalData) throws IOException {
         byte instrument = dis.readByte();
         byte key = dis.readByte();
 
