@@ -28,11 +28,9 @@ Works with Bukkit/Spigot 1.8 to 1.16!
     </a>
 </p>
 
->
-> :wave: If you want to use SuperJukebox right now, you can download 
-> an unofficial alpha version of the plugin on [TheCoolOne123's Spigot page](https://www.spigotmc.org/resources/superjukebox-added-a-discord.62293/)! **Thanks for his help!** :star: \
-> I will personally release the plugin when it will be complete and stable.
->
+> :star: If you want to use SuperJukebox right now, you can download 
+> an unofficial alpha version of the plugin on [TheCoolOne123's Spigot page](https://www.spigotmc.org/resources/superjukebox-added-a-discord.62293/)! **Thanks for his help!** \
+> :fire: **NEW!** Download development builds of the plugin from my [personal integration service](https://ci.utarwyn.fr/job/SuperJukebox).
 
 ## Key Features
 
