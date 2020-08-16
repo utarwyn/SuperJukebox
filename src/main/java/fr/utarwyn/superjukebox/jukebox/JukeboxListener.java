@@ -12,6 +12,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.event.world.WorldUnloadEvent;
 
 /**
  * Contains all events for interactions with super-jukeboxes!
@@ -21,7 +23,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
  */
 public class JukeboxListener implements Listener {
 
-    private JukeboxesManager manager;
+    private final JukeboxesManager manager;
 
     JukeboxListener(JukeboxesManager manager) {
         this.manager = manager;
@@ -65,6 +67,16 @@ public class JukeboxListener implements Listener {
                 JUtil.sendMessage(event.getPlayer(), "§7You just placed a §6SuperJukebox§7, right-click it to choose a song!");
             }
         }
+    }
+
+    @EventHandler
+    public void onWorldLoad(WorldLoadEvent event) {
+        this.manager.loadJukeboxesOfWorld(event.getWorld());
+    }
+
+    @EventHandler
+    public void onWorldUnload(WorldUnloadEvent event) {
+        this.manager.unloadJukeboxesOfWorld(event.getWorld());
     }
 
     @EventHandler

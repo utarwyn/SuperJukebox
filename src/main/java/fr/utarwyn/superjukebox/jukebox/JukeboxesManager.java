@@ -9,14 +9,14 @@ import fr.utarwyn.superjukebox.music.Music;
 import fr.utarwyn.superjukebox.music.MusicManager;
 import fr.utarwyn.superjukebox.util.FlatFile;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 
 /**
  * Manages all super jukeboxes of the server!
@@ -38,18 +38,12 @@ public class JukeboxesManager extends AbstractManager {
     @Override
     public void initialize() {
         this.storage = new FlatFile("jukeboxes.yml");
-        this.jukeboxes = this.storage.getConfig().getKeys(false).stream()
-                .map(key -> {
-                    try {
-                        return this.createJukebox(this.storage.getConfig().getConfigurationSection(key));
-                    } catch (JukeboxConfigurationException e) {
-                        this.logger.log(Level.WARNING, String.format(
-                                "Error when loading %s", key), e);
-                        return null;
-                    }
-                })
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+        this.jukeboxes = new ArrayList<>();
+
+        // Start loading jukeboxes in loaded worlds
+        for (World world : getPlugin().getServer().getWorlds()) {
+            this.loadJukeboxesOfWorld(world);
+        }
     }
 
     @Override
@@ -78,6 +72,35 @@ public class JukeboxesManager extends AbstractManager {
         this.saveJukeboxLocationOnDisk(jukebox);
         this.saveJukeboxSettingsOnDisk(jukebox);
         this.saveJukeboxPermissionsOnDisk(jukebox);
+    }
+
+    void loadJukeboxesOfWorld(World world) {
+        Configuration configuration = this.storage.getConfig();
+        int loaded = 0;
+        for (String key : configuration.getKeys(false)) {
+            ConfigurationSection section = configuration.getConfigurationSection(key);
+
+            if (section != null && world.getName().equals(section.getString("location.world"))) {
+                try {
+                    this.jukeboxes.add(this.createJukebox(section));
+                    loaded++;
+                } catch (JukeboxConfigurationException e) {
+                    this.logger.log(Level.WARNING, String.format("Error when loading %s", key), e);
+                }
+            }
+        }
+
+        this.getPlugin().getLogger().log(Level.INFO, "{0} jukebox(es) loaded for world {1}",
+                new Object[]{loaded, world.getName()});
+    }
+
+    void unloadJukeboxesOfWorld(World world) {
+        this.jukeboxes.removeIf(jukebox -> jukebox.getBlock().getWorld().equals(world));
+        this.getPlugin().getLogger().log(
+                Level.INFO,
+                "All jukeboxes of world {0} were unloaded",
+                world.getName()
+        );
     }
 
     void removeSuperJukebox(Block block) {
