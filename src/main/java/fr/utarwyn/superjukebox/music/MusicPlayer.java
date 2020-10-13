@@ -14,6 +14,8 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.List;
+
 /**
  * Capable of playing musics from SuperJukeboxes!
  *
@@ -56,16 +58,19 @@ public class MusicPlayer implements Runnable {
         return this.currentMusic;
     }
 
-    public synchronized void playMusic(Music music) {
+    public synchronized void setCurrentMusic(Music music) {
         this.currentMusic = music;
     }
 
     public synchronized void playNextMusic() {
-        int current = this.jukebox.getMusics().indexOf(this.currentMusic);
-        int next = (current + 1) % this.jukebox.getMusics().size();
+        List<Music> musics = this.jukebox.getMusics();
+        if (!musics.isEmpty()) {
+            int current = musics.indexOf(this.currentMusic);
+            int next = (current + 1) % musics.size();
 
-        this.playMusic(this.jukebox.getMusics().get(next));
-        this.start();
+            this.setCurrentMusic(musics.get(next));
+            this.start();
+        }
     }
 
     public synchronized void runTask() {

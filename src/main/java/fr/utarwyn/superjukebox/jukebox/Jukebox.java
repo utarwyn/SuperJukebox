@@ -129,16 +129,12 @@ public class Jukebox {
      * @param music Music to be played.
      */
     public void play(Music music) {
-        // Does the music exist in the list?
         if (!this.getMusics().contains(music)) {
             this.player.stop();
             return;
         }
 
-        // Start the player with the music object
-        this.player.playMusic(music);
-
-        // Start the player at the beginning of the chosen music!
+        this.player.setCurrentMusic(music);
         this.player.start();
     }
 
