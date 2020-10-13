@@ -220,6 +220,11 @@ public class JukeboxesManager extends AbstractManager {
             jukebox.loadMusicsFromConfiguration(config.getIntegerList("musics"));
         }
 
+        // Start the player if autoplay is set to true and jukebox has registered music
+        if (jukebox.getSettings().getAutoplay().getValue() && !jukebox.getMusics().isEmpty()) {
+            jukebox.play(jukebox.getMusics().get(0));
+        }
+
         return jukebox;
     }
 
