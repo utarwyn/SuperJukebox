@@ -12,6 +12,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,14 +30,24 @@ import java.util.Map;
 public abstract class AbstractMenu implements InventoryHolder {
 
     /**
-     * The separator item used for many menus
+     * Separator item used for many menus
      */
     public static final ItemStack SEPARATOR;
 
     /**
-     * The item used to create a way to go to a parent menu
+     * Item used to create a way to go to a parent menu
      */
     public static final ItemStack BACK_ITEM = new ItemStack(Material.ARROW);
+
+    /**
+     * Item to go to the previous page
+     */
+    public static final ItemStack PREV_PAGE_ITEM;
+
+    /**
+     * Item to go to the next page
+     */
+    public static final ItemStack NEXT_PAGE_ITEM;
 
     static {
         if (ServerVersion.isNewerThan(ServerVersion.V1_12)) {
@@ -54,6 +65,20 @@ public abstract class AbstractMenu implements InventoryHolder {
         ItemMeta backMeta = BACK_ITEM.getItemMeta();
         backMeta.setDisplayName(ChatColor.RED + "≪ Back");
         BACK_ITEM.setItemMeta(backMeta);
+
+        Material skullMaterial = MaterialHelper.findMaterial("PLAYER_HEAD", "SKULL_ITEM");
+        PREV_PAGE_ITEM = new ItemStack(skullMaterial, 1, (short) 3);
+        NEXT_PAGE_ITEM = new ItemStack(skullMaterial, 1, (short) 3);
+
+        SkullMeta prevSkullMeta = (SkullMeta) PREV_PAGE_ITEM.getItemMeta();
+        prevSkullMeta.setOwner("MHF_ArrowLeft");
+        prevSkullMeta.setDisplayName(ChatColor.RED + "≪ Previous page");
+        PREV_PAGE_ITEM.setItemMeta(prevSkullMeta);
+
+        SkullMeta nextSkullMeta = (SkullMeta) NEXT_PAGE_ITEM.getItemMeta();
+        nextSkullMeta.setOwner("MHF_ArrowRight");
+        nextSkullMeta.setDisplayName(ChatColor.RED + "Next page ≫");
+        NEXT_PAGE_ITEM.setItemMeta(nextSkullMeta);
     }
 
     /**
@@ -87,15 +112,14 @@ public abstract class AbstractMenu implements InventoryHolder {
      * @param rows  Number of rows of the container
      * @param title Title of the container
      */
-    public AbstractMenu(int rows, String title) {
+    protected AbstractMenu(int rows, String title) {
         this.rows = rows;
         this.title = title;
         this.items = new HashMap<>();
 
-        if (this.title.length() > 32)
+        if (this.title.length() > 32) {
             this.title = this.title.substring(0, 32);
-
-        Menus.registerMenu(this);
+        }
     }
 
     /**
@@ -103,7 +127,7 @@ public abstract class AbstractMenu implements InventoryHolder {
      *
      * @param title Title of the container
      */
-    public AbstractMenu(String title) {
+    protected AbstractMenu(String title) {
         this(-1, title);
         this.dynamicSize = true;
     }
@@ -154,8 +178,7 @@ public abstract class AbstractMenu implements InventoryHolder {
      * @param item     The item to set
      */
     protected void setItem(int position, ItemStack item) {
-        if (!this.items.containsKey(position))
-            this.items.put(position, item);
+        this.items.put(position, item);
     }
 
     /**

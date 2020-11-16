@@ -15,15 +15,17 @@ public abstract class MusicDiscsMenu extends AbstractMenu {
 
     private static final int MUSICS_PER_PAGE = 27;
 
+    private static final int PAGINATION_SLOT = 33;
+
     protected Player player;
 
     private int currentPage;
 
-    public MusicDiscsMenu(String title, Player player) {
+    protected MusicDiscsMenu(String title, Player player) {
         this(title, player, null);
     }
 
-    public MusicDiscsMenu(String title, Player player, AbstractMenu parentMenu) {
+    protected MusicDiscsMenu(String title, Player player, AbstractMenu parentMenu) {
         super(4, title);
 
         this.player = player;
@@ -42,10 +44,9 @@ public abstract class MusicDiscsMenu extends AbstractMenu {
         // Discs items
         List<Music> musicList = this.getMusicList();
         int musicCount = musicList.size();
+        int begin = (this.currentPage - 1) * MUSICS_PER_PAGE;
 
         if (musicCount > 0) {
-            int begin = (this.currentPage - 1) * MUSICS_PER_PAGE;
-
             for (int i = begin; i < begin + MUSICS_PER_PAGE && i < musicCount; i++) {
                 this.setItem(i % MUSICS_PER_PAGE, musicList.get(i).getIcon());
             }
@@ -60,7 +61,7 @@ public abstract class MusicDiscsMenu extends AbstractMenu {
             this.setItem(13, noMusicItem);
         }
 
-        // Bottom bar
+        // Prepare the bottom bar
         int beginBottomBar = 27;
 
         if (this.getParentMenu() != null) {
@@ -71,9 +72,12 @@ public abstract class MusicDiscsMenu extends AbstractMenu {
             this.setItem(i, SEPARATOR);
         }
 
-        // Page items
-        if (musicList.size() > MUSICS_PER_PAGE) {
-            // TODO
+        // Prepare pagination items
+        if (this.currentPage > 1) {
+            this.setItem(PAGINATION_SLOT, AbstractMenu.PREV_PAGE_ITEM);
+        }
+        if (musicCount > begin + MUSICS_PER_PAGE) {
+            this.setItem(PAGINATION_SLOT + 1, AbstractMenu.NEXT_PAGE_ITEM);
         }
     }
 
@@ -87,6 +91,20 @@ public abstract class MusicDiscsMenu extends AbstractMenu {
                 Music music = musicList.get(musicId);
                 this.onDiscClick(event, music);
             }
+        }
+
+        // Handle pagination items
+        Material currentMaterial = event.getCurrentItem() != null ? event.getCurrentItem().getType() : null;
+        boolean isPaginationitem = currentMaterial == AbstractMenu.PREV_PAGE_ITEM.getType();
+
+        if (isPaginationitem && event.getSlot() == PAGINATION_SLOT) {
+            this.currentPage--;
+            this.prepare();
+            this.updateInventory();
+        } else if (isPaginationitem && event.getSlot() == PAGINATION_SLOT + 1) {
+            this.currentPage++;
+            this.prepare();
+            this.updateInventory();
         }
 
         event.setCancelled(true);

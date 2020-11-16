@@ -21,11 +21,11 @@ import java.util.List;
  */
 public class JukeboxAddMusicMenu extends MusicDiscsMenu {
 
-    private MusicManager musicManager;
+    private final MusicManager musicManager;
 
-    private JukeboxesManager jukeboxesManager;
+    private final JukeboxesManager jukeboxesManager;
 
-    private Jukebox jukebox;
+    private final Jukebox jukebox;
 
     JukeboxAddMusicMenu(Jukebox jukebox, Player player, AbstractMenu parentMenu) {
         super("SuperJukebox musics menu", player);

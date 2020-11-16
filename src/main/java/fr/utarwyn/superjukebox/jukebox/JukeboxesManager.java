@@ -4,7 +4,7 @@ import fr.utarwyn.superjukebox.AbstractManager;
 import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.jukebox.config.ConfigurationLocationAdapter;
 import fr.utarwyn.superjukebox.jukebox.config.JukeboxConfigurationException;
-import fr.utarwyn.superjukebox.menu.Menus;
+import fr.utarwyn.superjukebox.menu.MenuManager;
 import fr.utarwyn.superjukebox.music.Music;
 import fr.utarwyn.superjukebox.music.MusicManager;
 import fr.utarwyn.superjukebox.util.FlatFile;
@@ -53,7 +53,7 @@ public class JukeboxesManager extends AbstractManager {
         this.jukeboxes.clear();
 
         // Close all menus
-        Menus.closeAll();
+        SuperJukebox.getInstance().getInstance(MenuManager.class).closeAll();
     }
 
     public List<Jukebox> getJukeboxes() {

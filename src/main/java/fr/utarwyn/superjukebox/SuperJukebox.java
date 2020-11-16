@@ -3,6 +3,7 @@ package fr.utarwyn.superjukebox;
 import fr.utarwyn.superjukebox.commands.CommandManager;
 import fr.utarwyn.superjukebox.configuration.Files;
 import fr.utarwyn.superjukebox.jukebox.JukeboxesManager;
+import fr.utarwyn.superjukebox.menu.MenuManager;
 import fr.utarwyn.superjukebox.music.MusicManager;
 import fr.utarwyn.superjukebox.util.Updater;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -45,6 +46,7 @@ public class SuperJukebox extends JavaPlugin {
 
         // Register all managers
         CommandManager commandManager = new CommandManager();
+        new MenuManager();
         new MusicManager();
         new JukeboxesManager();
         new Updater();

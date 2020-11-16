@@ -136,7 +136,7 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
 
             musicStopMeta.setDisplayName(ChatColor.GOLD + "Stop music");
             if (this.jukebox.getPlayer().isTaskRunning()) {
-                musicStopMeta.setLore(Arrays.asList("§cPress this iten to", "§cstop the music you're playing§c."));
+                musicStopMeta.setLore(Arrays.asList("§cPress this item to", "§cstop the music you're playing§c."));
             } else {
                 musicStopMeta.setLore(Arrays.asList("§7You can't stop music", "§7that's not playing!"));
                 musicStopMeta.addEnchant(Enchantment.DURABILITY, 3, true);

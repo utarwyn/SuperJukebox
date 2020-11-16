@@ -54,7 +54,7 @@ public class MusicPlayer implements Runnable {
         return this.task != null;
     }
 
-    public Music getCurrentMusic() {
+    public synchronized Music getCurrentMusic() {
         return this.currentMusic;
     }
 
