@@ -167,13 +167,8 @@ public class MusicPlayer implements Runnable {
             Note note = layer.getNote(this.tick);
             if (note == null) continue;
 
-            Bukkit.getOnlinePlayers().forEach(player -> player.playNote(
-                    loc, InstrumentConverter.getBukkitInstrument(note.getInstrument()),
-                    new org.bukkit.Note(note.getKey() - 33)
-            ));
-
-            float volume = ((layer.getVolume() * (this.jukebox.getSettings().getVolume().getValue() / 100f)
-                    * (int) note.getVelocity()) / 100_000_000f)
+            float volume = ((layer.getVolume() * this.jukebox.getSettings().getVolume().getValue()
+                    * (int) note.getVelocity()) / 1_000_000f)
                     * ((1f / 16f) * this.jukebox.getSettings().getDistance().getValue());
             float pitch = NotePitchConverter.getPitch(note);
 
