@@ -6,6 +6,7 @@ import fr.utarwyn.superjukebox.jukebox.JukeboxesManager;
 import fr.utarwyn.superjukebox.menu.MenuManager;
 import fr.utarwyn.superjukebox.music.MusicManager;
 import fr.utarwyn.superjukebox.util.Updater;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Level;
@@ -18,6 +19,11 @@ import java.util.logging.Level;
  * @since 0.1.0
  */
 public class SuperJukebox extends JavaPlugin {
+
+    /**
+     * bStats plugin identifier for metrics
+     */
+    private static final int PLUGIN_ID = 9435;
 
     /**
      * The SuperJukebox instance
@@ -52,6 +58,9 @@ public class SuperJukebox extends JavaPlugin {
         new Updater();
 
         commandManager.registerCommands();
+
+        // Enable metrics
+        new Metrics(this, PLUGIN_ID);
     }
 
     @Override
