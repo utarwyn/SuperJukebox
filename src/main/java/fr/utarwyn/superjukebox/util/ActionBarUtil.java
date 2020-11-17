@@ -73,12 +73,12 @@ public class ActionBarUtil {
         }
     }
 
-    public static void sendActionTitleToAllPlayers(String message) {
-        sendActionTitleToAllPlayers(message, -1);
+    public static void sendActionTitleToPlayers(String message, Iterable<Player> players) {
+        sendActionTitleToPlayers(message, players, -1);
     }
 
-    public static void sendActionTitleToAllPlayers(String message, int duration) {
-        for (Player p : Bukkit.getOnlinePlayers()) {
+    public static void sendActionTitleToPlayers(String message, Iterable<Player> players, int duration) {
+        for (Player p : players) {
             sendActionTitle(p, message, duration);
         }
     }

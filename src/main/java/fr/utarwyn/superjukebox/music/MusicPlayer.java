@@ -12,9 +12,11 @@ import fr.utarwyn.superjukebox.util.ActionBarUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Capable of playing musics from SuperJukeboxes!
@@ -97,9 +99,12 @@ public class MusicPlayer implements Runnable {
         // Send announcements to all players
         boolean announcements = this.jukebox.getSettings().getAnnouncements().getValue();
         if (announcements) {
-            // TODO: only send to players which can hear the music!
-            ActionBarUtil.sendActionTitleToAllPlayers(String.format("§a♫ %s §e(%s)",
-                    this.currentMusic.getName(), this.currentMusic.getOriginalAuthor()));
+            String message = String.format("§a♫ %s §e(%s)", this.currentMusic.getName(), this.currentMusic.getOriginalAuthor());
+            List<Player> players = this.jukebox.getBlock().getWorld().getPlayers().stream()
+                    .filter(this::isPlayerInRange)
+                    .collect(Collectors.toList());
+
+            ActionBarUtil.sendActionTitleToPlayers(message, players);
         }
     }
 
@@ -159,6 +164,8 @@ public class MusicPlayer implements Runnable {
     }
 
     private void playTick() {
+        if (this.currentMusic == null) return;
+
         int nbNote = 0;
         Block block = this.jukebox.getBlock();
         Location loc = block.getLocation().clone().add(0.5, -0.5, 0.5);
@@ -194,6 +201,11 @@ public class MusicPlayer implements Runnable {
     private boolean canPlay() {
         return !this.jukebox.getSettings().getPlayWithRedstone().getValue()
                 || this.jukebox.getBlock().isBlockIndirectlyPowered();
+    }
+
+    private boolean isPlayerInRange(Player player) {
+        return player.getLocation().distance(this.jukebox.getBlock().getLocation())
+                <= this.jukebox.getSettings().getDistance().getValue();
     }
 
 }
