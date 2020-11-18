@@ -1,6 +1,7 @@
 package fr.utarwyn.superjukebox.music;
 
 import fr.utarwyn.superjukebox.music.model.Layer;
+import fr.utarwyn.superjukebox.util.JUtil;
 import fr.utarwyn.superjukebox.util.MaterialHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -8,8 +9,9 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,7 +53,7 @@ public class Music {
         this.name = this.formatFilename();
         this.author = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No author";
         this.originalAuthor = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No original author";
-        this.description = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No description";
+        this.description = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No description" + ChatColor.RESET;
         this.layers = new HashMap<>();
         this.version = 0;
 
@@ -179,22 +181,26 @@ public class Music {
      */
     private void updateIconMetadatas() {
         ItemMeta iconMeta = this.icon.getItemMeta();
+        if (iconMeta == null) return;
 
-        // Set all metadatas on the Bukkit itemstack
-        iconMeta.setDisplayName(ChatColor.GREEN + "♫ " + this.name);
-        iconMeta.setLore(Arrays.asList(
-                ChatColor.DARK_GRAY + "*-------------------------*",
-                ChatColor.GRAY + "Duration: " + ChatColor.YELLOW + this.getFormattedLength(),
-                ChatColor.GRAY + "Author: " + ChatColor.AQUA + this.author,
-                ChatColor.GRAY + "Original author: " + ChatColor.AQUA + this.originalAuthor,
+        List<String> lore = new ArrayList<>();
+        List<String> descriptionLore = JUtil.splitText(
                 ChatColor.GRAY + "Description: " + ChatColor.WHITE + this.description,
-                ChatColor.DARK_GRAY + "*-------------------------*",
-                "",
-                ChatColor.GOLD + "Click to play this music!"
-        ));
+                40, ChatColor.WHITE.toString()
+        );
 
-        // Hide real music name from ths disc!
-        iconMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+        lore.add(ChatColor.DARK_GRAY + "*-------------------------*");
+        lore.add(ChatColor.GRAY + "Duration: " + ChatColor.YELLOW + this.getFormattedLength());
+        lore.add(ChatColor.GRAY + "Author: " + ChatColor.AQUA + this.author);
+        lore.add(ChatColor.GRAY + "Original author: " + ChatColor.AQUA + this.originalAuthor);
+        lore.addAll(descriptionLore);
+        lore.add(ChatColor.DARK_GRAY + "*-------------------------*");
+        lore.add("");
+        lore.add(ChatColor.GOLD + "Click to play this music!");
+
+        iconMeta.setDisplayName(ChatColor.GREEN + "♫ " + this.name);
+        iconMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS); // Hide real music name of the disc
+        iconMeta.setLore(lore);
 
         this.icon.setItemMeta(iconMeta);
     }

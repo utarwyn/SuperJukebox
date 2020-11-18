@@ -11,6 +11,8 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -101,6 +103,35 @@ public class JUtil {
         if (sound == null) return;
 
         player.playSound(player.getLocation(), sound, 1f, 1f);
+    }
+
+    /**
+     * Split a text to a multilines string based on its words.
+     *
+     * @param text       text to split
+     * @param characters amount of characters per line
+     * @param linePrefix preprend each line with a text
+     * @return list of string with cutted text
+     */
+    public static List<String> splitText(String text, int characters, String linePrefix) {
+        List<String> lore = new ArrayList<>();
+        String[] words = text.split(" ");
+        int wordsUsed = 0;
+        while (wordsUsed < words.length) {
+            StringBuilder line = new StringBuilder(linePrefix);
+            for (int i = wordsUsed; i < words.length; i++) {
+                if (line.length() + words[i].length() >= characters) {
+                    line.append(words[i]);
+                    wordsUsed++;
+                    break;
+                } else {
+                    line.append(words[i]).append(" ");
+                    wordsUsed++;
+                }
+            }
+            lore.add(line.toString());
+        }
+        return lore;
     }
 
     /**
