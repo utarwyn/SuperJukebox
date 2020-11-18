@@ -48,7 +48,7 @@ public class Music {
 
     public Music(String filename) {
         this.filename = filename;
-        this.name = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No name";
+        this.name = this.formatFilename();
         this.author = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No author";
         this.originalAuthor = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No original author";
         this.description = ChatColor.RED.toString() + ChatColor.UNDERLINE + "No description";
@@ -197,6 +197,12 @@ public class Music {
         iconMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
 
         this.icon.setItemMeta(iconMeta);
+    }
+
+    private String formatFilename() {
+        return this.filename.replace(".nbs", "")
+                .replace("-", " ")
+                .replace("_", " ");
     }
 
     private String getFormattedLength() {
