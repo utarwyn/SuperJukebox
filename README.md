@@ -7,24 +7,24 @@ Works with Bukkit/Spigot 1.8 to 1.16!
 </h4>
 
 <p align="center">
-    <a href="https://travis-ci.com/utarwyn/SuperJukebox">
-        <img src="https://img.shields.io/travis/com/utarwyn/SuperJukebox.svg" alt="Travis">
+    <a href="https://github.com/utarwyn/SuperJukebox/actions">
+        <img src="https://github.com/utarwyn/SuperJukebox/workflows/Java%20Integration/badge.svg" alt="Java CI">
     </a>
-    <a href="https://sonarcloud.io/dashboard?id=fr.utarwyn%3ASuperJukebox">
-        <img src="https://sonarcloud.io/api/project_badges/measure?project=fr.utarwyn%3ASuperJukebox&metric=alert_status" alt="SonarQube Quality gate">
+    <a href="https://sonarcloud.io/dashboard?id=fr.utarwyn.superjukebox">
+        <img src="https://sonarcloud.io/api/project_badges/measure?project=fr.utarwyn.superjukebox&metric=alert_status" alt="SonarQube Quality gate">
     </a>
-    <a href="https://sonarcloud.io/dashboard?id=fr.utarwyn%3ASuperJukebox">
-        <img src="https://sonarcloud.io/api/project_badges/measure?project=fr.utarwyn%3ASuperJukebox&metric=sqale_rating" alt="SonarQube maintainability">
+    <a href="https://sonarcloud.io/dashboard?id=fr.utarwyn.superJukebox">
+        <img src="https://sonarcloud.io/api/project_badges/measure?project=fr.utarwyn.superjukebox&metric=sqale_rating" alt="SonarQube maintainability">
     </a>
-    <a href="https://sonarcloud.io/component_measures?id=fr.utarwyn%3ASuperJukebox&metric=coverage">
-        <img src="https://sonarcloud.io/api/project_badges/measure?project=fr.utarwyn%3ASuperJukebox&metric=coverage" alt="SonarQube coverage">
+    <a href="https://sonarcloud.io/component_measures?id=fr.utarwyn.superJukebox&metric=coverage">
+        <img src="https://sonarcloud.io/api/project_badges/measure?project=fr.utarwyn.superjukebox&metric=coverage" alt="SonarQube coverage">
     </a>
     <br>
-    <a href="https://github.com/utarwyn/SuperJukebox/commits/master">
-        <img src="https://img.shields.io/github/last-commit/utarwyn/superjukebox/master.svg" alt="GitHub last commit">
+    <a href="https://www.spigotmc.org/resources/62293/">
+        <img src="https://img.shields.io/badge/dynamic/json.svg?label=Downloads&colorB=orange&query=$.downloads&uri=https%3A%2F%2Fapi.spiget.org%2Fv2%2Fresources%2F62293" alt="Downloads">
     </a>
-    <a href="https://github.com/utarwyn/SuperJukebox/blob/master/LICENSE">
-        <img src="https://img.shields.io/github/license/utarwyn/superjukebox.svg" alt="License">
+    <a href="https://www.spigotmc.org/resources/62293/">
+        <img src="https://img.shields.io/badge/dynamic/json.svg?label=Global%20rating&colorB=blue&query=$.rating.average&uri=https%3A%2F%2Fapi.spiget.org%2Fv2%2Fresources%2F62293" alt="Rating">
     </a>
 </p>
 
@@ -41,7 +41,6 @@ Works with Bukkit/Spigot 1.8 to 1.16!
  - Configure **jukebox's sound distance**!
  - Support for **1.14+** sounds!
  - Console commands support
- - Full titles, messages, GUI texts customization
  - Very fun for all type of servers!
  - **No dependency needed!** :tada:
 
@@ -56,9 +55,9 @@ Works with Bukkit/Spigot 1.8 to 1.16!
  5. Enjoy! 
  
  ### Create a SuperJukebox
- 
- 1. Make sure you have the `SuperJukebox.place` permission
- 2. Get a jukebox from your inventory, press shift then place jukebox
+
+1. Make sure you have the `superjukebox.place` permission
+2. Get a jukebox from your inventory, press shift then place jukebox
  3. If it worked you can now right click the Jukebox and a GUI just popped up!
 
 ## Contributors
@@ -72,7 +71,7 @@ Works with Bukkit/Spigot 1.8 to 1.16!
 
 ## License
 
-MIT
+BSD 3-Clause "New" or "Revised" License
 
 ---
 
