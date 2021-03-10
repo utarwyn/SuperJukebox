@@ -18,12 +18,13 @@ import org.bukkit.entity.Player;
  */
 public class CreateCommand extends AbstractCommand {
 
-    private JukeboxesManager manager;
+    private final JukeboxesManager manager;
 
     public CreateCommand() {
         super("create", "c");
 
         this.manager = SuperJukebox.getInstance().getInstance(JukeboxesManager.class);
+        this.setPermission("create");
     }
 
     @Override
@@ -33,11 +34,6 @@ public class CreateCommand extends AbstractCommand {
 
     @Override
     public void performPlayer(Player player) {
-        if (!JUtil.playerHasPerm(player, "create")) {
-            JUtil.sendMessage(player, ChatColor.RED + "You don't have permission to do that!");
-            return;
-        }
-
         Block block = player.getTargetBlock(null, 6);
 
         if (block.getType() != Material.JUKEBOX) {

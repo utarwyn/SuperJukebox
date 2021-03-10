@@ -16,13 +16,14 @@ public class ListCommand extends AbstractCommand {
 
     private static final int MUSICS_PER_PAGE = 8;
 
-    private MusicManager manager;
+    private final MusicManager manager;
 
     public ListCommand() {
         super("list", "l");
 
         this.manager = SuperJukebox.getInstance().getInstance(MusicManager.class);
 
+        this.setPermission("music.list");
         this.addParameter(Parameter.integer().optional());
     }
 

@@ -23,7 +23,7 @@ public abstract class AbstractCommand extends Command implements TabCompleter, C
     /**
      * Prefix for all command permissions of the plugin
      */
-    private static final String PERM_PREFIX = "endercontainers.";
+    private static final String PERM_PREFIX = "superjukebox.";
 
     /**
      * Permission needed to type the command (for a player)
@@ -33,12 +33,12 @@ public abstract class AbstractCommand extends Command implements TabCompleter, C
     /**
      * List all parameters of this command
      */
-    private List<Parameter> parameters;
+    private final List<Parameter<?>> parameters;
 
     /**
      * List all sub-commands of this command
      */
-    private List<AbstractCommand> subCommands;
+    private final List<AbstractCommand> subCommands;
 
     /**
      * List all arguments for this command
@@ -56,7 +56,7 @@ public abstract class AbstractCommand extends Command implements TabCompleter, C
      * @param name    Name of ths command
      * @param aliases Aliases of the command
      */
-    public AbstractCommand(String name, String... aliases) {
+    protected AbstractCommand(String name, String... aliases) {
         super(name);
 
         this.parameters = new ArrayList<>();
@@ -213,7 +213,7 @@ public abstract class AbstractCommand extends Command implements TabCompleter, C
         // Not implemented by default
     }
 
-    protected void addParameter(Parameter parameter) {
+    protected void addParameter(Parameter<?> parameter) {
         this.parameters.add(parameter);
     }
 
@@ -268,10 +268,11 @@ public abstract class AbstractCommand extends Command implements TabCompleter, C
      * @param <T> type of argument to read
      * @return converted read value
      */
+    @SuppressWarnings("unchecked")
     private <T> T readArgument(int idx) {
         this.nextArg = idx + 1;
 
-        Parameter<T> parameter = this.parameters.get(idx);
+        Parameter<T> parameter = (Parameter<T>) this.parameters.get(idx);
         return parameter.convertValue(this.args.get(idx));
     }
 

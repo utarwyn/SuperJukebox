@@ -33,7 +33,7 @@ public abstract class AbstractManager implements Listener {
      * @param plugin    Main class of the plugin
      * @param listeners List of listeners to automatically load during the initialization of the manager
      */
-    public AbstractManager(SuperJukebox plugin, Listener... listeners) {
+    protected AbstractManager(SuperJukebox plugin, Listener... listeners) {
         this.plugin = plugin;
         this.logger = plugin.getLogger();
 

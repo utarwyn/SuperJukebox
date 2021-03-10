@@ -12,13 +12,14 @@ import org.bukkit.entity.Player;
 
 public class ImportCommand extends AbstractCommand {
 
-    private MusicManager manager;
+    private final MusicManager manager;
 
     public ImportCommand() {
         super("import", "i");
 
         this.manager = SuperJukebox.getInstance().getInstance(MusicManager.class);
 
+        this.setPermission("music.import");
         this.addParameter(Parameter.string());
     }
 

@@ -21,15 +21,11 @@ public class ReloadCommand extends AbstractCommand {
 
     public ReloadCommand() {
         super("reload", "rl");
+        this.setPermission("reload");
     }
 
     @Override
     public void perform(CommandSender sender) {
-        if (!JUtil.senderHasPerm(sender, "reload")) {
-            JUtil.sendMessage(sender, ChatColor.RED + "You don't have permission to do that!");
-            return;
-        }
-
         if (!Files.getConfiguration().reload()) {
             JUtil.sendMessage(sender, ChatColor.RED + "Error when reloading config! See the console for more info!");
             JUtil.sendMessage(sender, ChatColor.DARK_GRAY + "Plugin now disabled.");

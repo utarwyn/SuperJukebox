@@ -13,13 +13,14 @@ import org.bukkit.entity.Player;
 
 public class RemoveCommand extends AbstractCommand {
 
-    private MusicManager manager;
+    private final MusicManager manager;
 
     public RemoveCommand() {
         super("remove", "rm");
 
         this.manager = SuperJukebox.getInstance().getInstance(MusicManager.class);
 
+        this.setPermission("music.remove");
         this.addParameter(Parameter.integer());
     }
 
