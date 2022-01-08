@@ -25,7 +25,7 @@
     <properties>
         <bukkit.version>1.16.1-R0.1-SNAPSHOT</bukkit.version>
         <fastparticles.version>1.2.3</fastparticles.version>
-        <bstats.version>1.7</bstats.version>
+        <bstats.version>2.2.1</bstats.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -40,10 +40,6 @@
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
-        </repository>
-        <repository>
-            <id>bstats</id>
-            <url>https://repo.codemc.org/repository/maven-public</url>
         </repository>
     </repositories>
 
@@ -69,6 +65,7 @@
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
             <version>${bstats.version}</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
@@ -102,11 +99,11 @@
                     <relocations>
                         <relocation>
                             <pattern>fr.mrmicky.fastparticle</pattern>
-                            <shadedPattern>fr.utarwyn.superjukebox.fastparticles</shadedPattern>
+                            <shadedPattern>fr.utarwyn.superjukebox.libs.fastparticles</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <shadedPattern>fr.utarwyn.superjukebox.bstats</shadedPattern>
+                            <shadedPattern>fr.utarwyn.superjukebox.libs.bstats</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

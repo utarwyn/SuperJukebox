@@ -23,7 +23,7 @@ public class SuperJukebox extends JavaPlugin {
     /**
      * bStats plugin identifier for metrics
      */
-    private static final int PLUGIN_ID = 9435;
+    private static final int METRICS_PLUGIN_ID = 9435;
 
     /**
      * The SuperJukebox instance
@@ -60,7 +60,7 @@ public class SuperJukebox extends JavaPlugin {
         commandManager.registerCommands();
 
         // Enable metrics
-        new Metrics(this, PLUGIN_ID);
+        new Metrics(this, METRICS_PLUGIN_ID);
     }
 
     @Override
