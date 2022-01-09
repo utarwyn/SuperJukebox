@@ -55,6 +55,9 @@ public class Configuration extends YamlFile {
     @Configurable(key = "jukeboxconfiguration.permissions.editsettings")
     private String jukeboxDefaultEditSettingsPerm;
 
+    @Configurable
+    private boolean updateChecker;
+
     Configuration(JavaPlugin plugin) {
         super(plugin);
     }
@@ -122,6 +125,10 @@ public class Configuration extends YamlFile {
 
     public String getJukeboxDefaultEditSettingsPerm() {
         return this.jukeboxDefaultEditSettingsPerm;
+    }
+
+    public boolean isUpdateChecker() {
+        return this.updateChecker;
     }
 
 }

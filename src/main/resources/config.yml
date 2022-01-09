@@ -35,3 +35,6 @@ jukeboxconfiguration:
     interact: EVERYONE
     editmusics: WITH_PERM
     editsettings: WITH_PERM
+
+# Check automatically for update?
+updateChecker: true
