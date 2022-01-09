@@ -155,7 +155,7 @@ public class JukeboxMainMenu extends MusicDiscsMenu {
         super.onClick(event);
 
         // Settings menu item
-        if (this.settingItem != null && event.getCurrentItem().equals(this.settingItem)) {
+        if (this.settingItem != null && this.settingItem.equals(event.getCurrentItem())) {
             // Open the setting menu in another Thread
             JUtil.runSync(() -> {
                 if (this.settingsMenu == null) {

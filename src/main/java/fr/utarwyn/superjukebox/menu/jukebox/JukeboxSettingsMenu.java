@@ -75,12 +75,12 @@ public class JukeboxSettingsMenu extends AbstractMenu {
                 this.jukebox.getSettings().getParticles()
         );
         this.createSettingItem(
-                19, Material.REDSTONE,
+                16, Material.REDSTONE,
                 "Play with redstone",
                 this.jukebox.getSettings().getPlayWithRedstone()
         );
         this.createSettingItem(
-                20, MaterialHelper.findMaterial("SIGN", "OAK_SIGN"),
+                19, MaterialHelper.findMaterial("SIGN", "OAK_SIGN"),
                 "Announce music",
                 this.jukebox.getSettings().getAnnouncements()
         );
@@ -98,7 +98,7 @@ public class JukeboxSettingsMenu extends AbstractMenu {
         }
 
         this.permissionItem.setItemMeta(permissionMeta);
-        this.setItem(16, this.permissionItem);
+        this.setItem(15, this.permissionItem);
 
         // Separators
         for (int i = 0; i < 10; i++) {
@@ -119,6 +119,7 @@ public class JukeboxSettingsMenu extends AbstractMenu {
     @Override
     public void onClick(InventoryClickEvent event) {
         ItemStack itemStack = this.getItemAt(event.getSlot());
+        if (itemStack == null) return;
 
         // Setting item
         for (Map.Entry<Setting<?>, ItemStack> entry : this.settingItems.entrySet()) {
@@ -132,7 +133,8 @@ public class JukeboxSettingsMenu extends AbstractMenu {
                         break;
 
                     case "Integer":
-                        int difference, newValue;
+                        int difference;
+                        int newValue;
 
                         // Left click = minus — Right click = plus
                         if (event.getClick().isLeftClick()) {
