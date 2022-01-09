@@ -63,7 +63,7 @@ public class CommandManager extends AbstractManager {
         CommandMap commandMap = getCommandMap();
 
         if (commandMap != null) {
-            commandMap.register("endercontainers", commandClass.getDeclaredConstructor().newInstance());
+            commandMap.register("superjukebox", commandClass.getDeclaredConstructor().newInstance());
         }
     }
 
