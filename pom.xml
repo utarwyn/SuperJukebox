@@ -6,7 +6,7 @@
 
     <groupId>fr.utarwyn</groupId>
     <artifactId>SuperJukebox</artifactId>
-    <version>0.4.0-dev</version>
+    <version>0.4.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>SuperJukebox</name>
@@ -17,7 +17,7 @@
     <licenses>
         <license>
             <name>The BSD 3-Clause License</name>
-            <url>http://opensource.org/licenses/BSD-3-Clause</url>
+            <url>https://opensource.org/licenses/BSD-3-Clause</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
