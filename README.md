@@ -3,7 +3,7 @@
 <h4 align="center">
 Play custom musics from jukeboxes. We all love music, right?
 <br>
-Works with Bukkit/Spigot 1.8 to 1.16!
+Works with Bukkit/Spigot 1.8 to 1.18!
 </h4>
 
 <p align="center">
@@ -48,11 +48,12 @@ Works with Bukkit/Spigot 1.8 to 1.16!
 
 ### Installation
 
- 1. Download the unofficial plugin from [this Spigot page](https://www.spigotmc.org/resources/superjukebox-added-a-discord.62293/)
- 2. Put the SuperJuperbox.jar file in your plugins' folder.
- 3. Restart your server!
- 4. Configure the plugin in config.yml file and type ***/sj reload***
- 5. Enjoy! 
+1. Download latest stable version from [releases page](https://github.com/utarwyn/SuperJukebox/releases)
+2. Put the SuperJuperbox.jar file in your plugins' folder
+3. Restart your server
+4. Configure the plugin in config.yml file and type ***/sj reload***
+5. Enjoy!
+
  
  ### Create a SuperJukebox
 
