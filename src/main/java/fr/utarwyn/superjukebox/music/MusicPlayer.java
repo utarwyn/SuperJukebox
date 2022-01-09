@@ -1,7 +1,6 @@
 package fr.utarwyn.superjukebox.music;
 
-import fr.mrmicky.fastparticle.FastParticle;
-import fr.mrmicky.fastparticle.ParticleType;
+import fr.mrmicky.fastparticles.ParticleType;
 import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.jukebox.Jukebox;
 import fr.utarwyn.superjukebox.music.converters.InstrumentConverter;
@@ -190,8 +189,8 @@ public class MusicPlayer implements Runnable {
         // Play particles at the same time if needed!
         boolean particlesEnabled = this.jukebox.getSettings().getParticles().getValue();
         if (nbNote > 0 && particlesEnabled) {
-            FastParticle.spawnParticle(
-                    block.getWorld(), ParticleType.NOTE,
+            ParticleType.of("NOTE").spawn(
+                    block.getWorld(),
                     block.getLocation().clone().add(.5, 1.2, .5),
                     nbNote, .3f, .3f, .3f
             );

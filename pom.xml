@@ -24,7 +24,7 @@
 
     <properties>
         <bukkit.version>1.16.1-R0.1-SNAPSHOT</bukkit.version>
-        <fastparticles.version>1.2.3</fastparticles.version>
+        <fastparticles.version>2.0.0</fastparticles.version>
         <bstats.version>2.2.1</bstats.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
