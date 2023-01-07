@@ -47,7 +47,7 @@ Works with Bukkit/Spigot 1.8 to 1.19!
 
 | Version   | Supported Minecraft versions | Status      | Download                                                                                  |
 |-----------|------------------------------|-------------|-------------------------------------------------------------------------------------------|
-| 0.4.0     | 1.8 to 1.18                  | Alpha       | [Click here](https://utarwyn.fr/projects/SuperJukebox/SuperJukebox-0.4.0.jar)             |
+| 0.4.1     | 1.8 to 1.19                  | Alpha       | [Click here](https://utarwyn.fr/projects/SuperJukebox/SuperJukebox-0.4.1.jar)             |
 | 0.4.1-dev | 1.8 to 1.19                  | Development | [Click here](https://utarwyn.fr/projects/SuperJukebox/SuperJukebox-0.4.1-SNAPSHOT.jar)    |
 | 0.3.1     | 1.8 to 1.12                  | Old         | [Click here](https://www.spigotmc.org/resources/superjukebox-your-mc-music-player.62293/) |
 
