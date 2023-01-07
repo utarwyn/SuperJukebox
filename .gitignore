@@ -1,6 +1,22 @@
-.idea/*
-out/
-target/
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Intellij
+.idea/
 *.iml
-META-INF/
-dependency-reduced-pom.xml
+*.iws
+
+# Mac
+.DS_Store
+
+# Gradle
+.gradle
+**/out/
+**/build/
+**/target/
+!src/**/build/
+gradle-app.setting
+!gradle-wrapper.jar
+.gradletasknamecache

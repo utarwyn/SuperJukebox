@@ -28,42 +28,38 @@ Works with Bukkit/Spigot 1.8 to 1.18!
     </a>
 </p>
 
-> :star: If you want to use SuperJukebox right now, you can download 
-> an unofficial alpha version of the plugin on [TheCoolOne123's Spigot page](https://www.spigotmc.org/resources/superjukebox-added-a-discord.62293/)! **Thanks for his help!** \
-> :fire: **NEW!** Download development builds of the plugin from my [personal integration service](https://ci.utarwyn.fr/job/SuperJukebox).
+> :fire: **NEW!** Download all builds of the plugin
+> directly [from GitHub](https://github.com/utarwyn/SuperJukebox#downloads).
 
 ## Key Features
 
- - Play music from all formats of NBS files
- - Jukeboxes **fully configurable with GUIs**!
- - Can display particles/holograms
- - Permissions **for each jukebox**!
- - Configure **jukebox's sound distance**!
- - Support for **1.14+** sounds!
+- Play music from all formats of NBS files
+- Jukeboxes **fully configurable with GUIs**!
+- Can display particles/holograms
+- Permissions **for each jukebox**!
+- Configure **jukebox's sound distance**!
+- Support for **1.14+** sounds!
  - Console commands support
  - Very fun for all type of servers!
  - **No dependency needed!** :tada:
 
-## How to use
+## Downloads
 
-### Installation
+| Version   | Supported Minecraft versions | Status      | Download                                                                                  |
+|-----------|------------------------------|-------------|-------------------------------------------------------------------------------------------|
+| 0.4.0     | 1.8 to 1.18                  | Alpha       | [Click here](https://utarwyn.fr/projects/SuperJukebox/SuperJukebox-0.4.0.jar)             |
+| 0.4.1-dev | 1.8 to 1.18                  | Development | [Click here](https://utarwyn.fr/projects/SuperJukebox/SuperJukebox-0.4.1-SNAPSHOT.jar)    |
+| 0.3.1     | 1.8 to 1.12                  | Old         | [Click here](https://www.spigotmc.org/resources/superjukebox-your-mc-music-player.62293/) |
 
-1. Download latest stable version from [releases page](https://github.com/utarwyn/SuperJukebox/releases)
-2. Put the SuperJuperbox.jar file in your plugins' folder
-3. Restart your server
-4. Configure the plugin in config.yml file and type ***/sj reload***
-5. Enjoy!
+> :star: TheCoolOne123 has already created
+> a [Spigot page](https://www.spigotmc.org/resources/superjukebox-added-a-discord.62293/) for the project! **Thanks for
+his help!**
 
- 
- ### Create a SuperJukebox
+## Getting started with SuperJukebox
 
 1. Make sure you have the `superjukebox.place` permission
 2. Get a jukebox from your inventory, press shift then place jukebox
- 3. If it worked you can now right click the Jukebox and a GUI just popped up!
-
-## Contributors
-
-* [TheCoolOne123](https://github.com/TheCoolOne123)
+3. If it worked you can now right click the Jukebox and a GUI just popped up!
 
 ## Support
  
