@@ -3,11 +3,9 @@ package fr.utarwyn.superjukebox.commands.main;
 import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.commands.AbstractCommand;
 import fr.utarwyn.superjukebox.jukebox.JukeboxesManager;
-import fr.utarwyn.superjukebox.util.JUtil;
-import org.bukkit.ChatColor;
+import fr.utarwyn.superjukebox.util.PluginMsg;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
@@ -28,32 +26,21 @@ public class CreateCommand extends AbstractCommand {
     }
 
     @Override
-    public void perform(CommandSender sender) {
-        // Not implemented
-    }
-
-    @Override
     public void performPlayer(Player player) {
         Block block = player.getTargetBlock(null, 6);
 
         if (block.getType() != Material.JUKEBOX) {
-            JUtil.sendMessage(player, ChatColor.RED + "The aimed block is not a valid jukebox.");
+            PluginMsg.errorMessage(player, "Aimed block is not a valid jukebox.");
             return;
         }
 
         if (this.manager.getJukeboxAt(block) != null) {
-            JUtil.sendMessage(player, ChatColor.RED + "The aimed block is already a super jukebox!");
+            PluginMsg.errorMessage(player, "Aimed block is already a super jukebox!");
             return;
         }
 
-        // Create a superjukebox here!
         this.manager.createSuperJukebox(block);
-        JUtil.sendMessage(player, ChatColor.GREEN + "This jukebox is now " + ChatColor.GOLD + "A SuperJukebox " + ChatColor.GREEN + "!");
-    }
-
-    @Override
-    public void performConsole(CommandSender sender) {
-        // Not implemented
+        PluginMsg.successMessage(player, "This jukebox now looks super cool!");
     }
 
 }

@@ -5,11 +5,9 @@ import fr.utarwyn.superjukebox.commands.AbstractCommand;
 import fr.utarwyn.superjukebox.commands.Parameter;
 import fr.utarwyn.superjukebox.music.Music;
 import fr.utarwyn.superjukebox.music.MusicManager;
-import fr.utarwyn.superjukebox.util.JUtil;
+import fr.utarwyn.superjukebox.util.PluginMsg;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class RemoveCommand extends AbstractCommand {
 
@@ -32,26 +30,16 @@ public class RemoveCommand extends AbstractCommand {
             Music music = this.manager.getMusic(id);
 
             if (music == null) {
-                JUtil.sendMessage(sender, ChatColor.RED + "This music does not exist!");
+                PluginMsg.errorMessage(sender, "This music does not exist!");
                 return;
             }
 
             if (this.manager.removeMusic(music)) {
-                JUtil.sendMessage(sender, ChatColor.GREEN + "Music removed!");
+                PluginMsg.successMessage(sender, "Music removed!");
             } else {
-                JUtil.sendMessage(sender, ChatColor.RED + "Music cannot be removed from the configuration.");
+                PluginMsg.errorMessage(sender, "Music cannot be removed from the configuration.");
             }
         });
-    }
-
-    @Override
-    public void performPlayer(Player player) {
-        // Not implemented
-    }
-
-    @Override
-    public void performConsole(CommandSender sender) {
-        // Not implemented
     }
 
 }

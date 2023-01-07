@@ -18,7 +18,7 @@ public class Updater extends AbstractManager implements Runnable {
 
     private static final int PROJECT_ID = 62293;
 
-    private static final String PROJECT_URL = "https://www.spigotmc.org/resources/" + PROJECT_ID;
+    private static final String DOWNLOAD_LINK = "https://github.com/utarwyn/SuperJukebox/releases";
 
     private static final String VERSION_API_URL = "https://api.spigotmc.org/legacy/update.php?resource=" + PROJECT_ID;
 
@@ -90,7 +90,7 @@ public class Updater extends AbstractManager implements Runnable {
             logger.warning("-----------[Plugin Update]----------");
             logger.log(Level.WARNING, "  Your server is using v{0} of SuperJukebox. Latest is v{1}.",
                     new Object[]{this.currentVersion, this.latestVersion});
-            logger.log(Level.WARNING, "  Download the new version here: {0}", PROJECT_URL);
+            logger.log(Level.WARNING, "  Download the new version here: {0}", DOWNLOAD_LINK);
             logger.warning("------------------------------------");
         } else {
             logger.log(Level.INFO, "You are using the newest version of the plugin ({0}).", this.currentVersion);
@@ -114,8 +114,7 @@ public class Updater extends AbstractManager implements Runnable {
      */
     public void notifyPlayer(Player player) {
         if (this.hasToBeUpdated()) {
-            JUtil.sendMessage(player, "§6SuperJukebox §cis not up-to-date! Latest version is §ev" + latestVersion + "§c.");
-            JUtil.sendMessage(player, "Please download it at: §6" + PROJECT_URL);
+            PluginMsg.errorMessage(player, "§6SuperJukebox §cis not up-to-date! Latest version is §ev" + latestVersion + "§c.");
             JUtil.playSound(player, "NOTE_PLING", "BLOCK_NOTE_PLING");
         }
     }

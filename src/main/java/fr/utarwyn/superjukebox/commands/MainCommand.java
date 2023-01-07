@@ -1,10 +1,12 @@
 package fr.utarwyn.superjukebox.commands;
 
 import fr.utarwyn.superjukebox.SuperJukebox;
-import fr.utarwyn.superjukebox.commands.main.*;
-import fr.utarwyn.superjukebox.util.JUtil;
+import fr.utarwyn.superjukebox.commands.main.CreateCommand;
+import fr.utarwyn.superjukebox.commands.main.HelpCommand;
+import fr.utarwyn.superjukebox.commands.main.MusicCommand;
+import fr.utarwyn.superjukebox.commands.main.ReloadCommand;
+import fr.utarwyn.superjukebox.util.PluginMsg;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 
 import java.util.List;
@@ -21,8 +23,6 @@ public class MainCommand extends AbstractCommand {
 
     private final String pluginAuthor;
 
-    private String pluginContributors;
-
     public MainCommand() {
         super("superjukebox", "sj");
 
@@ -30,7 +30,6 @@ public class MainCommand extends AbstractCommand {
         this.addSubCommand(new MusicCommand());
         this.addSubCommand(new HelpCommand());
         this.addSubCommand(new ReloadCommand());
-        this.addSubCommand(new SupportCommand());
 
         // Save some plugin values in memory
         PluginDescriptionFile description = SuperJukebox.getInstance().getDescription();
@@ -38,29 +37,17 @@ public class MainCommand extends AbstractCommand {
 
         this.pluginVersion = description.getVersion();
         this.pluginAuthor = authors.get(0);
-        if (authors.size() > 1) {
-            this.pluginContributors = String.join(", ", authors.subList(1, authors.size()));
-        }
     }
 
     @Override
     public void perform(CommandSender sender) {
-        JUtil.sendMessage(sender, String.format("Created by §3%s.§7 Version §e%s§7.", this.pluginAuthor, this.pluginVersion));
-        if (this.pluginContributors != null) {
-            JUtil.sendMessage(sender, String.format("Contributors: §3%s§7.", this.pluginContributors));
-        }
+        PluginMsg.pluginBar(sender);
 
-        JUtil.sendMessage(sender, "To show plugin's help: §d/sj help§7.");
-    }
-
-    @Override
-    public void performPlayer(Player player) {
-        // Not implemented
-    }
-
-    @Override
-    public void performConsole(CommandSender sender) {
-        // Not implemented
+        sender.sendMessage(" ");
+        sender.sendMessage("  §7 Plugin created by §a" + this.pluginAuthor + "§7 and contributors.");
+        sender.sendMessage("  §7 Version installed: §e" + this.pluginVersion);
+        sender.sendMessage("  §7 Do you need help? Type §d/sj help§7!");
+        sender.sendMessage(" ");
     }
 
 }

@@ -16,9 +16,6 @@ public class Configuration extends YamlFile {
     @Configurable
     private boolean debug;
 
-    @Configurable(key = "chat.prefix")
-    private String prefix;
-
     @Configurable
     private String locale;
 
@@ -73,10 +70,6 @@ public class Configuration extends YamlFile {
 
     public boolean isDebug() {
         return this.debug;
-    }
-
-    public String getPrefix() {
-        return this.prefix;
     }
 
     public String getLocale() {

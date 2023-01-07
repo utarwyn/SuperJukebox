@@ -5,10 +5,8 @@ import fr.utarwyn.superjukebox.commands.AbstractCommand;
 import fr.utarwyn.superjukebox.commands.Parameter;
 import fr.utarwyn.superjukebox.music.Music;
 import fr.utarwyn.superjukebox.music.MusicManager;
-import fr.utarwyn.superjukebox.util.JUtil;
-import org.bukkit.ChatColor;
+import fr.utarwyn.superjukebox.util.PluginMsg;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -32,13 +30,13 @@ public class ListCommand extends AbstractCommand {
         List<Music> musics = this.manager.getMusics();
 
         if (musics.isEmpty()) {
-            JUtil.sendMessage(sender, ChatColor.RED + "There is no music yet.");
+            PluginMsg.infoMessage(sender, "There is no music yet.");
             return;
         }
 
         int page = this.readArgOrDefault(1);
         if (page <= 0 || page > Math.ceil(musics.size() / (double) MUSICS_PER_PAGE)) {
-            JUtil.sendMessage(sender, ChatColor.RED + "This page does not exist!");
+            PluginMsg.errorMessage(sender, "This page does not exist!");
             return;
         }
 
@@ -52,16 +50,6 @@ public class ListCommand extends AbstractCommand {
                     "§7#" + String.format("%02d", i + 1) + ": §f" + music.getName() + "§b (" + music.getOriginalAuthor() + "§b)"
             );
         }
-    }
-
-    @Override
-    public void performPlayer(Player player) {
-        // Not implemented
-    }
-
-    @Override
-    public void performConsole(CommandSender sender) {
-        // Not implemented
     }
 
 }

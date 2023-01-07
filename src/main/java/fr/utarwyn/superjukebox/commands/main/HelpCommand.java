@@ -1,9 +1,9 @@
 package fr.utarwyn.superjukebox.commands.main;
 
 import fr.utarwyn.superjukebox.commands.AbstractCommand;
+import fr.utarwyn.superjukebox.util.PluginMsg;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 /**
  * Waooowww, the help command! You need help?
@@ -14,29 +14,37 @@ import org.bukkit.entity.Player;
 public class HelpCommand extends AbstractCommand {
 
     public HelpCommand() {
-        super("help", "?");
+        super("help", "h", "?");
+    }
+
+    /**
+     * Format a command usage for a given player and command.
+     *
+     * @param sender     The entity which receive the line
+     * @param command    Command to perform to run the action
+     * @param permission Permission which player have to had to perform the see the help line
+     * @return formated command
+     */
+    static String formatCommandFor(CommandSender sender, String command, String permission) {
+        if (!sender.hasPermission("superjukebox." + permission)) {
+            command = ChatColor.RED.toString() + ChatColor.STRIKETHROUGH + ChatColor.stripColor(command);
+        }
+
+        return command;
     }
 
     @Override
     public void perform(CommandSender sender) {
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                "&7&m--------------------&r&8[&3SuperJukebox&8]&7&m--------------------\n\n" +
-                        "&b/&2sj &6help&7/&6? &b- &aShow this page!\n" +
-                        "&b/&2sj &6music&7/&6m &b- &aGet help with importing music!\n" +
-                        "&b/&2sj &6create &b- &aCreate a &6SuperJukebox\n" +
-                        "&b/&2sj &6support &b- &aGet the link to the discord server!\n" +
-                        "&b/&2sj &6reload&7 &b- &aReload the config!\n" +
-                        "&7&m----------------------------------------------------"));
-    }
+        PluginMsg.pluginBar(sender);
 
-    @Override
-    public void performPlayer(Player player) {
-        // Not implemented
-    }
-
-    @Override
-    public void performConsole(CommandSender sender) {
-        // Not implemented
+        sender.sendMessage(" ");
+        sender.sendMessage("  §6/sj music §bimport,list,remove");
+        sender.sendMessage("  §7   ⏩ Manage the music available in jukeboxes");
+        sender.sendMessage("  " + formatCommandFor(sender, "§6/sj create", "create"));
+        sender.sendMessage("  §7   ⏩ Create a super jukebox");
+        sender.sendMessage("  " + formatCommandFor(sender, "§3/sj reload", "reload"));
+        sender.sendMessage("  §7   ⏩ Reload the plugin");
+        sender.sendMessage(" ");
     }
 
 }

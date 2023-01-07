@@ -4,11 +4,9 @@ import fr.utarwyn.superjukebox.Managers;
 import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.commands.AbstractCommand;
 import fr.utarwyn.superjukebox.configuration.Files;
-import fr.utarwyn.superjukebox.util.JUtil;
+import fr.utarwyn.superjukebox.util.PluginMsg;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 /**
  * This command just add a possibility to reload the plugin
@@ -27,26 +25,14 @@ public class ReloadCommand extends AbstractCommand {
     @Override
     public void perform(CommandSender sender) {
         if (!Files.getConfiguration().reload()) {
-            JUtil.sendMessage(sender, ChatColor.RED + "Error when reloading config! See the console for more info!");
-            JUtil.sendMessage(sender, ChatColor.DARK_GRAY + "Plugin now disabled.");
-
+            PluginMsg.errorMessage(sender, "Error when reloading config! See the console for more info!");
             Bukkit.getPluginManager().disablePlugin(SuperJukebox.getInstance());
+            PluginMsg.infoMessage(sender, "Plugin has been disabled.");
             return;
         }
 
         Managers.reloadAll();
-
-        JUtil.sendMessage(sender, ChatColor.GREEN + "Configuration reloaded!");
-    }
-
-    @Override
-    public void performPlayer(Player player) {
-        // Not implemented
-    }
-
-    @Override
-    public void performConsole(CommandSender sender) {
-        // Not implemented
+        PluginMsg.successMessage(sender, "Configuration reloaded!");
     }
 
 }

@@ -3,6 +3,7 @@ package fr.utarwyn.superjukebox.jukebox;
 import fr.utarwyn.superjukebox.configuration.Files;
 import fr.utarwyn.superjukebox.menu.jukebox.JukeboxMainMenu;
 import fr.utarwyn.superjukebox.util.JUtil;
+import fr.utarwyn.superjukebox.util.PluginMsg;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -64,7 +65,7 @@ public class JukeboxListener implements Listener {
 
             if (interactSuperJukebox) {
                 JUtil.runSync(() -> this.manager.createSuperJukebox(block));
-                JUtil.sendMessage(event.getPlayer(), "§7You just placed a §6SuperJukebox§7, right-click it to choose a song!");
+                PluginMsg.infoMessage(event.getPlayer(), "You just placed a §6SuperJukebox§7, right-click it to choose a song!");
             }
         }
     }
@@ -90,7 +91,7 @@ public class JukeboxListener implements Listener {
 
         // Remove it!
         JUtil.runSync(() -> this.manager.removeSuperJukebox(block));
-        JUtil.sendMessage(event.getPlayer(), "§7You just removed a §6SuperJukebox§7!");
+        PluginMsg.infoMessage(event.getPlayer(), "You just removed a §6SuperJukebox§7!");
     }
 
 }

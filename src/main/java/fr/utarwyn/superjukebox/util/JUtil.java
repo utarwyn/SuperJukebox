@@ -1,9 +1,7 @@
 package fr.utarwyn.superjukebox.util;
 
 import fr.utarwyn.superjukebox.SuperJukebox;
-import fr.utarwyn.superjukebox.configuration.Files;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
@@ -30,17 +28,6 @@ public class JUtil {
      */
     private JUtil() {
 
-    }
-
-    /**
-     * Send a prefixed message to a command sender.
-     *
-     * @param sender  receiver of the messsage
-     * @param message message to send
-     */
-    public static void sendMessage(CommandSender sender, String message) {
-        String prefix = ChatColor.translateAlternateColorCodes('&', Files.getConfiguration().getPrefix());
-        sender.sendMessage(prefix + message);
     }
 
     /**

@@ -1,6 +1,6 @@
 package fr.utarwyn.superjukebox.commands;
 
-import fr.utarwyn.superjukebox.util.JUtil;
+import fr.utarwyn.superjukebox.util.PluginMsg;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -86,7 +86,7 @@ public abstract class AbstractCommand extends Command implements TabCompleter, C
 
         // Check argument count
         if (!this.checkArgLength(args.length)) {
-            JUtil.sendMessage(sender, "§cWrong argument count. §6/sj help §cto show the plugin's help!");
+            PluginMsg.errorMessage(sender, "Wrong argument count. §6/sj help §cto show the plugin's help!");
             return true;
         }
 
@@ -94,7 +94,7 @@ public abstract class AbstractCommand extends Command implements TabCompleter, C
         int i = 0;
         for (Parameter<?> param : this.parameters) {
             if (i < args.length && !param.checkValue(args[i])) {
-                JUtil.sendMessage(sender, "§cParameter §6" + args[i] + " §cis not valid.");
+                PluginMsg.errorMessage(sender, String.format("Parameter §6%s §cis not valid.", args[i]));
                 return true;
             }
 
@@ -110,7 +110,7 @@ public abstract class AbstractCommand extends Command implements TabCompleter, C
 
             // Player permission
             if (!this.hasRequiredPermission(player)) {
-                JUtil.sendMessage(player, "§cYou don't have the permission to use this command.");
+                PluginMsg.errorMessage(player, "§cYou don't have the permission to use this command.");
                 return true;
             }
 
