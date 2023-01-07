@@ -75,7 +75,7 @@ jobs:
           ./gradlew build --stacktrace
 
       - name: Publish to Maven repository
-        run: ./gradlew publishAllPublicationsToPersonalRepository --stacktrace
+        run: ./gradlew publishMavenPublicationToPersonalRepository --stacktrace
         env:
           PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
 

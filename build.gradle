@@ -30,6 +30,11 @@ compileJava {
 }
 
 publishing {
+    publications {
+        maven(MavenPublication) { publication ->
+            project.shadow.component(publication)
+        }
+    }
     repositories {
         maven {
             name 'Personal'
