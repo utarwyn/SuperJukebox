@@ -3,7 +3,7 @@
 <h4 align="center">
 Play custom musics from jukeboxes. We all love music, right?
 <br>
-Works with Bukkit/Spigot 1.8 to 1.18!
+Works with Bukkit/Spigot 1.8 to 1.19!
 </h4>
 
 <p align="center">
@@ -48,7 +48,7 @@ Works with Bukkit/Spigot 1.8 to 1.18!
 | Version   | Supported Minecraft versions | Status      | Download                                                                                  |
 |-----------|------------------------------|-------------|-------------------------------------------------------------------------------------------|
 | 0.4.0     | 1.8 to 1.18                  | Alpha       | [Click here](https://utarwyn.fr/projects/SuperJukebox/SuperJukebox-0.4.0.jar)             |
-| 0.4.1-dev | 1.8 to 1.18                  | Development | [Click here](https://utarwyn.fr/projects/SuperJukebox/SuperJukebox-0.4.1-SNAPSHOT.jar)    |
+| 0.4.1-dev | 1.8 to 1.19                  | Development | [Click here](https://utarwyn.fr/projects/SuperJukebox/SuperJukebox-0.4.1-SNAPSHOT.jar)    |
 | 0.3.1     | 1.8 to 1.12                  | Old         | [Click here](https://www.spigotmc.org/resources/superjukebox-your-mc-music-player.62293/) |
 
 > :star: TheCoolOne123 has already created

@@ -63,7 +63,9 @@ public class ActionBarUtil {
             return;
         }
 
-        if (ServerVersion.isNewerThan(ServerVersion.V1_11)) {
+        if (ServerVersion.isNewerThan(ServerVersion.V1_18)) {
+            ActionBarUtil.sendActionTitlePost19(player, message);
+        } else if (ServerVersion.isNewerThan(ServerVersion.V1_11)) {
             ActionBarUtil.sendActionTitlePost12(player, message);
         } else {
             ActionBarUtil.sendActionTitlePre12(player, message);
@@ -107,12 +109,9 @@ public class ActionBarUtil {
 
     private static void sendActionTitlePre12(Player player, String message) {
         try {
-            Class<?> craftPlayerClass = getCraftbukkitClass("entity.CraftPlayer");
-            Object craftPlayer = craftPlayerClass.cast(player);
             Object ppoc;
             Class<?> c3 = getNMSClass("IChatBaseComponent");
             Class<?> c4 = getNMSClass("PacketPlayOutChat");
-            Class<?> c5 = getNMSClass("Packet");
 
             if (USE_PRE_18) {
                 Class<?> c2 = getNMSClass("ChatSerializer");
@@ -125,12 +124,7 @@ public class ActionBarUtil {
                 ppoc = c4.getConstructor(c3, byte.class).newInstance(o, (byte) 2);
             }
 
-            Method m1 = craftPlayerClass.getDeclaredMethod("getHandle");
-            Object h = m1.invoke(craftPlayer);
-            Field f1 = h.getClass().getDeclaredField("playerConnection");
-            Object pc = f1.get(h);
-            Method m5 = pc.getClass().getDeclaredMethod("sendPacket", c5);
-            m5.invoke(pc, ppoc);
+            sendPacket(player, ppoc);
         } catch (Exception ex) {
             Log.log(Level.WARNING, "Cannot send action title packet (<1.12) for " + player.getName() + "!", ex);
         }
@@ -138,14 +132,12 @@ public class ActionBarUtil {
 
     private static void sendActionTitlePost12(Player player, String message) {
         try {
-            Class<?> craftPlayerClass = getCraftbukkitClass("entity.CraftPlayer");
-            Object craftPlayer = craftPlayerClass.cast(player);
             Object ppoc;
             Class<?> c4 = getNMSClass("PacketPlayOutChat", "network.protocol.game");
-            Class<?> c5 = getNMSClass("Packet", "network.protocol");
             Class<?> c2 = getNMSClass("ChatComponentText", NETWORK_CHAT);
             Class<?> c3 = getNMSClass("IChatBaseComponent", NETWORK_CHAT);
             Class<?> chatMessageTypeClass = getNMSClass("ChatMessageType", NETWORK_CHAT);
+
             Object[] chatMessageTypes = chatMessageTypeClass.getEnumConstants();
             Object chatMessageType = null;
             for (Object obj : chatMessageTypes) {
@@ -153,6 +145,7 @@ public class ActionBarUtil {
                     chatMessageType = obj;
                 }
             }
+
             Object o = c2.getConstructor(String.class).newInstance(message);
             if (ServerVersion.isOlderThan(ServerVersion.V1_16)) {
                 ppoc = c4.getConstructor(c3, chatMessageTypeClass).newInstance(o, chatMessageType);
@@ -160,23 +153,43 @@ public class ActionBarUtil {
                 ppoc = c4.getConstructor(c3, chatMessageTypeClass, UUID.class).newInstance(o, chatMessageType, player.getUniqueId());
             }
 
-            Method m1 = craftPlayerClass.getDeclaredMethod("getHandle");
-            Object h = m1.invoke(craftPlayer);
-            Field f1;
-
-            // 1.17+ :: New way of retrieving player connection instance
-            if (ServerVersion.isNewerThan(ServerVersion.V1_16)) {
-                f1 = h.getClass().getField("b");
-            } else {
-                f1 = h.getClass().getField("playerConnection");
-            }
-
-            Object pc = f1.get(h);
-            Method m5 = getNMSDynamicMethod(pc.getClass(), "sendPacket", "a", c5);
-            m5.invoke(pc, ppoc);
+            sendPacket(player, ppoc);
         } catch (Exception ex) {
             Log.log(Level.WARNING, "Cannot send action title packet (>=1.12) for " + player.getName() + "!", ex);
         }
+    }
+
+    private static void sendActionTitlePost19(Player player, String message) {
+        try {
+            Class<?> packetClass = getNMSClass("ClientboundSystemChatPacket", "network.protocol.game");
+            Class<?> baseComponentClass = getNMSClass("IChatBaseComponent", NETWORK_CHAT);
+            Method baseComponentClassCreator = baseComponentClass.getDeclaredMethod("a", String.class);
+            Object baseComponent = baseComponentClassCreator.invoke(null, message);
+            Object packet = packetClass.getConstructor(baseComponentClass, boolean.class).newInstance(baseComponent, true);
+            sendPacket(player, packet);
+        } catch (Exception ex) {
+            Log.log(Level.WARNING, "Cannot send action title packet (>=1.19) for " + player.getName() + "!", ex);
+        }
+    }
+
+    private static void sendPacket(Player player, Object packet) throws ReflectiveOperationException {
+        Class<?> craftPlayerClass = getCraftbukkitClass("entity.CraftPlayer");
+        Object craftPlayer = craftPlayerClass.cast(player);
+        Class<?> c5 = getNMSClass("Packet", "network.protocol");
+        Method m1 = craftPlayerClass.getDeclaredMethod("getHandle");
+        Object h = m1.invoke(craftPlayer);
+        Field f1;
+
+        // 1.17+ :: New way of retrieving player connection instance
+        if (ServerVersion.isNewerThan(ServerVersion.V1_16)) {
+            f1 = h.getClass().getField("b");
+        } else {
+            f1 = h.getClass().getField("playerConnection");
+        }
+
+        Object pc = f1.get(h);
+        Method m5 = getNMSDynamicMethod(pc.getClass(), "sendPacket", "a", c5);
+        m5.invoke(pc, packet);
     }
 
     private static Class<?> getCraftbukkitClass(String className) throws ClassNotFoundException {

@@ -97,15 +97,13 @@ public class Updater extends AbstractManager implements Runnable {
         }
 
         if (this.currentVersion.isDevelopment()) {
-            logger.warning("----------[Unstable Build]----------");
-            logger.warning("  You are using a development build. This means that the plugin can be unstable.");
-            logger.warning("  If you have an issue during its execution, please report it on the Github repository.");
-            logger.warning("------------------------------------");
+            logger.warning("**** IMPORTANT!");
+            logger.warning("You are using a development build. This means that the plugin can be unstable.");
+            logger.warning("If you have an issue during its execution, please report it on the Github repository.");
         } else if (this.currentVersion.getMajor() == 0) {
-            logger.warning("----------[Alpha Build]----------");
-            logger.warning("  You are using an alpha build. This means that the plugin is still in its first stages.");
-            logger.warning("  If you have an issue during its execution, please report it on the Github repository.");
-            logger.warning("------------------------------------");
+            logger.warning("**** IMPORTANT!");
+            logger.warning("You are using an alpha build. This means that the plugin is still in its first stages.");
+            logger.warning("If you have an issue during its execution, please report it on the Github repository.");
         }
     }
 

@@ -3,7 +3,6 @@ package fr.utarwyn.superjukebox.commands;
 import fr.utarwyn.superjukebox.SuperJukebox;
 import fr.utarwyn.superjukebox.commands.main.*;
 import fr.utarwyn.superjukebox.util.JUtil;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -18,9 +17,9 @@ import java.util.List;
  */
 public class MainCommand extends AbstractCommand {
 
-    private String pluginVersion;
+    private final String pluginVersion;
 
-    private String pluginAuthor;
+    private final String pluginAuthor;
 
     private String pluginContributors;
 
@@ -40,7 +39,7 @@ public class MainCommand extends AbstractCommand {
         this.pluginVersion = description.getVersion();
         this.pluginAuthor = authors.get(0);
         if (authors.size() > 1) {
-            this.pluginContributors = StringUtils.join(authors.subList(1, authors.size()), ", ");
+            this.pluginContributors = String.join(", ", authors.subList(1, authors.size()));
         }
     }
 
