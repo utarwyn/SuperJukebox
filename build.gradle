@@ -1,0 +1,74 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'org.sonarqube' version '3.5.0.2730'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+group = 'fr.utarwyn'
+version = '0.4.1-SNAPSHOT'
+description = 'An Epic Bukkit plugin to play custom musics from jukeboxes! We all love music, right?'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven { url 'https://hub.spigotmc.org/nexus/content/groups/public/' }
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT'
+
+    implementation 'fr.mrmicky:FastParticles:2.0.0'
+    implementation 'org.bstats:bstats-bukkit:3.0.0'
+}
+
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+    options.encoding = 'UTF-8'
+}
+
+publishing {
+    repositories {
+        maven {
+            name 'Personal'
+            if (project.version.endsWith('-SNAPSHOT')) {
+                url 'https://repo.utarwyn.fr/snapshots/'
+            } else {
+                url 'https://repo.utarwyn.fr/releases/'
+            }
+            credentials {
+                username = 'utarwyn'
+                password = project.findProperty('personal.token') ?: System.getenv('PERSONAL_TOKEN')
+            }
+        }
+    }
+}
+
+shadowJar {
+    archiveClassifier.set('')
+    from "${rootDir}/LICENSE"
+
+    dependencies {
+        exclude 'META-INF/**'
+    }
+    relocate 'org.bstats', 'fr.utarwyn.superjukebox.libs.bstats'
+    relocate 'fr.mrmicky.fastparticle', 'fr.utarwyn.superjukebox.libs.fastparticles'
+}
+
+jar {
+    enabled = false
+    dependsOn(shadowJar)
+}
+
+artifacts {
+    archives shadowJar
+}
+
+sonarqube {
+    properties {
+        property 'sonar.host.url', 'https://sonarcloud.io'
+        property 'sonar.organization', 'utarwyn-github'
+        property 'sonar.projectKey', 'fr.utarwyn.superjukebox'
+    }
+}
