@@ -11,7 +11,7 @@
 # Mac
 .DS_Store
 
-# Maven
+# Gradle
 .gradle
 **/out/
 **/build/
