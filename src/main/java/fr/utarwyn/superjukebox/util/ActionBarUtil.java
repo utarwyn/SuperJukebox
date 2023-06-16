@@ -181,7 +181,9 @@ public class ActionBarUtil {
         Field f1;
 
         // 1.17+ :: New way of retrieving player connection instance
-        if (ServerVersion.isNewerThan(ServerVersion.V1_16)) {
+        if (ServerVersion.isNewerThan(ServerVersion.V1_19)) {
+            f1 = h.getClass().getField("c");
+        } else if (ServerVersion.isNewerThan(ServerVersion.V1_16)) {
             f1 = h.getClass().getField("b");
         } else {
             f1 = h.getClass().getField("playerConnection");
